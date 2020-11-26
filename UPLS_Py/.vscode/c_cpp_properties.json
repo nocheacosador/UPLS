@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/../shared/**"
+            ],
+            "defines": [ "_GLIBCXX_HAS_GTHREADS" ],
+            "compilerPath": "/home/lukas/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-arm"
+        }
+    ],
+    "version": 4
+}

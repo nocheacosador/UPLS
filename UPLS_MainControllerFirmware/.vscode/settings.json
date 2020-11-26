@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"functional": "cpp",
+		"*.tpp": "cpp",
+		"*.tcc": "cpp"
+	},
+	"cmake.configureOnOpen": false
+}

@@ -1,0 +1,14 @@
+/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles/install/strip.dir
+/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles/install.dir
+/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles/list_install_components.dir
+/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles/rebuild_cache.dir
+/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles/edit_cache.dir
+/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles/install/local.dir
+/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles/UPLS.dir
+/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/src/CMakeFiles/install/strip.dir
+/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/src/CMakeFiles/install/local.dir
+/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/src/CMakeFiles/install.dir
+/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/src/CMakeFiles/list_install_components.dir
+/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/src/CMakeFiles/rebuild_cache.dir
+/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/src/CMakeFiles/edit_cache.dir
+/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/src/CMakeFiles/lib_UPLS.dir

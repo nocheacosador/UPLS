@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+
+<typesystem package="UPLS">
+	
+	<object-type name="UPLS_Controller"/>
+	
+	<container-type name="std::list" type="list">
+        <include file-name="list" location="global"/>
+        <conversion-rule>
+            <native-to-target>
+            PyObject* %out = PyList_New((int) %in.size());
+            %INTYPE::const_iterator it = %in.begin();
+            for (int idx = 0; it != %in.end(); ++it, ++idx) {
+                %INTYPE_0 cppItem(*it);
+                PyList_SET_ITEM(%out, idx, %CONVERTTOPYTHON[%INTYPE_0](cppItem));
+            }
+            return %out;
+            </native-to-target>
+            <target-to-native>
+                <add-conversion type="PySequence">
+                Shiboken::AutoDecRef seq(PySequence_Fast(%in, 0));
+                for (int i = 0; i &lt; PySequence_Fast_GET_SIZE(seq.object()); i++) {
+                    PyObject* pyItem = PySequence_Fast_GET_ITEM(seq.object(), i);
+                    %OUTTYPE_0 cppItem = %CONVERTTOCPP[%OUTTYPE_0](pyItem);
+                    %out.push_back(cppItem);
+                }
+                </add-conversion>
+            </target-to-native>
+        </conversion-rule>
+    </container-type>
+	
+	<primitive-type name="std::string"/>
+	<primitive-type name="char"/>
+	<primitive-type name="bool"/>
+	<primitive-type name="uint8_t"/>
+	<primitive-type name="uint16_t"/>
+	<primitive-type name="uint32_t"/>
+	<primitive-type name="uint64_t"/>
+	<primitive-type name="int8_t"/>
+	<primitive-type name="int16_t"/>
+	<primitive-type name="int32_t"/>
+	<primitive-type name="int64_t"/>
+	<primitive-type name="float"/>
+
+	<enum-type name="Device"/>
+	
+	<value-type name="Command">
+		<enum-type name="Code"/>
+		<rejection class="*" function-name="getPulseLength()"/>
+		<rejection class="*" function-name="setPulseLength(uint16_t value)"/>
+	</value-type>
+
+	<value-type name="HookInfo">
+		<value-type name="Battery">
+			<enum-type name="State"/>
+		</value-type>
+		<value-type name="Latch">
+			<enum-type name="State"/>
+		</value-type>
+	</value-type>
+	
+	<value-type name="LedInfo">
+		<value-type name="Led">
+			<enum-type name="Mode"/>
+			<value-type name="Pulsing"/>
+			<value-type name="Blinking"/>
+			<value-type name="Normal"/>
+			<value-type name="FadeInFadeOut"/>
+		</value-type>
+	</value-type>
+
+	<value-type name="LandingGearInfo">
+		<value-type name="Leg">
+			<enum-type name="Status"/>
+		</value-type>
+	</value-type>
+
+	<value-type name="WinchInfo">
+		<enum-type name="Status"/>
+	</value-type>
+
+	<value-type name="Error">
+		<enum-type name="Code"/>
+	</value-type>
+
+	<value-type name="Warning">
+		<enum-type name="Code"/>
+	</value-type>
+
+	<rejection class="LatencyCheck"/>
+	<rejection class="Packet"/>
+	<rejection class="PacketHandler"/>
+</typesystem>
