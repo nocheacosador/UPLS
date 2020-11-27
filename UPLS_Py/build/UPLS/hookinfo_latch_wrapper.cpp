@@ -191,8 +191,8 @@ static PyObject *Sbk_HookInfo_LatchFunc_getCurrent(PyObject *self)
 
         if (!PyErr_Occurred()) {
             // getCurrent()const
-            uint16_t cppResult = const_cast<const ::HookInfo::Latch *>(cppSelf)->getCurrent();
-            pyResult = Shiboken::Conversions::copyToPython(Shiboken::Conversions::PrimitiveTypeConverter<uint16_t>(), &cppResult);
+            float cppResult = const_cast<const ::HookInfo::Latch *>(cppSelf)->getCurrent();
+            pyResult = Shiboken::Conversions::copyToPython(Shiboken::Conversions::PrimitiveTypeConverter<float>(), &cppResult);
         }
     }
 
@@ -452,7 +452,7 @@ static PythonToCppFunc is_Latch_PythonToCpp_Latch_COPY_Convertible(PyObject *pyI
 static const char *HookInfo_Latch_SignatureStrings[] = {
     "1:UPLS.HookInfo.Latch(self,_state:UPLS.HookInfo.Latch.State=State.Unknown,_current:uint16_t=0)",
     "0:UPLS.HookInfo.Latch(self,Latch:UPLS.HookInfo.Latch)",
-    "UPLS.HookInfo.Latch.getCurrent(self)->uint16_t",
+    "UPLS.HookInfo.Latch.getCurrent(self)->float",
     "UPLS.HookInfo.Latch.getState(self)->UPLS.HookInfo.Latch.State",
     "UPLS.HookInfo.Latch.setCurrent(self,_current:uint16_t)",
     "UPLS.HookInfo.Latch.setState(self,_state:UPLS.HookInfo.Latch.State)",

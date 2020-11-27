@@ -250,8 +250,8 @@ static PyObject *Sbk_HookInfoFunc_getTemperature(PyObject *self)
 
         if (!PyErr_Occurred()) {
             // getTemperature()const
-            int16_t cppResult = const_cast<const ::HookInfo *>(cppSelf)->getTemperature();
-            pyResult = Shiboken::Conversions::copyToPython(Shiboken::Conversions::PrimitiveTypeConverter<int16_t>(), &cppResult);
+            float cppResult = const_cast<const ::HookInfo *>(cppSelf)->getTemperature();
+            pyResult = Shiboken::Conversions::copyToPython(Shiboken::Conversions::PrimitiveTypeConverter<float>(), &cppResult);
         }
     }
 
@@ -420,7 +420,7 @@ static const char *HookInfo_SignatureStrings[] = {
     "UPLS.HookInfo.getBatteryInfo(self)->UPLS.HookInfo.Battery",
     "UPLS.HookInfo.getLatchInfo(self)->UPLS.HookInfo.Latch",
     "UPLS.HookInfo.getMCURuntime(self)->float",
-    "UPLS.HookInfo.getTemperature(self)->int16_t",
+    "UPLS.HookInfo.getTemperature(self)->float",
     "UPLS.HookInfo.getlostMessages(self)->uint16_t",
     "UPLS.HookInfo.__copy__()",
     nullptr}; // Sentinel

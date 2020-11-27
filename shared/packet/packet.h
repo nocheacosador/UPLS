@@ -93,7 +93,7 @@ struct BINDINGS_API __NO_PADDING__ HookInfo
 #if defined(__XAVIER)
 
 		//void 	 setVoltage(uint16_t _voltage) { voltage = _voltage; }
-		float getVoltage() const { return float(voltage) * 1000.f; }
+		float getVoltage() const { return float(voltage) / 1000.f; }
 
 		//void  setState(State _state) { state = _state; }
 		State getState() const { return state; }
@@ -118,8 +118,8 @@ struct BINDINGS_API __NO_PADDING__ HookInfo
 		};
 
 #if defined(__XAVIER)
-		void 	 setCurrent(uint16_t _current) { current = _current; }
-		uint16_t getCurrent() const { return current; }
+		void  setCurrent(uint16_t _current) { current = _current; }
+		float getCurrent() const { return float(current) / 1000.f; }
 
 		void  setState(State _state) { state = _state; }
 		State getState() const { return state; }
@@ -141,7 +141,7 @@ struct BINDINGS_API __NO_PADDING__ HookInfo
 
 	uint16_t getlostMessages() const { return mcuRuntime; }
 
-	int16_t getTemperature() const { return temperature; }
+	float getTemperature() const { return float(temperature) / 10.f; }
 
 	Battery getBatteryInfo() const { return battery; }
 

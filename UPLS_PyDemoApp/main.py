@@ -5,7 +5,7 @@ from UPLS import *
 from tkinter import *
 from tkinter import ttk
 
-from custom_widgets import BatteryWidget
+from custom_widgets import HookInfoWidget
 
 #lst_AvailablePorts = [ "dev/ttyACM0", "dev/ttyUSB0", "dev/ttyUSB1" ]
 
@@ -62,15 +62,15 @@ class MainApp:
 			print("[MainApp] serial_port was not specified.\n Exiting...")
 			sys.exit()
 		self.running = False
-		
+
 		self.win_Window = Tk()
 		self.win_Window.title(app_name)
 		self.win_Window.geometry("400x300+300+300")
 		self.win_Window.resizable(False, False)
 		self.win_Window.protocol("WM_DELETE_WINDOW", self.__onClosing)
-		self.test_widget = BatteryWidget(self.win_Window)
+		self.hki_HookInfo = HookInfoWidget(self.win_Window)
 
-		self.test_widget.grid(column=0, row=0)
+		self.hki_HookInfo.grid(column=0, row=0, padx=2, pady=2)
 
 	def __onClosing(self):
 		self.running = False

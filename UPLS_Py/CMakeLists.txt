@@ -211,9 +211,3 @@ install(TARGETS ${bindings_library} #${sample_library}
         RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../UPLS_PyDemoApp
         )
 install(FILES ${windows_shiboken_shared_libraries} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../UPLS_PyDemoApp)
-
-install(TARGETS ${bindings_library} #${sample_library}
-        LIBRARY DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../UPLS_PyDemoAppGUI
-        RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../UPLS_PyDemoAppGUI
-        )
-install(FILES ${windows_shiboken_shared_libraries} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../UPLS_PyDemoAppGUI)
