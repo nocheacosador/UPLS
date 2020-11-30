@@ -15,8 +15,11 @@ Class for controlling various peripherals on the UAV. Provides various functions
 \mbox{\Hypertarget{classUPLS__Controller_a3f407ff7a9fd6f0522887ec24b2d2cbc}\label{classUPLS__Controller_a3f407ff7a9fd6f0522887ec24b2d2cbc}} 
 \mbox{\hyperlink{classUPLS__Controller_a3f407ff7a9fd6f0522887ec24b2d2cbc}{UPLS\+\_\+\+Controller}} ()
 \begin{DoxyCompactList}\small\item\em Default constructor for the \mbox{\hyperlink{classUPLS__Controller}{UPLS\+\_\+\+Controller}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classUPLS__Controller_a8c665ba42db17939492572e403d2a8b5}\label{classUPLS__Controller_a8c665ba42db17939492572e403d2a8b5}} 
+\mbox{\hyperlink{classUPLS__Controller_a8c665ba42db17939492572e403d2a8b5}{$\sim$\+UPLS\+\_\+\+Controller}} ()
+\begin{DoxyCompactList}\small\item\em Deconstructor for the \mbox{\hyperlink{classUPLS__Controller}{UPLS\+\_\+\+Controller}} object. \end{DoxyCompactList}\item 
 std\+::list$<$ std\+::string $>$ \mbox{\hyperlink{classUPLS__Controller_aa8ddec7ecd2bb4636658766be9317257}{list\+Available\+Ports}} ()
-\begin{DoxyCompactList}\small\item\em Utility function to check for available serial ports. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Utility function for listing available serial ports. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classUPLS__Controller_a1ea441fb5dc43406a27df11c4cc5bbca}{print\+Available\+Ports}} ()
 \begin{DoxyCompactList}\small\item\em Utility function to check for available serial ports. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classUPLS__Controller_a6c6c12f1c9a51e8a1dcfd25a98de29a3}{set\+Serial\+Port}} (const char $\ast$port\+Name)
@@ -76,21 +79,25 @@ void \mbox{\hyperlink{classUPLS__Controller_ac7b90a3f611c93d7337f0eda92355821}{l
 void \mbox{\hyperlink{classUPLS__Controller_a9f48d1cf0400149fbb573f42eaf39361}{led\+Off}} ()
 \begin{DoxyCompactList}\small\item\em Test function. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classUPLS__Controller_a8e46bd6e0b8c7ded61214f0add701f03}{error}} (const char $\ast$error\+\_\+msg)
-\begin{DoxyCompactList}\small\item\em Formats and prints string as an error. Formats and prints string as an error in to stdout. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Formats and prints string as an error. Formats and prints string as an error in to stdout. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUPLS__Controller_a4f830d9035e38afd186e4f14d521b561}{warning}} (const char $\ast$warning\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em Formats and prints string as an warning. Formats and prints string as an error in to stdout. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUPLS__Controller_ab6f96642a00c37c490ec24fb9dfdc632}{message}} (const char $\ast$message)
+\begin{DoxyCompactList}\small\item\em Formats and prints string as an message. Formats and prints string as an error in to stdout. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classUPLS__Controller_ac43380cd7275283f63a7c5053ca55211}\label{classUPLS__Controller_ac43380cd7275283f63a7c5053ca55211}} 
-std\+::mutex {\bfseries m\+\_\+mux\+Hookinfo}
+\mbox{\Hypertarget{classUPLS__Controller_aeb69600aa776d1e60e7769c9d3834963}\label{classUPLS__Controller_aeb69600aa776d1e60e7769c9d3834963}} 
+std\+::mutex {\bfseries mux\+Hookinfo}
 \item 
-\mbox{\Hypertarget{classUPLS__Controller_a1521164ac050ab9f484bfc630ee96739}\label{classUPLS__Controller_a1521164ac050ab9f484bfc630ee96739}} 
-std\+::mutex {\bfseries m\+\_\+mux\+Landing\+Gear\+Info}
+\mbox{\Hypertarget{classUPLS__Controller_a0ac219f01d5a4f3a89947da093879af4}\label{classUPLS__Controller_a0ac219f01d5a4f3a89947da093879af4}} 
+std\+::mutex {\bfseries mux\+Landing\+Gear\+Info}
 \item 
-\mbox{\Hypertarget{classUPLS__Controller_a6a752f5227aea8e0236eb9cb3ae7481e}\label{classUPLS__Controller_a6a752f5227aea8e0236eb9cb3ae7481e}} 
-std\+::mutex {\bfseries m\+\_\+mux\+Led\+Info}
+\mbox{\Hypertarget{classUPLS__Controller_a79b9672ea8e092e38f22d9d7f3f39c53}\label{classUPLS__Controller_a79b9672ea8e092e38f22d9d7f3f39c53}} 
+std\+::mutex {\bfseries mux\+Led\+Info}
 \item 
-\mbox{\Hypertarget{classUPLS__Controller_ab84f84e571ab98b51b72ea1dfda8dbfb}\label{classUPLS__Controller_ab84f84e571ab98b51b72ea1dfda8dbfb}} 
-std\+::mutex {\bfseries m\+\_\+mux\+Winch\+Info}
+\mbox{\Hypertarget{classUPLS__Controller_a52ad5bbe67100f42fe50830a9ed8d3e0}\label{classUPLS__Controller_a52ad5bbe67100f42fe50830a9ed8d3e0}} 
+std\+::mutex {\bfseries mux\+Winch\+Info}
 \end{DoxyCompactItemize}
 
 
@@ -212,13 +219,28 @@ Returns update frequeny in hertz.
 
 
 
-Utility function to check for available serial ports. 
+Utility function for listing available serial ports. 
 
 Returns list of available serial port names. If none found return empty list.
 
 \begin{DoxyReturn}{Returns}
 String list of ports names. 
 \end{DoxyReturn}
+\mbox{\Hypertarget{classUPLS__Controller_ab6f96642a00c37c490ec24fb9dfdc632}\label{classUPLS__Controller_ab6f96642a00c37c490ec24fb9dfdc632}} 
+\index{UPLS\_Controller@{UPLS\_Controller}!message@{message}}
+\index{message@{message}!UPLS\_Controller@{UPLS\_Controller}}
+\doxysubsubsection{\texorpdfstring{message()}{message()}}
+{\footnotesize\ttfamily void UPLS\+\_\+\+Controller\+::message (\begin{DoxyParamCaption}\item[{const char $\ast$}]{message }\end{DoxyParamCaption})}
+
+
+
+Formats and prints string as an message. Formats and prints string as an error in to stdout. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & Pointer to a C style string. \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classUPLS__Controller_acdfb82e7fd8e564fbf63cdd250c7e54a}\label{classUPLS__Controller_acdfb82e7fd8e564fbf63cdd250c7e54a}} 
 \index{UPLS\_Controller@{UPLS\_Controller}!messagesReceived@{messagesReceived}}
 \index{messagesReceived@{messagesReceived}!UPLS\_Controller@{UPLS\_Controller}}
@@ -270,6 +292,21 @@ Starts serial comunication with UPLS.
 \begin{DoxyReturn}{Returns}
 Returns true on succesful connection. 
 \end{DoxyReturn}
+\mbox{\Hypertarget{classUPLS__Controller_a4f830d9035e38afd186e4f14d521b561}\label{classUPLS__Controller_a4f830d9035e38afd186e4f14d521b561}} 
+\index{UPLS\_Controller@{UPLS\_Controller}!warning@{warning}}
+\index{warning@{warning}!UPLS\_Controller@{UPLS\_Controller}}
+\doxysubsubsection{\texorpdfstring{warning()}{warning()}}
+{\footnotesize\ttfamily void UPLS\+\_\+\+Controller\+::warning (\begin{DoxyParamCaption}\item[{const char $\ast$}]{warning\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+Formats and prints string as an warning. Formats and prints string as an error in to stdout. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em warning\+\_\+msg} & Pointer to a C style string. \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classUPLS__Controller_a2e51468cde2f796c894ed41e757a2afb}\label{classUPLS__Controller_a2e51468cde2f796c894ed41e757a2afb}} 
 \index{UPLS\_Controller@{UPLS\_Controller}!warningsReceived@{warningsReceived}}
 \index{warningsReceived@{warningsReceived}!UPLS\_Controller@{UPLS\_Controller}}

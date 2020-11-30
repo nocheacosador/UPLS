@@ -167,6 +167,7 @@ struct BINDINGS_API __NO_PADDING__ LedInfo
 	{
 		enum class Mode : uint8_t
 		{
+			Unknown = 0,
 			Normal,
 			Pulsing,
 			FadeInOut,
@@ -200,7 +201,7 @@ struct BINDINGS_API __NO_PADDING__ LedInfo
 		struct __NO_PADDING__ Blinking 
 		{
 #if defined(__XAVIER)
-		Blinking(uint16_t _onDuration, uint16_t _offDuration) : onDuration(_onDuration), offDuration(_offDuration) { ; }
+		Blinking(uint16_t _onDuration = 1000, uint16_t _offDuration = 1000) : onDuration(_onDuration), offDuration(_offDuration) { ; }
 		
 		uint16_t getOnDuration() const { return onDuration; }
 		uint16_t getOffDuration() const { return offDuration; }
@@ -214,7 +215,7 @@ struct BINDINGS_API __NO_PADDING__ LedInfo
 		struct __NO_PADDING__ Normal
 		{
 #if defined(__XAVIER)
-		Normal(uint8_t _brightness) : brightness(_brightness) { ; }
+		Normal(uint8_t _brightness = 255) : brightness(_brightness) { ; }
 
 		uint8_t getBrightness() const { return brightness; }
 
@@ -249,7 +250,7 @@ struct BINDINGS_API __NO_PADDING__ LedInfo
 		Led(FadeInFadeOut _fadeInOut) : fadeInOut(_fadeInOut), mode(Mode::FadeInOut) { ; }
 
 		bool getEnabled() const { return enabled; }
-		uint8_t getCurrent_value() const { return current_value; }
+		uint8_t getCurrentValue() const { return current_value; }
 		Mode getMode() const { return mode; }
 		Pulsing	getPulsingSettings() const { return pulsing; }
 		Blinking getBlinking() const { return blinking; }
@@ -293,7 +294,7 @@ struct BINDINGS_API __NO_PADDING__ LandingGearInfo
 		enum class Status : uint8_t
 		{
 			Unknown = 0,
-			Opened,
+			Open,
 			Closed,
 			Closing,
 			Opening

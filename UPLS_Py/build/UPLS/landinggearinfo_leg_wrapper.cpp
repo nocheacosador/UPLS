@@ -408,7 +408,7 @@ void init_LandingGearInfo_Leg(PyObject *enclosingClass)
         SbkUPLSTypes[SBK_LANDINGGEARINFO_LEG_STATUS_IDX], "Unknown", (long) LandingGearInfo::Leg::Status::Unknown))
         return;
     if (!Shiboken::Enum::createScopedEnumItem(SbkUPLSTypes[SBK_LANDINGGEARINFO_LEG_STATUS_IDX],
-        SbkUPLSTypes[SBK_LANDINGGEARINFO_LEG_STATUS_IDX], "Opened", (long) LandingGearInfo::Leg::Status::Opened))
+        SbkUPLSTypes[SBK_LANDINGGEARINFO_LEG_STATUS_IDX], "Open", (long) LandingGearInfo::Leg::Status::Open))
         return;
     if (!Shiboken::Enum::createScopedEnumItem(SbkUPLSTypes[SBK_LANDINGGEARINFO_LEG_STATUS_IDX],
         SbkUPLSTypes[SBK_LANDINGGEARINFO_LEG_STATUS_IDX], "Closed", (long) LandingGearInfo::Leg::Status::Closed))

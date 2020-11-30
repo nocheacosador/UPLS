@@ -73,24 +73,6 @@ file(INSTALL DESTINATION "/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/../UPLS_P
   endif()
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/../UPLS_PyDemoAppGUI/UPLS.so")
-  if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
-    message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
-  endif()
-  if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-    message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
-  endif()
-file(INSTALL DESTINATION "/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/../UPLS_PyDemoAppGUI" TYPE MODULE FILES "/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS.so")
-  if(EXISTS "$ENV{DESTDIR}/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/../UPLS_PyDemoAppGUI/UPLS.so" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/../UPLS_PyDemoAppGUI/UPLS.so")
-    if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/../UPLS_PyDemoAppGUI/UPLS.so")
-    endif()
-  endif()
-endif()
-
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/src/cmake_install.cmake")

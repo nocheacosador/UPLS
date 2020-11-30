@@ -12,7 +12,9 @@
 
 //#define	__XAVIER
 //#define	__HOOK
-#define	__MAIN_CONTROLLER
+#ifndef __MAIN_CONTROLLER
+# define	__MAIN_CONTROLLER
+#endif
 
 const char sun[9][19] = {
 	"        '        \n",

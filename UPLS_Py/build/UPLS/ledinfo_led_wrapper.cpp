@@ -119,7 +119,7 @@ Sbk_LedInfo_Led_Init(PyObject *self, PyObject *args, PyObject *kwds)
         {
             if (!Shiboken::Object::isValid(pyArgs[0]))
                 return -1;
-            ::LedInfo::Led::Blinking cppArg0 = ::LedInfo::Led::Blinking(::uint16_t(), ::uint16_t());
+            ::LedInfo::Led::Blinking cppArg0;
             pythonToCpp[0](pyArgs[0], &cppArg0);
 
             if (!PyErr_Occurred()) {
@@ -145,7 +145,7 @@ Sbk_LedInfo_Led_Init(PyObject *self, PyObject *args, PyObject *kwds)
         {
             if (!Shiboken::Object::isValid(pyArgs[0]))
                 return -1;
-            ::LedInfo::Led::Normal cppArg0 = ::LedInfo::Led::Normal(::uint8_t());
+            ::LedInfo::Led::Normal cppArg0;
             pythonToCpp[0](pyArgs[0], &cppArg0);
 
             if (!PyErr_Occurred()) {
@@ -639,6 +639,9 @@ void init_LedInfo_Led(PyObject *enclosingClass)
     if (!SbkUPLSTypes[SBK_LEDINFO_LED_MODE_IDX])
         return;
 
+    if (!Shiboken::Enum::createScopedEnumItem(SbkUPLSTypes[SBK_LEDINFO_LED_MODE_IDX],
+        SbkUPLSTypes[SBK_LEDINFO_LED_MODE_IDX], "Unknown", (long) LedInfo::Led::Mode::Unknown))
+        return;
     if (!Shiboken::Enum::createScopedEnumItem(SbkUPLSTypes[SBK_LEDINFO_LED_MODE_IDX],
         SbkUPLSTypes[SBK_LEDINFO_LED_MODE_IDX], "Normal", (long) LedInfo::Led::Mode::Normal))
         return;

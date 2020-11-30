@@ -6,8 +6,22 @@
  */ 
 
 
-#ifndef DEFINITIONS_H_
-#define DEFINITIONS_H_
+#ifndef GLOBAL_MACROS_H
+#define GLOBAL_MACROS_H
+
+// Define this device for package configuration
+// THIS_DEFINE values:
+//		1 - xavier
+//		2 - hook
+//		3 - main controller
+
+#define THIS_DEVICE				2
+#define DEFAULT_RECEIVER_DEVICE	3
+
+#ifndef 	__HOOK
+# define	__HOOK
+#endif
+
 
 #define F_CPU	8000000UL
 
@@ -64,8 +78,7 @@ const byte addresses[2][6] = { "10000", "20000" };
 
 // EEPROM Addresses
 
-#define EEPROM_LATCH_OPEN_PULSE_ADDR	(uint16_t*)0x00
-#define EEPROM_LATCH_CLOSE_PULSE_ADDR	(uint16_t*)0x02
+#define EEPROM_LATCH_OPEN_PULSE_ADDR	(uint16_t*)(0x00)
+#define EEPROM_LATCH_CLOSE_PULSE_ADDR	(uint16_t*)(0x02)
 
-
-#endif /* DEFINITIONS_H_ */
+#endif /* GLOBAL_MACROS_H */

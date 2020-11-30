@@ -59,22 +59,27 @@ Sbk_LedInfo_Led_Normal_Init(PyObject *self, PyObject *args, PyObject *kwds)
     int overloadId = -1;
     PythonToCppFunc pythonToCpp[] = { nullptr };
     SBK_UNUSED(pythonToCpp)
+    const Py_ssize_t numNamedArgs = (kwds ? PyDict_Size(kwds) : 0);
     const Py_ssize_t numArgs = PyTuple_GET_SIZE(args);
     SBK_UNUSED(numArgs)
     PyObject *pyArgs[] = {0};
 
     // invalid argument lengths
+    if (numArgs + numNamedArgs > 1) {
+        PyErr_SetString(PyExc_TypeError, "UPLS.LedInfo.Led.Normal(): too many arguments");
+        return -1;
+    }
 
-
-    if (!PyArg_UnpackTuple(args, "Normal", 1, 1, &(pyArgs[0])))
+    if (!PyArg_ParseTuple(args, "|O:Normal", &(pyArgs[0])))
         return -1;
 
 
     // Overloaded function decisor
     // 0: Normal::Normal(LedInfo::Led::Normal)
     // 1: Normal::Normal(uint8_t)
-    if (numArgs == 1
-        && (pythonToCpp[0] = Shiboken::Conversions::isPythonToCppConvertible(Shiboken::Conversions::PrimitiveTypeConverter<uint8_t>(), (pyArgs[0])))) {
+    if (numArgs == 0) {
+        overloadId = 1; // Normal(uint8_t)
+    } else if ((pythonToCpp[0] = Shiboken::Conversions::isPythonToCppConvertible(Shiboken::Conversions::PrimitiveTypeConverter<uint8_t>(), (pyArgs[0])))) {
         overloadId = 1; // Normal(uint8_t)
     } else if (numArgs == 1
         && (pythonToCpp[0] = Shiboken::Conversions::isPythonToCppReferenceConvertible(reinterpret_cast<SbkObjectType *>(SbkUPLSTypes[SBK_LEDINFO_LED_NORMAL_IDX]), (pyArgs[0])))) {
@@ -90,7 +95,7 @@ Sbk_LedInfo_Led_Normal_Init(PyObject *self, PyObject *args, PyObject *kwds)
         {
             if (!Shiboken::Object::isValid(pyArgs[0]))
                 return -1;
-            ::LedInfo::Led::Normal cppArg0_local = ::LedInfo::Led::Normal(::uint8_t());
+            ::LedInfo::Led::Normal cppArg0_local;
             ::LedInfo::Led::Normal *cppArg0 = &cppArg0_local;
             if (Shiboken::Conversions::isImplicitConversion(reinterpret_cast<SbkObjectType *>(SbkUPLSTypes[SBK_LEDINFO_LED_NORMAL_IDX]), pythonToCpp[0]))
                 pythonToCpp[0](pyArgs[0], &cppArg0_local);
@@ -106,8 +111,25 @@ Sbk_LedInfo_Led_Normal_Init(PyObject *self, PyObject *args, PyObject *kwds)
         }
         case 1: // Normal(uint8_t _brightness)
         {
-            ::uint8_t cppArg0;
-            pythonToCpp[0](pyArgs[0], &cppArg0);
+            if (kwds) {
+                PyObject *keyName = nullptr;
+                PyObject *value = nullptr;
+                keyName = Py_BuildValue("s","_brightness");
+                if (PyDict_Contains(kwds, keyName)) {
+                    value = PyDict_GetItem(kwds, keyName);
+                    if (value && pyArgs[0]) {
+                        PyErr_SetString(PyExc_TypeError, "UPLS.LedInfo.Led.Normal(): got multiple values for keyword argument '_brightness'.");
+                        return -1;
+                    }
+                    if (value) {
+                        pyArgs[0] = value;
+                        if (!(pythonToCpp[0] = Shiboken::Conversions::isPythonToCppConvertible(Shiboken::Conversions::PrimitiveTypeConverter<uint8_t>(), (pyArgs[0]))))
+                            goto Sbk_LedInfo_Led_Normal_Init_TypeError;
+                    }
+                }
+            }
+            ::uint8_t cppArg0 = 255;
+            if (pythonToCpp[0]) pythonToCpp[0](pyArgs[0], &cppArg0);
 
             if (!PyErr_Occurred()) {
                 // Normal(uint8_t)
@@ -297,7 +319,7 @@ static PythonToCppFunc is_uint8_t_PythonToCpp_LedInfo_Led_Normal_Convertible(PyO
 // Multiple signatures have their index "n:" in front.
 static const char *LedInfo_Led_Normal_SignatureStrings[] = {
     "1:UPLS.LedInfo.Led.Normal(self,Normal:UPLS.LedInfo.Led.Normal)",
-    "0:UPLS.LedInfo.Led.Normal(self,_brightness:uint8_t)",
+    "0:UPLS.LedInfo.Led.Normal(self,_brightness:uint8_t=255)",
     "UPLS.LedInfo.Led.Normal.getBrightness(self)->uint8_t",
     "UPLS.LedInfo.Led.Normal.__copy__()",
     nullptr}; // Sentinel

@@ -59,24 +59,32 @@ Sbk_LedInfo_Led_Blinking_Init(PyObject *self, PyObject *args, PyObject *kwds)
     int overloadId = -1;
     PythonToCppFunc pythonToCpp[] = { nullptr, nullptr };
     SBK_UNUSED(pythonToCpp)
+    const Py_ssize_t numNamedArgs = (kwds ? PyDict_Size(kwds) : 0);
     const Py_ssize_t numArgs = PyTuple_GET_SIZE(args);
     SBK_UNUSED(numArgs)
     PyObject *pyArgs[] = {0, 0};
 
     // invalid argument lengths
+    if (numArgs + numNamedArgs > 2) {
+        PyErr_SetString(PyExc_TypeError, "UPLS.LedInfo.Led.Blinking(): too many arguments");
+        return -1;
+    }
 
-
-    if (!PyArg_UnpackTuple(args, "Blinking", 1, 2, &(pyArgs[0]), &(pyArgs[1])))
+    if (!PyArg_ParseTuple(args, "|OO:Blinking", &(pyArgs[0]), &(pyArgs[1])))
         return -1;
 
 
     // Overloaded function decisor
     // 0: Blinking::Blinking(LedInfo::Led::Blinking)
     // 1: Blinking::Blinking(uint16_t,uint16_t)
-    if (numArgs == 2
-        && (pythonToCpp[0] = Shiboken::Conversions::isPythonToCppConvertible(Shiboken::Conversions::PrimitiveTypeConverter<uint16_t>(), (pyArgs[0])))
-        && (pythonToCpp[1] = Shiboken::Conversions::isPythonToCppConvertible(Shiboken::Conversions::PrimitiveTypeConverter<uint16_t>(), (pyArgs[1])))) {
+    if (numArgs == 0) {
         overloadId = 1; // Blinking(uint16_t,uint16_t)
+    } else if ((pythonToCpp[0] = Shiboken::Conversions::isPythonToCppConvertible(Shiboken::Conversions::PrimitiveTypeConverter<uint16_t>(), (pyArgs[0])))) {
+        if (numArgs == 1) {
+            overloadId = 1; // Blinking(uint16_t,uint16_t)
+        } else if ((pythonToCpp[1] = Shiboken::Conversions::isPythonToCppConvertible(Shiboken::Conversions::PrimitiveTypeConverter<uint16_t>(), (pyArgs[1])))) {
+            overloadId = 1; // Blinking(uint16_t,uint16_t)
+        }
     } else if (numArgs == 1
         && (pythonToCpp[0] = Shiboken::Conversions::isPythonToCppReferenceConvertible(reinterpret_cast<SbkObjectType *>(SbkUPLSTypes[SBK_LEDINFO_LED_BLINKING_IDX]), (pyArgs[0])))) {
         overloadId = 0; // Blinking(LedInfo::Led::Blinking)
@@ -91,7 +99,7 @@ Sbk_LedInfo_Led_Blinking_Init(PyObject *self, PyObject *args, PyObject *kwds)
         {
             if (!Shiboken::Object::isValid(pyArgs[0]))
                 return -1;
-            ::LedInfo::Led::Blinking cppArg0_local = ::LedInfo::Led::Blinking(::uint16_t(), ::uint16_t());
+            ::LedInfo::Led::Blinking cppArg0_local;
             ::LedInfo::Led::Blinking *cppArg0 = &cppArg0_local;
             if (Shiboken::Conversions::isImplicitConversion(reinterpret_cast<SbkObjectType *>(SbkUPLSTypes[SBK_LEDINFO_LED_BLINKING_IDX]), pythonToCpp[0]))
                 pythonToCpp[0](pyArgs[0], &cppArg0_local);
@@ -107,10 +115,40 @@ Sbk_LedInfo_Led_Blinking_Init(PyObject *self, PyObject *args, PyObject *kwds)
         }
         case 1: // Blinking(uint16_t _onDuration, uint16_t _offDuration)
         {
-            ::uint16_t cppArg0;
-            pythonToCpp[0](pyArgs[0], &cppArg0);
-            ::uint16_t cppArg1;
-            pythonToCpp[1](pyArgs[1], &cppArg1);
+            if (kwds) {
+                PyObject *keyName = nullptr;
+                PyObject *value = nullptr;
+                keyName = Py_BuildValue("s","_onDuration");
+                if (PyDict_Contains(kwds, keyName)) {
+                    value = PyDict_GetItem(kwds, keyName);
+                    if (value && pyArgs[0]) {
+                        PyErr_SetString(PyExc_TypeError, "UPLS.LedInfo.Led.Blinking(): got multiple values for keyword argument '_onDuration'.");
+                        return -1;
+                    }
+                    if (value) {
+                        pyArgs[0] = value;
+                        if (!(pythonToCpp[0] = Shiboken::Conversions::isPythonToCppConvertible(Shiboken::Conversions::PrimitiveTypeConverter<uint16_t>(), (pyArgs[0]))))
+                            goto Sbk_LedInfo_Led_Blinking_Init_TypeError;
+                    }
+                }
+                keyName = Py_BuildValue("s","_offDuration");
+                if (PyDict_Contains(kwds, keyName)) {
+                    value = PyDict_GetItem(kwds, keyName);
+                    if (value && pyArgs[1]) {
+                        PyErr_SetString(PyExc_TypeError, "UPLS.LedInfo.Led.Blinking(): got multiple values for keyword argument '_offDuration'.");
+                        return -1;
+                    }
+                    if (value) {
+                        pyArgs[1] = value;
+                        if (!(pythonToCpp[1] = Shiboken::Conversions::isPythonToCppConvertible(Shiboken::Conversions::PrimitiveTypeConverter<uint16_t>(), (pyArgs[1]))))
+                            goto Sbk_LedInfo_Led_Blinking_Init_TypeError;
+                    }
+                }
+            }
+            ::uint16_t cppArg0 = 1000;
+            if (pythonToCpp[0]) pythonToCpp[0](pyArgs[0], &cppArg0);
+            ::uint16_t cppArg1 = 1000;
+            if (pythonToCpp[1]) pythonToCpp[1](pyArgs[1], &cppArg1);
 
             if (!PyErr_Occurred()) {
                 // Blinking(uint16_t,uint16_t)
@@ -314,7 +352,7 @@ static PythonToCppFunc is_Blinking_PythonToCpp_Blinking_COPY_Convertible(PyObjec
 // Multiple signatures have their index "n:" in front.
 static const char *LedInfo_Led_Blinking_SignatureStrings[] = {
     "1:UPLS.LedInfo.Led.Blinking(self,Blinking:UPLS.LedInfo.Led.Blinking)",
-    "0:UPLS.LedInfo.Led.Blinking(self,_onDuration:uint16_t,_offDuration:uint16_t)",
+    "0:UPLS.LedInfo.Led.Blinking(self,_onDuration:uint16_t=1000,_offDuration:uint16_t=1000)",
     "UPLS.LedInfo.Led.Blinking.getOffDuration(self)->uint16_t",
     "UPLS.LedInfo.Led.Blinking.getOnDuration(self)->uint16_t",
     "UPLS.LedInfo.Led.Blinking.__copy__()",
