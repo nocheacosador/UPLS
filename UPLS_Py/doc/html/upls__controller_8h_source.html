@@ -172,24 +172,28 @@ $(function() {
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    std::atomic&lt;float&gt; m_ledInfoUpdateFrequency;</div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    std::atomic&lt;float&gt; m_winchInfoUpdateFrequency;</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    std::mutex muxHookinfo;</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    std::mutex muxLandingGearInfo;</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    std::mutex muxLedInfo;</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    std::mutex muxWinchInfo;</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160; </div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    <span class="keywordtype">void</span> m_receivedPacketHandler();</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <span class="keywordtype">void</span> m_updateHookInfo(<a class="code" href="structHookInfo.html">HookInfo</a>&amp; info);</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    <span class="keywordtype">void</span> m_updateLandingGearInfo(<a class="code" href="structLandingGearInfo.html">LandingGearInfo</a>&amp; info);</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    <span class="keywordtype">void</span> m_updateLedInfo(<a class="code" href="structLedInfo.html">LedInfo</a>&amp; info);</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    <span class="keywordtype">void</span> m_updateWinchInfo(<a class="code" href="structWinchInfo.html">WinchInfo</a>&amp; info);</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="keywordtype">void</span> info(<span class="keyword">const</span> <span class="keywordtype">char</span>* info_msg);</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;};</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="preprocessor">#if !defined(DOXYGEN_ONLY) &amp;&amp; !defined(__BINDINGS)</span></div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    std::mutex muxHookinfo;</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    std::mutex muxLandingGearInfo;</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    std::mutex muxLedInfo;</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    std::mutex muxWinchInfo;</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    std::mutex muxInfoStream;</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// !DOXYGEN_ONLY and !__BINDINGS</span></div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    <span class="keywordtype">void</span> m_receivedPacketHandler();</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <span class="keywordtype">void</span> m_updateHookInfo(<a class="code" href="structHookInfo.html">HookInfo</a>&amp; info);</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    <span class="keywordtype">void</span> m_updateLandingGearInfo(<a class="code" href="structLandingGearInfo.html">LandingGearInfo</a>&amp; info);</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="keywordtype">void</span> m_updateLedInfo(<a class="code" href="structLedInfo.html">LedInfo</a>&amp; info);</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    <span class="keywordtype">void</span> m_updateWinchInfo(<a class="code" href="structWinchInfo.html">WinchInfo</a>&amp; info);</div>
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160; </div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// UPLS_CONTROLLER_H</span></div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="keywordtype">void</span> info(<span class="keyword">const</span> <span class="keywordtype">char</span>* info_msg);</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;};</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// UPLS_CONTROLLER_H</span></div>
 <div class="ttc" id="aclassUPLS__Controller_html"><div class="ttname"><a href="classUPLS__Controller.html">UPLS_Controller</a></div><div class="ttdoc">Class for controlling various peripherals on the UAV. Provides various functions to control UPLS.</div><div class="ttdef"><b>Definition:</b> upls_controller.h:19</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_a1ea441fb5dc43406a27df11c4cc5bbca"><div class="ttname"><a href="classUPLS__Controller.html#a1ea441fb5dc43406a27df11c4cc5bbca">UPLS_Controller::printAvailablePorts</a></div><div class="ttdeci">void printAvailablePorts()</div><div class="ttdoc">Utility function to check for available serial ports.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_a257b0b00b95cb4bb97ad9cc3b7269ee4"><div class="ttname"><a href="classUPLS__Controller.html#a257b0b00b95cb4bb97ad9cc3b7269ee4">UPLS_Controller::printAllMessages</a></div><div class="ttdeci">void printAllMessages()</div><div class="ttdoc">Prints all messages in the queue. Prints and deletes all messages in the queue.</div></div>
@@ -222,9 +226,9 @@ $(function() {
 <div class="ttc" id="aclassUPLS__Controller_html_aefa62caefd06d1e9657507eae163a672"><div class="ttname"><a href="classUPLS__Controller.html#aefa62caefd06d1e9657507eae163a672">UPLS_Controller::start</a></div><div class="ttdeci">bool start()</div><div class="ttdoc">Starts serial comunication with UPLS.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_afa5f914e13808dd37452006d06a5fc0d"><div class="ttname"><a href="classUPLS__Controller.html#afa5f914e13808dd37452006d06a5fc0d">UPLS_Controller::winchInfo</a></div><div class="ttdeci">WinchInfo winchInfo()</div><div class="ttdoc">Access function. Returns object, containing latest information about UAV's winch.</div></div>
 <div class="ttc" id="astructHookInfo_html"><div class="ttname"><a href="structHookInfo.html">HookInfo</a></div><div class="ttdoc">Structure that holds information about UAV UPLS hook.</div><div class="ttdef"><b>Definition:</b> packet.h:84</div></div>
-<div class="ttc" id="astructLandingGearInfo_html"><div class="ttname"><a href="structLandingGearInfo.html">LandingGearInfo</a></div><div class="ttdef"><b>Definition:</b> packet.h:291</div></div>
-<div class="ttc" id="astructLedInfo_html"><div class="ttname"><a href="structLedInfo.html">LedInfo</a></div><div class="ttdef"><b>Definition:</b> packet.h:165</div></div>
-<div class="ttc" id="astructWinchInfo_html"><div class="ttname"><a href="structWinchInfo.html">WinchInfo</a></div><div class="ttdef"><b>Definition:</b> packet.h:330</div></div>
+<div class="ttc" id="astructLandingGearInfo_html"><div class="ttname"><a href="structLandingGearInfo.html">LandingGearInfo</a></div><div class="ttdef"><b>Definition:</b> packet.h:231</div></div>
+<div class="ttc" id="astructLedInfo_html"><div class="ttname"><a href="structLedInfo.html">LedInfo</a></div><div class="ttdef"><b>Definition:</b> packet.h:163</div></div>
+<div class="ttc" id="astructWinchInfo_html"><div class="ttname"><a href="structWinchInfo.html">WinchInfo</a></div><div class="ttdef"><b>Definition:</b> packet.h:270</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

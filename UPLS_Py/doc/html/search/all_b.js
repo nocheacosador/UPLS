@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['upls_5fcontroller_36',['UPLS_Controller',['../classUPLS__Controller.html',1,'UPLS_Controller'],['../classUPLS__Controller.html#a3f407ff7a9fd6f0522887ec24b2d2cbc',1,'UPLS_Controller::UPLS_Controller()']]]
+  ['_7eupls_5fcontroller_38',['~UPLS_Controller',['../classUPLS__Controller.html#a8c665ba42db17939492572e403d2a8b5',1,'UPLS_Controller']]]
 ];

@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['setserialport_33',['setSerialPort',['../classUPLS__Controller.html#a6c6c12f1c9a51e8a1dcfd25a98de29a3',1,'UPLS_Controller']]],
-  ['start_34',['start',['../classUPLS__Controller.html#aefa62caefd06d1e9657507eae163a672',1,'UPLS_Controller']]],
-  ['stop_35',['stop',['../classUPLS__Controller.html#a5f7876c7655d3e49f681a49780ff919e',1,'UPLS_Controller']]]
+  ['warning_34',['Warning',['../structWarning.html',1,'Warning'],['../classUPLS__Controller.html#a4f830d9035e38afd186e4f14d521b561',1,'UPLS_Controller::warning()']]],
+  ['warningsreceived_35',['warningsReceived',['../classUPLS__Controller.html#a2e51468cde2f796c894ed41e757a2afb',1,'UPLS_Controller']]],
+  ['winchinfo_36',['WinchInfo',['../structWinchInfo.html',1,'WinchInfo'],['../classUPLS__Controller.html#afa5f914e13808dd37452006d06a5fc0d',1,'UPLS_Controller::winchInfo()']]],
+  ['winchinfoupdatefrequency_37',['winchInfoUpdateFrequency',['../classUPLS__Controller.html#ad7c6ad2440ff24f525ad669f52319c5c',1,'UPLS_Controller']]]
 ];

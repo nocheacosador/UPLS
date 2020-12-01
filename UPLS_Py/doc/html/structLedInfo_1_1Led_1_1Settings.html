@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>UPLS: LedInfo::Led Struct Reference</title>
+<title>UPLS: LedInfo::Led::Settings Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -62,48 +62,41 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="structLedInfo.html">LedInfo</a></li><li class="navelem"><a class="el" href="structLedInfo_1_1Led.html">Led</a></li>  </ul>
+<li class="navelem"><a class="el" href="structLedInfo.html">LedInfo</a></li><li class="navelem"><a class="el" href="structLedInfo_1_1Led.html">Led</a></li><li class="navelem"><a class="el" href="structLedInfo_1_1Led_1_1Settings.html">Settings</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="structLedInfo_1_1Led-members.html">List of all members</a>  </div>
+<a href="structLedInfo_1_1Led_1_1Settings-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">LedInfo::Led Struct Reference</div>  </div>
+<div class="title">LedInfo::Led::Settings Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structLedInfo_1_1Led_1_1Settings.html">Settings</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a17d6c50dd88c27ffc67294703aca0367"><td class="memItemLeft" align="right" valign="top"><a id="a17d6c50dd88c27ffc67294703aca0367"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>Mode</b> : uint8_t { <b>Unknown</b> = 0
-, <b>Normal</b>
-, <b>Soft</b>
-, <b>Pulsing</b>
- }</td></tr>
-<tr class="separator:a17d6c50dd88c27ffc67294703aca0367"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3a62933979cc70dfb295f3e85fc93693"><td class="memItemLeft" align="right" valign="top"><a id="a3a62933979cc70dfb295f3e85fc93693"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>getEnabled</b> () const</td></tr>
-<tr class="separator:a3a62933979cc70dfb295f3e85fc93693"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaab22ed36485146dd004873ac90966df"><td class="memItemLeft" align="right" valign="top"><a id="aaab22ed36485146dd004873ac90966df"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>getCurrentValue</b> () const</td></tr>
-<tr class="separator:aaab22ed36485146dd004873ac90966df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0382789da4f28ab6d1be6de35560b4e8"><td class="memItemLeft" align="right" valign="top"><a id="a0382789da4f28ab6d1be6de35560b4e8"></a>
-Mode&#160;</td><td class="memItemRight" valign="bottom"><b>getMode</b> () const</td></tr>
-<tr class="separator:a0382789da4f28ab6d1be6de35560b4e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d04f380cf085df9b22758ad250f045a"><td class="memItemLeft" align="right" valign="top"><a id="a4d04f380cf085df9b22758ad250f045a"></a>
-<a class="el" href="structLedInfo_1_1Led_1_1Settings.html">Settings</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getSettings</b> () const</td></tr>
-<tr class="separator:a4d04f380cf085df9b22758ad250f045a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a533bc85bae6b2b8be6337c55150600b0"><td class="memItemLeft" align="right" valign="top"><a id="a533bc85bae6b2b8be6337c55150600b0"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Settings</b> (uint8_t onValue=255, uint8_t offValue=0, uint16_t fadeInDuration=500, uint16_t fadeOutDuration=500, uint16_t onDuration=1000, uint16_t offDuration=1000)</td></tr>
+<tr class="separator:a533bc85bae6b2b8be6337c55150600b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1a427094e72ca39bad375354d326979"><td class="memItemLeft" align="right" valign="top"><a id="af1a427094e72ca39bad375354d326979"></a>
+uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getFadeInDuration</b> () const</td></tr>
+<tr class="separator:af1a427094e72ca39bad375354d326979"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a6b3fbbb439c53a60a8d23fe991ab95"><td class="memItemLeft" align="right" valign="top"><a id="a5a6b3fbbb439c53a60a8d23fe991ab95"></a>
+uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getFadeOutDuration</b> () const</td></tr>
+<tr class="separator:a5a6b3fbbb439c53a60a8d23fe991ab95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47ba6283706f3d1a42c127a2887b05c5"><td class="memItemLeft" align="right" valign="top"><a id="a47ba6283706f3d1a42c127a2887b05c5"></a>
+uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getOnDuration</b> () const</td></tr>
+<tr class="separator:a47ba6283706f3d1a42c127a2887b05c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0efe8d0032226d834bf68c271a9e6d85"><td class="memItemLeft" align="right" valign="top"><a id="a0efe8d0032226d834bf68c271a9e6d85"></a>
+uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getOffDuration</b> () const</td></tr>
+<tr class="separator:a0efe8d0032226d834bf68c271a9e6d85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af90f4f50e731a79c17e33735f99b8726"><td class="memItemLeft" align="right" valign="top"><a id="af90f4f50e731a79c17e33735f99b8726"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>getOnValue</b> () const</td></tr>
+<tr class="separator:af90f4f50e731a79c17e33735f99b8726"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbaa277d685c1b72812f5767e083970d"><td class="memItemLeft" align="right" valign="top"><a id="acbaa277d685c1b72812f5767e083970d"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>getOffValue</b> () const</td></tr>
+<tr class="separator:acbaa277d685c1b72812f5767e083970d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/media/lukas/Data/IONX/Software/UPLS/shared/packet/<a class="el" href="packet_8h_source.html">packet.h</a></li>

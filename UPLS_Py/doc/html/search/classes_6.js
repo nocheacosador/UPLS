@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['normal_54',['Normal',['../structLedInfo_1_1Led_1_1Normal.html',1,'LedInfo::Led']]]
+  ['upls_5fcontroller_50',['UPLS_Controller',['../classUPLS__Controller.html',1,'']]]
 ];
