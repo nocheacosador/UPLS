@@ -24,21 +24,18 @@ set(generated_sources
 	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/command_wrapper.cpp
 	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/hookinfo_latch_wrapper.cpp
 	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/landinggearinfo_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/ledinfo_led_normal_wrapper.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/ledinfo_led_settings_wrapper.cpp
 	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/ledinfo_wrapper.cpp
 	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/warning_wrapper.cpp
 	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/error_wrapper.cpp
 	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/hookinfo_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/ledinfo_led_blinking_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/ledinfo_led_pulsing_wrapper.cpp
 	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/upls_controller_wrapper.cpp
 	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/winchinfo_wrapper.cpp
 	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/hookinfo_battery_wrapper.cpp
 	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/landinggearinfo_leg_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/ledinfo_led_fadeinfadeout_wrapper.cpp
 	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/ledinfo_led_wrapper.cpp
 	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/upls_module_wrapper.cpp
-    )
+	)
 
 if(NOT python_interpreter)
     find_program(python_interpreter "python3")

@@ -4,13 +4,11 @@ Command::Command() : code(Command::Code::Unknown), pulseLength(0) { ; }
 Command::Command(Command::Code _code) : code(_code), pulseLength(0) { ; }
 
 #if defined(__XAVIER)
-//Command::Code Command::getCode() 
-
-//void Command::setCode(Command::Code _code) { code = _code; }
-
-//uint16_t Command::getPulseLength() { return pulseLength; }
-
-//void Command::setPulseLength(uint16_t value) { pulseLength = value; };
+//void HookInfo::Battery::setVoltage(uint16_t _voltage) { voltage = _voltage; }
+//void HookInfo::Battery::setState(State _state) { state = _state; }
+float HookInfo::Battery::getVoltage() const { return float(voltage) / 1000.f; }
+HookInfo::Battery::State HookInfo::Battery::getState() const { return state; }
+HookInfo::Battery::Battery(uint16_t _voltage, HookInfo::Battery::State _state) : voltage(_voltage), state(_state) { ; }
 #endif // __XAVIER
 
 HookInfo::HookInfo() : averageRetrie(0.f), mcuRuntime(0.f), lostMessages(0), 

@@ -371,113 +371,32 @@ UPLS/landinggearinfo_wrapper.cpp.s:
 	$(MAKE) -f CMakeFiles/UPLS.dir/build.make CMakeFiles/UPLS.dir/UPLS/landinggearinfo_wrapper.cpp.s
 .PHONY : UPLS/landinggearinfo_wrapper.cpp.s
 
-UPLS/ledinfo_led_blinking_wrapper.o: UPLS/ledinfo_led_blinking_wrapper.cpp.o
+UPLS/ledinfo_led_settings_wrapper.o: UPLS/ledinfo_led_settings_wrapper.cpp.o
 
-.PHONY : UPLS/ledinfo_led_blinking_wrapper.o
-
-# target to build an object file
-UPLS/ledinfo_led_blinking_wrapper.cpp.o:
-	$(MAKE) -f CMakeFiles/UPLS.dir/build.make CMakeFiles/UPLS.dir/UPLS/ledinfo_led_blinking_wrapper.cpp.o
-.PHONY : UPLS/ledinfo_led_blinking_wrapper.cpp.o
-
-UPLS/ledinfo_led_blinking_wrapper.i: UPLS/ledinfo_led_blinking_wrapper.cpp.i
-
-.PHONY : UPLS/ledinfo_led_blinking_wrapper.i
-
-# target to preprocess a source file
-UPLS/ledinfo_led_blinking_wrapper.cpp.i:
-	$(MAKE) -f CMakeFiles/UPLS.dir/build.make CMakeFiles/UPLS.dir/UPLS/ledinfo_led_blinking_wrapper.cpp.i
-.PHONY : UPLS/ledinfo_led_blinking_wrapper.cpp.i
-
-UPLS/ledinfo_led_blinking_wrapper.s: UPLS/ledinfo_led_blinking_wrapper.cpp.s
-
-.PHONY : UPLS/ledinfo_led_blinking_wrapper.s
-
-# target to generate assembly for a file
-UPLS/ledinfo_led_blinking_wrapper.cpp.s:
-	$(MAKE) -f CMakeFiles/UPLS.dir/build.make CMakeFiles/UPLS.dir/UPLS/ledinfo_led_blinking_wrapper.cpp.s
-.PHONY : UPLS/ledinfo_led_blinking_wrapper.cpp.s
-
-UPLS/ledinfo_led_fadeinfadeout_wrapper.o: UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.o
-
-.PHONY : UPLS/ledinfo_led_fadeinfadeout_wrapper.o
+.PHONY : UPLS/ledinfo_led_settings_wrapper.o
 
 # target to build an object file
-UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.o:
-	$(MAKE) -f CMakeFiles/UPLS.dir/build.make CMakeFiles/UPLS.dir/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.o
-.PHONY : UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.o
+UPLS/ledinfo_led_settings_wrapper.cpp.o:
+	$(MAKE) -f CMakeFiles/UPLS.dir/build.make CMakeFiles/UPLS.dir/UPLS/ledinfo_led_settings_wrapper.cpp.o
+.PHONY : UPLS/ledinfo_led_settings_wrapper.cpp.o
 
-UPLS/ledinfo_led_fadeinfadeout_wrapper.i: UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.i
+UPLS/ledinfo_led_settings_wrapper.i: UPLS/ledinfo_led_settings_wrapper.cpp.i
 
-.PHONY : UPLS/ledinfo_led_fadeinfadeout_wrapper.i
-
-# target to preprocess a source file
-UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.i:
-	$(MAKE) -f CMakeFiles/UPLS.dir/build.make CMakeFiles/UPLS.dir/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.i
-.PHONY : UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.i
-
-UPLS/ledinfo_led_fadeinfadeout_wrapper.s: UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.s
-
-.PHONY : UPLS/ledinfo_led_fadeinfadeout_wrapper.s
-
-# target to generate assembly for a file
-UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.s:
-	$(MAKE) -f CMakeFiles/UPLS.dir/build.make CMakeFiles/UPLS.dir/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.s
-.PHONY : UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.s
-
-UPLS/ledinfo_led_normal_wrapper.o: UPLS/ledinfo_led_normal_wrapper.cpp.o
-
-.PHONY : UPLS/ledinfo_led_normal_wrapper.o
-
-# target to build an object file
-UPLS/ledinfo_led_normal_wrapper.cpp.o:
-	$(MAKE) -f CMakeFiles/UPLS.dir/build.make CMakeFiles/UPLS.dir/UPLS/ledinfo_led_normal_wrapper.cpp.o
-.PHONY : UPLS/ledinfo_led_normal_wrapper.cpp.o
-
-UPLS/ledinfo_led_normal_wrapper.i: UPLS/ledinfo_led_normal_wrapper.cpp.i
-
-.PHONY : UPLS/ledinfo_led_normal_wrapper.i
+.PHONY : UPLS/ledinfo_led_settings_wrapper.i
 
 # target to preprocess a source file
-UPLS/ledinfo_led_normal_wrapper.cpp.i:
-	$(MAKE) -f CMakeFiles/UPLS.dir/build.make CMakeFiles/UPLS.dir/UPLS/ledinfo_led_normal_wrapper.cpp.i
-.PHONY : UPLS/ledinfo_led_normal_wrapper.cpp.i
+UPLS/ledinfo_led_settings_wrapper.cpp.i:
+	$(MAKE) -f CMakeFiles/UPLS.dir/build.make CMakeFiles/UPLS.dir/UPLS/ledinfo_led_settings_wrapper.cpp.i
+.PHONY : UPLS/ledinfo_led_settings_wrapper.cpp.i
 
-UPLS/ledinfo_led_normal_wrapper.s: UPLS/ledinfo_led_normal_wrapper.cpp.s
+UPLS/ledinfo_led_settings_wrapper.s: UPLS/ledinfo_led_settings_wrapper.cpp.s
 
-.PHONY : UPLS/ledinfo_led_normal_wrapper.s
-
-# target to generate assembly for a file
-UPLS/ledinfo_led_normal_wrapper.cpp.s:
-	$(MAKE) -f CMakeFiles/UPLS.dir/build.make CMakeFiles/UPLS.dir/UPLS/ledinfo_led_normal_wrapper.cpp.s
-.PHONY : UPLS/ledinfo_led_normal_wrapper.cpp.s
-
-UPLS/ledinfo_led_pulsing_wrapper.o: UPLS/ledinfo_led_pulsing_wrapper.cpp.o
-
-.PHONY : UPLS/ledinfo_led_pulsing_wrapper.o
-
-# target to build an object file
-UPLS/ledinfo_led_pulsing_wrapper.cpp.o:
-	$(MAKE) -f CMakeFiles/UPLS.dir/build.make CMakeFiles/UPLS.dir/UPLS/ledinfo_led_pulsing_wrapper.cpp.o
-.PHONY : UPLS/ledinfo_led_pulsing_wrapper.cpp.o
-
-UPLS/ledinfo_led_pulsing_wrapper.i: UPLS/ledinfo_led_pulsing_wrapper.cpp.i
-
-.PHONY : UPLS/ledinfo_led_pulsing_wrapper.i
-
-# target to preprocess a source file
-UPLS/ledinfo_led_pulsing_wrapper.cpp.i:
-	$(MAKE) -f CMakeFiles/UPLS.dir/build.make CMakeFiles/UPLS.dir/UPLS/ledinfo_led_pulsing_wrapper.cpp.i
-.PHONY : UPLS/ledinfo_led_pulsing_wrapper.cpp.i
-
-UPLS/ledinfo_led_pulsing_wrapper.s: UPLS/ledinfo_led_pulsing_wrapper.cpp.s
-
-.PHONY : UPLS/ledinfo_led_pulsing_wrapper.s
+.PHONY : UPLS/ledinfo_led_settings_wrapper.s
 
 # target to generate assembly for a file
-UPLS/ledinfo_led_pulsing_wrapper.cpp.s:
-	$(MAKE) -f CMakeFiles/UPLS.dir/build.make CMakeFiles/UPLS.dir/UPLS/ledinfo_led_pulsing_wrapper.cpp.s
-.PHONY : UPLS/ledinfo_led_pulsing_wrapper.cpp.s
+UPLS/ledinfo_led_settings_wrapper.cpp.s:
+	$(MAKE) -f CMakeFiles/UPLS.dir/build.make CMakeFiles/UPLS.dir/UPLS/ledinfo_led_settings_wrapper.cpp.s
+.PHONY : UPLS/ledinfo_led_settings_wrapper.cpp.s
 
 UPLS/ledinfo_led_wrapper.o: UPLS/ledinfo_led_wrapper.cpp.o
 
@@ -676,18 +595,9 @@ help:
 	@echo "... UPLS/landinggearinfo_wrapper.o"
 	@echo "... UPLS/landinggearinfo_wrapper.i"
 	@echo "... UPLS/landinggearinfo_wrapper.s"
-	@echo "... UPLS/ledinfo_led_blinking_wrapper.o"
-	@echo "... UPLS/ledinfo_led_blinking_wrapper.i"
-	@echo "... UPLS/ledinfo_led_blinking_wrapper.s"
-	@echo "... UPLS/ledinfo_led_fadeinfadeout_wrapper.o"
-	@echo "... UPLS/ledinfo_led_fadeinfadeout_wrapper.i"
-	@echo "... UPLS/ledinfo_led_fadeinfadeout_wrapper.s"
-	@echo "... UPLS/ledinfo_led_normal_wrapper.o"
-	@echo "... UPLS/ledinfo_led_normal_wrapper.i"
-	@echo "... UPLS/ledinfo_led_normal_wrapper.s"
-	@echo "... UPLS/ledinfo_led_pulsing_wrapper.o"
-	@echo "... UPLS/ledinfo_led_pulsing_wrapper.i"
-	@echo "... UPLS/ledinfo_led_pulsing_wrapper.s"
+	@echo "... UPLS/ledinfo_led_settings_wrapper.o"
+	@echo "... UPLS/ledinfo_led_settings_wrapper.i"
+	@echo "... UPLS/ledinfo_led_settings_wrapper.s"
 	@echo "... UPLS/ledinfo_led_wrapper.o"
 	@echo "... UPLS/ledinfo_led_wrapper.i"
 	@echo "... UPLS/ledinfo_led_wrapper.s"

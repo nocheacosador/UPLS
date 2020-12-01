@@ -69,8 +69,8 @@ UPLS/hookinfo_latch_wrapper.cpp: UPLS/command_wrapper.cpp
 UPLS/landinggearinfo_wrapper.cpp: UPLS/command_wrapper.cpp
 	@$(CMAKE_COMMAND) -E touch_nocreate UPLS/landinggearinfo_wrapper.cpp
 
-UPLS/ledinfo_led_normal_wrapper.cpp: UPLS/command_wrapper.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate UPLS/ledinfo_led_normal_wrapper.cpp
+UPLS/ledinfo_led_settings_wrapper.cpp: UPLS/command_wrapper.cpp
+	@$(CMAKE_COMMAND) -E touch_nocreate UPLS/ledinfo_led_settings_wrapper.cpp
 
 UPLS/ledinfo_wrapper.cpp: UPLS/command_wrapper.cpp
 	@$(CMAKE_COMMAND) -E touch_nocreate UPLS/ledinfo_wrapper.cpp
@@ -84,12 +84,6 @@ UPLS/error_wrapper.cpp: UPLS/command_wrapper.cpp
 UPLS/hookinfo_wrapper.cpp: UPLS/command_wrapper.cpp
 	@$(CMAKE_COMMAND) -E touch_nocreate UPLS/hookinfo_wrapper.cpp
 
-UPLS/ledinfo_led_blinking_wrapper.cpp: UPLS/command_wrapper.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate UPLS/ledinfo_led_blinking_wrapper.cpp
-
-UPLS/ledinfo_led_pulsing_wrapper.cpp: UPLS/command_wrapper.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate UPLS/ledinfo_led_pulsing_wrapper.cpp
-
 UPLS/upls_controller_wrapper.cpp: UPLS/command_wrapper.cpp
 	@$(CMAKE_COMMAND) -E touch_nocreate UPLS/upls_controller_wrapper.cpp
 
@@ -101,9 +95,6 @@ UPLS/hookinfo_battery_wrapper.cpp: UPLS/command_wrapper.cpp
 
 UPLS/landinggearinfo_leg_wrapper.cpp: UPLS/command_wrapper.cpp
 	@$(CMAKE_COMMAND) -E touch_nocreate UPLS/landinggearinfo_leg_wrapper.cpp
-
-UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp: UPLS/command_wrapper.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp
 
 UPLS/ledinfo_led_wrapper.cpp: UPLS/command_wrapper.cpp
 	@$(CMAKE_COMMAND) -E touch_nocreate UPLS/ledinfo_led_wrapper.cpp
@@ -150,18 +141,18 @@ CMakeFiles/UPLS.dir/UPLS/landinggearinfo_wrapper.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/UPLS.dir/UPLS/landinggearinfo_wrapper.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/landinggearinfo_wrapper.cpp -o CMakeFiles/UPLS.dir/UPLS/landinggearinfo_wrapper.cpp.s
 
-CMakeFiles/UPLS.dir/UPLS/ledinfo_led_normal_wrapper.cpp.o: CMakeFiles/UPLS.dir/flags.make
-CMakeFiles/UPLS.dir/UPLS/ledinfo_led_normal_wrapper.cpp.o: UPLS/ledinfo_led_normal_wrapper.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/UPLS.dir/UPLS/ledinfo_led_normal_wrapper.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/UPLS.dir/UPLS/ledinfo_led_normal_wrapper.cpp.o -c /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/ledinfo_led_normal_wrapper.cpp
+CMakeFiles/UPLS.dir/UPLS/ledinfo_led_settings_wrapper.cpp.o: CMakeFiles/UPLS.dir/flags.make
+CMakeFiles/UPLS.dir/UPLS/ledinfo_led_settings_wrapper.cpp.o: UPLS/ledinfo_led_settings_wrapper.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/UPLS.dir/UPLS/ledinfo_led_settings_wrapper.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/UPLS.dir/UPLS/ledinfo_led_settings_wrapper.cpp.o -c /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/ledinfo_led_settings_wrapper.cpp
 
-CMakeFiles/UPLS.dir/UPLS/ledinfo_led_normal_wrapper.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/UPLS.dir/UPLS/ledinfo_led_normal_wrapper.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/ledinfo_led_normal_wrapper.cpp > CMakeFiles/UPLS.dir/UPLS/ledinfo_led_normal_wrapper.cpp.i
+CMakeFiles/UPLS.dir/UPLS/ledinfo_led_settings_wrapper.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/UPLS.dir/UPLS/ledinfo_led_settings_wrapper.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/ledinfo_led_settings_wrapper.cpp > CMakeFiles/UPLS.dir/UPLS/ledinfo_led_settings_wrapper.cpp.i
 
-CMakeFiles/UPLS.dir/UPLS/ledinfo_led_normal_wrapper.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/UPLS.dir/UPLS/ledinfo_led_normal_wrapper.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/ledinfo_led_normal_wrapper.cpp -o CMakeFiles/UPLS.dir/UPLS/ledinfo_led_normal_wrapper.cpp.s
+CMakeFiles/UPLS.dir/UPLS/ledinfo_led_settings_wrapper.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/UPLS.dir/UPLS/ledinfo_led_settings_wrapper.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/ledinfo_led_settings_wrapper.cpp -o CMakeFiles/UPLS.dir/UPLS/ledinfo_led_settings_wrapper.cpp.s
 
 CMakeFiles/UPLS.dir/UPLS/ledinfo_wrapper.cpp.o: CMakeFiles/UPLS.dir/flags.make
 CMakeFiles/UPLS.dir/UPLS/ledinfo_wrapper.cpp.o: UPLS/ledinfo_wrapper.cpp
@@ -215,35 +206,9 @@ CMakeFiles/UPLS.dir/UPLS/hookinfo_wrapper.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/UPLS.dir/UPLS/hookinfo_wrapper.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/hookinfo_wrapper.cpp -o CMakeFiles/UPLS.dir/UPLS/hookinfo_wrapper.cpp.s
 
-CMakeFiles/UPLS.dir/UPLS/ledinfo_led_blinking_wrapper.cpp.o: CMakeFiles/UPLS.dir/flags.make
-CMakeFiles/UPLS.dir/UPLS/ledinfo_led_blinking_wrapper.cpp.o: UPLS/ledinfo_led_blinking_wrapper.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/UPLS.dir/UPLS/ledinfo_led_blinking_wrapper.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/UPLS.dir/UPLS/ledinfo_led_blinking_wrapper.cpp.o -c /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/ledinfo_led_blinking_wrapper.cpp
-
-CMakeFiles/UPLS.dir/UPLS/ledinfo_led_blinking_wrapper.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/UPLS.dir/UPLS/ledinfo_led_blinking_wrapper.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/ledinfo_led_blinking_wrapper.cpp > CMakeFiles/UPLS.dir/UPLS/ledinfo_led_blinking_wrapper.cpp.i
-
-CMakeFiles/UPLS.dir/UPLS/ledinfo_led_blinking_wrapper.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/UPLS.dir/UPLS/ledinfo_led_blinking_wrapper.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/ledinfo_led_blinking_wrapper.cpp -o CMakeFiles/UPLS.dir/UPLS/ledinfo_led_blinking_wrapper.cpp.s
-
-CMakeFiles/UPLS.dir/UPLS/ledinfo_led_pulsing_wrapper.cpp.o: CMakeFiles/UPLS.dir/flags.make
-CMakeFiles/UPLS.dir/UPLS/ledinfo_led_pulsing_wrapper.cpp.o: UPLS/ledinfo_led_pulsing_wrapper.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/UPLS.dir/UPLS/ledinfo_led_pulsing_wrapper.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/UPLS.dir/UPLS/ledinfo_led_pulsing_wrapper.cpp.o -c /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/ledinfo_led_pulsing_wrapper.cpp
-
-CMakeFiles/UPLS.dir/UPLS/ledinfo_led_pulsing_wrapper.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/UPLS.dir/UPLS/ledinfo_led_pulsing_wrapper.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/ledinfo_led_pulsing_wrapper.cpp > CMakeFiles/UPLS.dir/UPLS/ledinfo_led_pulsing_wrapper.cpp.i
-
-CMakeFiles/UPLS.dir/UPLS/ledinfo_led_pulsing_wrapper.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/UPLS.dir/UPLS/ledinfo_led_pulsing_wrapper.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/ledinfo_led_pulsing_wrapper.cpp -o CMakeFiles/UPLS.dir/UPLS/ledinfo_led_pulsing_wrapper.cpp.s
-
 CMakeFiles/UPLS.dir/UPLS/upls_controller_wrapper.cpp.o: CMakeFiles/UPLS.dir/flags.make
 CMakeFiles/UPLS.dir/UPLS/upls_controller_wrapper.cpp.o: UPLS/upls_controller_wrapper.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/UPLS.dir/UPLS/upls_controller_wrapper.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/UPLS.dir/UPLS/upls_controller_wrapper.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/UPLS.dir/UPLS/upls_controller_wrapper.cpp.o -c /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/upls_controller_wrapper.cpp
 
 CMakeFiles/UPLS.dir/UPLS/upls_controller_wrapper.cpp.i: cmake_force
@@ -256,7 +221,7 @@ CMakeFiles/UPLS.dir/UPLS/upls_controller_wrapper.cpp.s: cmake_force
 
 CMakeFiles/UPLS.dir/UPLS/winchinfo_wrapper.cpp.o: CMakeFiles/UPLS.dir/flags.make
 CMakeFiles/UPLS.dir/UPLS/winchinfo_wrapper.cpp.o: UPLS/winchinfo_wrapper.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/UPLS.dir/UPLS/winchinfo_wrapper.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/UPLS.dir/UPLS/winchinfo_wrapper.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/UPLS.dir/UPLS/winchinfo_wrapper.cpp.o -c /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/winchinfo_wrapper.cpp
 
 CMakeFiles/UPLS.dir/UPLS/winchinfo_wrapper.cpp.i: cmake_force
@@ -269,7 +234,7 @@ CMakeFiles/UPLS.dir/UPLS/winchinfo_wrapper.cpp.s: cmake_force
 
 CMakeFiles/UPLS.dir/UPLS/hookinfo_battery_wrapper.cpp.o: CMakeFiles/UPLS.dir/flags.make
 CMakeFiles/UPLS.dir/UPLS/hookinfo_battery_wrapper.cpp.o: UPLS/hookinfo_battery_wrapper.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/UPLS.dir/UPLS/hookinfo_battery_wrapper.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/UPLS.dir/UPLS/hookinfo_battery_wrapper.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/UPLS.dir/UPLS/hookinfo_battery_wrapper.cpp.o -c /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/hookinfo_battery_wrapper.cpp
 
 CMakeFiles/UPLS.dir/UPLS/hookinfo_battery_wrapper.cpp.i: cmake_force
@@ -282,7 +247,7 @@ CMakeFiles/UPLS.dir/UPLS/hookinfo_battery_wrapper.cpp.s: cmake_force
 
 CMakeFiles/UPLS.dir/UPLS/landinggearinfo_leg_wrapper.cpp.o: CMakeFiles/UPLS.dir/flags.make
 CMakeFiles/UPLS.dir/UPLS/landinggearinfo_leg_wrapper.cpp.o: UPLS/landinggearinfo_leg_wrapper.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/UPLS.dir/UPLS/landinggearinfo_leg_wrapper.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/UPLS.dir/UPLS/landinggearinfo_leg_wrapper.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/UPLS.dir/UPLS/landinggearinfo_leg_wrapper.cpp.o -c /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/landinggearinfo_leg_wrapper.cpp
 
 CMakeFiles/UPLS.dir/UPLS/landinggearinfo_leg_wrapper.cpp.i: cmake_force
@@ -293,22 +258,9 @@ CMakeFiles/UPLS.dir/UPLS/landinggearinfo_leg_wrapper.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/UPLS.dir/UPLS/landinggearinfo_leg_wrapper.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/landinggearinfo_leg_wrapper.cpp -o CMakeFiles/UPLS.dir/UPLS/landinggearinfo_leg_wrapper.cpp.s
 
-CMakeFiles/UPLS.dir/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.o: CMakeFiles/UPLS.dir/flags.make
-CMakeFiles/UPLS.dir/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.o: UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/UPLS.dir/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/UPLS.dir/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.o -c /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp
-
-CMakeFiles/UPLS.dir/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/UPLS.dir/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp > CMakeFiles/UPLS.dir/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.i
-
-CMakeFiles/UPLS.dir/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/UPLS.dir/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp -o CMakeFiles/UPLS.dir/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.s
-
 CMakeFiles/UPLS.dir/UPLS/ledinfo_led_wrapper.cpp.o: CMakeFiles/UPLS.dir/flags.make
 CMakeFiles/UPLS.dir/UPLS/ledinfo_led_wrapper.cpp.o: UPLS/ledinfo_led_wrapper.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/UPLS.dir/UPLS/ledinfo_led_wrapper.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/UPLS.dir/UPLS/ledinfo_led_wrapper.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/UPLS.dir/UPLS/ledinfo_led_wrapper.cpp.o -c /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/ledinfo_led_wrapper.cpp
 
 CMakeFiles/UPLS.dir/UPLS/ledinfo_led_wrapper.cpp.i: cmake_force
@@ -321,7 +273,7 @@ CMakeFiles/UPLS.dir/UPLS/ledinfo_led_wrapper.cpp.s: cmake_force
 
 CMakeFiles/UPLS.dir/UPLS/upls_module_wrapper.cpp.o: CMakeFiles/UPLS.dir/flags.make
 CMakeFiles/UPLS.dir/UPLS/upls_module_wrapper.cpp.o: UPLS/upls_module_wrapper.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/UPLS.dir/UPLS/upls_module_wrapper.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/UPLS.dir/UPLS/upls_module_wrapper.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/UPLS.dir/UPLS/upls_module_wrapper.cpp.o -c /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/UPLS/upls_module_wrapper.cpp
 
 CMakeFiles/UPLS.dir/UPLS/upls_module_wrapper.cpp.i: cmake_force
@@ -337,18 +289,15 @@ UPLS_OBJECTS = \
 "CMakeFiles/UPLS.dir/UPLS/command_wrapper.cpp.o" \
 "CMakeFiles/UPLS.dir/UPLS/hookinfo_latch_wrapper.cpp.o" \
 "CMakeFiles/UPLS.dir/UPLS/landinggearinfo_wrapper.cpp.o" \
-"CMakeFiles/UPLS.dir/UPLS/ledinfo_led_normal_wrapper.cpp.o" \
+"CMakeFiles/UPLS.dir/UPLS/ledinfo_led_settings_wrapper.cpp.o" \
 "CMakeFiles/UPLS.dir/UPLS/ledinfo_wrapper.cpp.o" \
 "CMakeFiles/UPLS.dir/UPLS/warning_wrapper.cpp.o" \
 "CMakeFiles/UPLS.dir/UPLS/error_wrapper.cpp.o" \
 "CMakeFiles/UPLS.dir/UPLS/hookinfo_wrapper.cpp.o" \
-"CMakeFiles/UPLS.dir/UPLS/ledinfo_led_blinking_wrapper.cpp.o" \
-"CMakeFiles/UPLS.dir/UPLS/ledinfo_led_pulsing_wrapper.cpp.o" \
 "CMakeFiles/UPLS.dir/UPLS/upls_controller_wrapper.cpp.o" \
 "CMakeFiles/UPLS.dir/UPLS/winchinfo_wrapper.cpp.o" \
 "CMakeFiles/UPLS.dir/UPLS/hookinfo_battery_wrapper.cpp.o" \
 "CMakeFiles/UPLS.dir/UPLS/landinggearinfo_leg_wrapper.cpp.o" \
-"CMakeFiles/UPLS.dir/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.o" \
 "CMakeFiles/UPLS.dir/UPLS/ledinfo_led_wrapper.cpp.o" \
 "CMakeFiles/UPLS.dir/UPLS/upls_module_wrapper.cpp.o"
 
@@ -358,25 +307,22 @@ UPLS_EXTERNAL_OBJECTS =
 UPLS.so: CMakeFiles/UPLS.dir/UPLS/command_wrapper.cpp.o
 UPLS.so: CMakeFiles/UPLS.dir/UPLS/hookinfo_latch_wrapper.cpp.o
 UPLS.so: CMakeFiles/UPLS.dir/UPLS/landinggearinfo_wrapper.cpp.o
-UPLS.so: CMakeFiles/UPLS.dir/UPLS/ledinfo_led_normal_wrapper.cpp.o
+UPLS.so: CMakeFiles/UPLS.dir/UPLS/ledinfo_led_settings_wrapper.cpp.o
 UPLS.so: CMakeFiles/UPLS.dir/UPLS/ledinfo_wrapper.cpp.o
 UPLS.so: CMakeFiles/UPLS.dir/UPLS/warning_wrapper.cpp.o
 UPLS.so: CMakeFiles/UPLS.dir/UPLS/error_wrapper.cpp.o
 UPLS.so: CMakeFiles/UPLS.dir/UPLS/hookinfo_wrapper.cpp.o
-UPLS.so: CMakeFiles/UPLS.dir/UPLS/ledinfo_led_blinking_wrapper.cpp.o
-UPLS.so: CMakeFiles/UPLS.dir/UPLS/ledinfo_led_pulsing_wrapper.cpp.o
 UPLS.so: CMakeFiles/UPLS.dir/UPLS/upls_controller_wrapper.cpp.o
 UPLS.so: CMakeFiles/UPLS.dir/UPLS/winchinfo_wrapper.cpp.o
 UPLS.so: CMakeFiles/UPLS.dir/UPLS/hookinfo_battery_wrapper.cpp.o
 UPLS.so: CMakeFiles/UPLS.dir/UPLS/landinggearinfo_leg_wrapper.cpp.o
-UPLS.so: CMakeFiles/UPLS.dir/UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp.o
 UPLS.so: CMakeFiles/UPLS.dir/UPLS/ledinfo_led_wrapper.cpp.o
 UPLS.so: CMakeFiles/UPLS.dir/UPLS/upls_module_wrapper.cpp.o
 UPLS.so: CMakeFiles/UPLS.dir/build.make
 UPLS.so: /home/lukas/.local/lib/python3.8/site-packages/shiboken2/libshiboken2.abi3.so.5.15
 UPLS.so: src/lib_UPLS.a
 UPLS.so: CMakeFiles/UPLS.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Linking CXX shared module UPLS.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Linking CXX shared module UPLS.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/UPLS.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -391,18 +337,15 @@ CMakeFiles/UPLS.dir/clean:
 CMakeFiles/UPLS.dir/depend: UPLS/command_wrapper.cpp
 CMakeFiles/UPLS.dir/depend: UPLS/hookinfo_latch_wrapper.cpp
 CMakeFiles/UPLS.dir/depend: UPLS/landinggearinfo_wrapper.cpp
-CMakeFiles/UPLS.dir/depend: UPLS/ledinfo_led_normal_wrapper.cpp
+CMakeFiles/UPLS.dir/depend: UPLS/ledinfo_led_settings_wrapper.cpp
 CMakeFiles/UPLS.dir/depend: UPLS/ledinfo_wrapper.cpp
 CMakeFiles/UPLS.dir/depend: UPLS/warning_wrapper.cpp
 CMakeFiles/UPLS.dir/depend: UPLS/error_wrapper.cpp
 CMakeFiles/UPLS.dir/depend: UPLS/hookinfo_wrapper.cpp
-CMakeFiles/UPLS.dir/depend: UPLS/ledinfo_led_blinking_wrapper.cpp
-CMakeFiles/UPLS.dir/depend: UPLS/ledinfo_led_pulsing_wrapper.cpp
 CMakeFiles/UPLS.dir/depend: UPLS/upls_controller_wrapper.cpp
 CMakeFiles/UPLS.dir/depend: UPLS/winchinfo_wrapper.cpp
 CMakeFiles/UPLS.dir/depend: UPLS/hookinfo_battery_wrapper.cpp
 CMakeFiles/UPLS.dir/depend: UPLS/landinggearinfo_leg_wrapper.cpp
-CMakeFiles/UPLS.dir/depend: UPLS/ledinfo_led_fadeinfadeout_wrapper.cpp
 CMakeFiles/UPLS.dir/depend: UPLS/ledinfo_led_wrapper.cpp
 CMakeFiles/UPLS.dir/depend: UPLS/upls_module_wrapper.cpp
 	cd /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /media/lukas/Data/IONX/Software/UPLS/UPLS_Py /media/lukas/Data/IONX/Software/UPLS/UPLS_Py /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build /media/lukas/Data/IONX/Software/UPLS/UPLS_Py/build/CMakeFiles/UPLS.dir/DependInfo.cmake --color=$(COLOR)

@@ -15,9 +15,9 @@ class UpdateFrequencyWidget(Frame):
 		self.ent_frequency.grid(column=1, row=0, sticky="e")
 		self.lbl_hertz.grid(column=2, row=0, sticky="w")
 		# Set default values
-		self.update()
+		self.updateVal()
 	
-	def update(self, frequency = 0.0):
+	def updateVal(self, frequency = 0.0):
 		self.var_frequency.set(f'{frequency:.1f}')
 
 	def state(self, state = "disabled"):
@@ -44,7 +44,7 @@ class BatteryWidget(Frame):
 		self.lbl_state.grid(column=0, row=2, sticky="e")
 		self.ent_state.grid(column=1, row=2)
 		# Set default values
-		self.update()
+		self.updateVal()
 
 	def __setVoltage(self, voltage = 0.0):
 		self.ent_voltage_val.set(f'{voltage:.2f}')
@@ -54,7 +54,7 @@ class BatteryWidget(Frame):
 					 HookInfo.Battery.State.Discharging: 	"discharging", }
 		self.ent_state_val.set(switcher.get(state, "unknown"))
 
-	def update(self, battery = HookInfo.Battery()):
+	def updateVal(self, battery = HookInfo.Battery()):
 		self.__setVoltage(battery.getVoltage())
 		self.__setState(battery.getState())
 
@@ -83,7 +83,7 @@ class LatchWidget(Frame):
 		self.lbl_state.grid(column=0, row=2, sticky="e")
 		self.ent_state.grid(column=1, row=2, sticky="e")
 		# Set default values
-		self.update()
+		self.updateVal()
 
 	def __setCurrent(self, current = 0.0):
 		self.ent_current_val.set(f'{current:.3f}')
@@ -95,7 +95,7 @@ class LatchWidget(Frame):
 					 HookInfo.Latch.State.Closing: 	"closing", }
 		self.ent_state_val.set(switcher.get(state, "unknown"))
 
-	def update(self, latch=HookInfo.Latch()):
+	def updateVal(self, latch=HookInfo.Latch()):
 		self.__setCurrent(latch.getCurrent())
 		self.__setState(latch.getState())
 
@@ -142,7 +142,7 @@ class HookInfoWidget(Frame):
 		self.ent_lost.grid(column=4, row=3)
 		self.ufr_frequency.grid(column=0, row=4, columnspan=5, sticky="e")
 		# Set default values
-		self.update()
+		self.updateVal()
 
 	def __setRuntime(self, runtime = 0.0):
 		if runtime < 100.0:
@@ -159,17 +159,17 @@ class HookInfoWidget(Frame):
 	def __setLost(self, lost = 0):
 		self.var_lost.set(str(lost))
 
-	def update(self, hook_info = HookInfo(), frequency = 0.0):
-		self.lch_latch.update(hook_info.getLatchInfo())
-		self.btr_battery.update(hook_info.getBatteryInfo())
+	def updateVal(self, hook_info = HookInfo(), frequency = 0.0):
+		self.lch_latch.updateVal(hook_info.getLatchInfo())
+		self.btr_battery.updateVal(hook_info.getBatteryInfo())
 		self.__setRuntime(hook_info.getMCURuntime())
 		self.__setTemperature(hook_info.getTemperature())
 		self.__setLost(hook_info.getlostMessages())
 		self.__setRetries(hook_info.getAverageRetrie())
-		self.ufr_frequency.update(frequency)
+		self.ufr_frequency.updateVal(frequency)
 
 	def state(self, state = "disabled"):
-		#self.ent_mcu_runtime["state"] = state
+		self.ent_mcu_runtime["state"] = state
 		self.ent_temperature["state"] = state
 		self.ent_lost["state"] = state
 		self.ent_retries["state"] = state
@@ -202,10 +202,11 @@ class LegWidget(Frame):
 		self.ent_current.grid(column=1, row=3)
 		self.lbl_A.grid(column=2, row=3, sticky="w")
 
-		self.update()
+		self.updateVal()
 
-	def __setCurrent(self, current = 0.0):
-		self.var_current.set(f'{current:.3f}')
+	def __setCurrent(self, current = 0):
+		temp = float(current) / 1000.0
+		self.var_current.set(f'{temp:.3f}')
 
 	def __setValue(self, value = 0):
 		self.var_value.set(str(value))
@@ -217,7 +218,7 @@ class LegWidget(Frame):
 					 LandingGearInfo.Leg.Status.Closing: 	"closing", }
 		self.var_status.set(switcher.get(status, "unknown"))
 
-	def update(self, leg = LandingGearInfo.Leg()):
+	def updateVal(self, leg = LandingGearInfo.Leg()):
 		self.__setCurrent(leg.getCurrent())
 		self.__setStatus(leg.getStatus())
 		self.__setValue(leg.getValue())
@@ -242,12 +243,12 @@ class LandingGearInfoWidget(Frame):
 		self.leg_rear.grid(column=1, row=1)
 		self.ufr_frequency.grid(column=0, row=2, columnspan=2, sticky="e")
 
-		self.update()
+		self.updateVal()
 
-	def update(self, landing_gear = LandingGearInfo(), frequency = 0.0):
-		self.leg_front.update(landing_gear.frontInfo())
-		self.leg_rear.update(landing_gear.rearInfo())
-		self.ufr_frequency.update(frequency)
+	def updateVal(self, landing_gear = LandingGearInfo(), frequency = 0.0):
+		self.leg_front.updateVal(landing_gear.frontInfo())
+		self.leg_rear.updateVal(landing_gear.rearInfo())
+		self.ufr_frequency.updateVal(frequency)
 
 	def state(self, state = "disabled"):
 		self.leg_front.state(state)
@@ -287,10 +288,11 @@ class WinchInfoWidget(Frame):
 		
 		self.ufr_frequency.grid(column=0, row=4, columnspan=3, sticky="e")
 
-		self.update()
+		self.updateVal()
 
-	def __setCurrent(self, current = 0.0):
-		self.var_current.set(f'{current:.3f}')
+	def __setCurrent(self, current = 0):
+		temp = float(current) / 1000.0
+		self.var_current.set(f'{temp:.3f}')
 
 	def __setPosition(self, position = 0.0):
 		self.var_position.set(f'{position:.2f}')
@@ -303,16 +305,17 @@ class WinchInfoWidget(Frame):
 					 WinchInfo.Status.Home:		"home", }
 		self.var_status.set(switcher.get(status, "unknown"))
 
-	def update(self, winch = WinchInfo(), frequency = 0.0):
+	def updateVal(self, winch = WinchInfo(), frequency = 0.0):
 		self.__setCurrent(winch.getCurrent())
 		self.__setStatus(winch.getStatus())
 		self.__setPosition(winch.getPosition())
-		self.ufr_frequency.update(frequency)
+		self.ufr_frequency.updateVal(frequency)
 
 	def state(self, state = "disabled"):
 		self.ent_status["state"] = state
 		self.ent_position["state"] = state
 		self.ent_current["state"] = state
+		self.ufr_frequency.state(state)
 
 
 #class NormalLedModeWidget(Frame):
@@ -328,9 +331,9 @@ class WinchInfoWidget(Frame):
 #		self.lbl_brightness.grid(column=0, row=1, sticky="e")
 #		self.ent_brightness.grid(column=1, row=1)
 #
-#		self.update()
+#		self.updateVal()
 #
-#	def update(self, blinking = LedInfo.Led.Normal()):
+#	def updateVal(self, blinking = LedInfo.Led.Normal()):
 #		self.var_brightness.set(blinking.getBrightness())
 #
 #	def state(self, state = "disabled"):
@@ -361,9 +364,9 @@ class WinchInfoWidget(Frame):
 #		self.ent_offDuration.grid(column=1, row=1)
 #		self.lbl_off_ms.grid(column=2, row=1, sticky="w")
 #
-#		self.update()
+#		self.updateVal()
 #
-#	def update(self, blinking = LedInfo.Led.Normal()):
+#	def updateVal(self, blinking = LedInfo.Led.Normal()):
 #		self.var_onDuration.set(normal.getBrightness())
 #		self.var_offDuration.set(normal.getBrightness())
 #
@@ -387,7 +390,7 @@ class LedWidget(Frame):
 		self.var_mode.set(switcher.get(mode, "unknown"))
 
 
-	def update(self, led = LedInfo.Led()):
+	def updateVal(self, led = LedInfo.Led()):
 		self.__setMode(led.getMode())
 
 

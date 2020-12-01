@@ -11,10 +11,7 @@
 #include "ledinfo_led_wrapper.h"
 
 // inner classes
-#include "ledinfo_led_fadeinfadeout_wrapper.h"
-#include "ledinfo_led_normal_wrapper.h"
-#include "ledinfo_led_blinking_wrapper.h"
-#include "ledinfo_led_pulsing_wrapper.h"
+#include "ledinfo_led_settings_wrapper.h"
 
 // Extra includes
 #include <packet/packet.h>
@@ -77,28 +74,12 @@ Sbk_LedInfo_Led_Init(PyObject *self, PyObject *args, PyObject *kwds)
 
     // Overloaded function decisor
     // 0: Led::Led()
-    // 1: Led::Led(LedInfo::Led::Blinking)
-    // 2: Led::Led(LedInfo::Led::FadeInFadeOut)
-    // 3: Led::Led(LedInfo::Led::Normal)
-    // 4: Led::Led(LedInfo::Led::Pulsing)
-    // 5: Led::Led(LedInfo::Led)
+    // 1: Led::Led(LedInfo::Led)
     if (numArgs == 0) {
         overloadId = 0; // Led()
     } else if (numArgs == 1
-        && (pythonToCpp[0] = Shiboken::Conversions::isPythonToCppValueConvertible(reinterpret_cast<SbkObjectType *>(SbkUPLSTypes[SBK_LEDINFO_LED_PULSING_IDX]), (pyArgs[0])))) {
-        overloadId = 4; // Led(LedInfo::Led::Pulsing)
-    } else if (numArgs == 1
-        && (pythonToCpp[0] = Shiboken::Conversions::isPythonToCppValueConvertible(reinterpret_cast<SbkObjectType *>(SbkUPLSTypes[SBK_LEDINFO_LED_NORMAL_IDX]), (pyArgs[0])))) {
-        overloadId = 3; // Led(LedInfo::Led::Normal)
-    } else if (numArgs == 1
-        && (pythonToCpp[0] = Shiboken::Conversions::isPythonToCppValueConvertible(reinterpret_cast<SbkObjectType *>(SbkUPLSTypes[SBK_LEDINFO_LED_FADEINFADEOUT_IDX]), (pyArgs[0])))) {
-        overloadId = 2; // Led(LedInfo::Led::FadeInFadeOut)
-    } else if (numArgs == 1
-        && (pythonToCpp[0] = Shiboken::Conversions::isPythonToCppValueConvertible(reinterpret_cast<SbkObjectType *>(SbkUPLSTypes[SBK_LEDINFO_LED_BLINKING_IDX]), (pyArgs[0])))) {
-        overloadId = 1; // Led(LedInfo::Led::Blinking)
-    } else if (numArgs == 1
         && (pythonToCpp[0] = Shiboken::Conversions::isPythonToCppReferenceConvertible(reinterpret_cast<SbkObjectType *>(SbkUPLSTypes[SBK_LEDINFO_LED_IDX]), (pyArgs[0])))) {
-        overloadId = 5; // Led(LedInfo::Led)
+        overloadId = 1; // Led(LedInfo::Led)
     }
 
     // Function signature not found.
@@ -115,59 +96,7 @@ Sbk_LedInfo_Led_Init(PyObject *self, PyObject *args, PyObject *kwds)
             }
             break;
         }
-        case 1: // Led(LedInfo::Led::Blinking _blinking)
-        {
-            if (!Shiboken::Object::isValid(pyArgs[0]))
-                return -1;
-            ::LedInfo::Led::Blinking cppArg0;
-            pythonToCpp[0](pyArgs[0], &cppArg0);
-
-            if (!PyErr_Occurred()) {
-                // Led(LedInfo::Led::Blinking)
-                cptr = new ::LedInfo::Led(cppArg0);
-            }
-            break;
-        }
-        case 2: // Led(LedInfo::Led::FadeInFadeOut _fadeInOut)
-        {
-            if (!Shiboken::Object::isValid(pyArgs[0]))
-                return -1;
-            ::LedInfo::Led::FadeInFadeOut cppArg0;
-            pythonToCpp[0](pyArgs[0], &cppArg0);
-
-            if (!PyErr_Occurred()) {
-                // Led(LedInfo::Led::FadeInFadeOut)
-                cptr = new ::LedInfo::Led(cppArg0);
-            }
-            break;
-        }
-        case 3: // Led(LedInfo::Led::Normal _normal)
-        {
-            if (!Shiboken::Object::isValid(pyArgs[0]))
-                return -1;
-            ::LedInfo::Led::Normal cppArg0;
-            pythonToCpp[0](pyArgs[0], &cppArg0);
-
-            if (!PyErr_Occurred()) {
-                // Led(LedInfo::Led::Normal)
-                cptr = new ::LedInfo::Led(cppArg0);
-            }
-            break;
-        }
-        case 4: // Led(LedInfo::Led::Pulsing _pulsing)
-        {
-            if (!Shiboken::Object::isValid(pyArgs[0]))
-                return -1;
-            ::LedInfo::Led::Pulsing cppArg0;
-            pythonToCpp[0](pyArgs[0], &cppArg0);
-
-            if (!PyErr_Occurred()) {
-                // Led(LedInfo::Led::Pulsing)
-                cptr = new ::LedInfo::Led(cppArg0);
-            }
-            break;
-        }
-        case 5: // Led(const LedInfo::Led & Led)
+        case 1: // Led(const LedInfo::Led & Led)
         {
             if (!Shiboken::Object::isValid(pyArgs[0]))
                 return -1;
@@ -207,7 +136,7 @@ Sbk_LedInfo_Led_Init(PyObject *self, PyObject *args, PyObject *kwds)
         return -1;
 }
 
-static PyObject *Sbk_LedInfo_LedFunc_getBlinking(PyObject *self)
+static PyObject *Sbk_LedInfo_LedFunc_getCurrentValue(PyObject *self)
 {
     if (!Shiboken::Object::isValid(self))
         return {};
@@ -219,33 +148,8 @@ static PyObject *Sbk_LedInfo_LedFunc_getBlinking(PyObject *self)
     {
 
         if (!PyErr_Occurred()) {
-            // getBlinking()const
-            LedInfo::Led::Blinking cppResult = const_cast<const ::LedInfo::Led *>(cppSelf)->getBlinking();
-            pyResult = Shiboken::Conversions::copyToPython(reinterpret_cast<SbkObjectType *>(SbkUPLSTypes[SBK_LEDINFO_LED_BLINKING_IDX]), &cppResult);
-        }
-    }
-
-    if (PyErr_Occurred() || !pyResult) {
-        Py_XDECREF(pyResult);
-        return {};
-    }
-    return pyResult;
-}
-
-static PyObject *Sbk_LedInfo_LedFunc_getCurrent_value(PyObject *self)
-{
-    if (!Shiboken::Object::isValid(self))
-        return {};
-    auto cppSelf = reinterpret_cast< ::LedInfo::Led *>(Shiboken::Conversions::cppPointer(SbkUPLSTypes[SBK_LEDINFO_LED_IDX], reinterpret_cast<SbkObject *>(self)));
-    SBK_UNUSED(cppSelf)
-    PyObject *pyResult{};
-
-    // Call function/method
-    {
-
-        if (!PyErr_Occurred()) {
-            // getCurrent_value()const
-            uint8_t cppResult = const_cast<const ::LedInfo::Led *>(cppSelf)->getCurrent_value();
+            // getCurrentValue()const
+            uint8_t cppResult = const_cast<const ::LedInfo::Led *>(cppSelf)->getCurrentValue();
             pyResult = Shiboken::Conversions::copyToPython(Shiboken::Conversions::PrimitiveTypeConverter<uint8_t>(), &cppResult);
         }
     }
@@ -282,31 +186,6 @@ static PyObject *Sbk_LedInfo_LedFunc_getEnabled(PyObject *self)
     return pyResult;
 }
 
-static PyObject *Sbk_LedInfo_LedFunc_getFadeInFadeOutSettings(PyObject *self)
-{
-    if (!Shiboken::Object::isValid(self))
-        return {};
-    auto cppSelf = reinterpret_cast< ::LedInfo::Led *>(Shiboken::Conversions::cppPointer(SbkUPLSTypes[SBK_LEDINFO_LED_IDX], reinterpret_cast<SbkObject *>(self)));
-    SBK_UNUSED(cppSelf)
-    PyObject *pyResult{};
-
-    // Call function/method
-    {
-
-        if (!PyErr_Occurred()) {
-            // getFadeInFadeOutSettings()const
-            LedInfo::Led::FadeInFadeOut cppResult = const_cast<const ::LedInfo::Led *>(cppSelf)->getFadeInFadeOutSettings();
-            pyResult = Shiboken::Conversions::copyToPython(reinterpret_cast<SbkObjectType *>(SbkUPLSTypes[SBK_LEDINFO_LED_FADEINFADEOUT_IDX]), &cppResult);
-        }
-    }
-
-    if (PyErr_Occurred() || !pyResult) {
-        Py_XDECREF(pyResult);
-        return {};
-    }
-    return pyResult;
-}
-
 static PyObject *Sbk_LedInfo_LedFunc_getMode(PyObject *self)
 {
     if (!Shiboken::Object::isValid(self))
@@ -332,7 +211,7 @@ static PyObject *Sbk_LedInfo_LedFunc_getMode(PyObject *self)
     return pyResult;
 }
 
-static PyObject *Sbk_LedInfo_LedFunc_getNormalSettings(PyObject *self)
+static PyObject *Sbk_LedInfo_LedFunc_getSettings(PyObject *self)
 {
     if (!Shiboken::Object::isValid(self))
         return {};
@@ -344,34 +223,9 @@ static PyObject *Sbk_LedInfo_LedFunc_getNormalSettings(PyObject *self)
     {
 
         if (!PyErr_Occurred()) {
-            // getNormalSettings()const
-            LedInfo::Led::Normal cppResult = const_cast<const ::LedInfo::Led *>(cppSelf)->getNormalSettings();
-            pyResult = Shiboken::Conversions::copyToPython(reinterpret_cast<SbkObjectType *>(SbkUPLSTypes[SBK_LEDINFO_LED_NORMAL_IDX]), &cppResult);
-        }
-    }
-
-    if (PyErr_Occurred() || !pyResult) {
-        Py_XDECREF(pyResult);
-        return {};
-    }
-    return pyResult;
-}
-
-static PyObject *Sbk_LedInfo_LedFunc_getPulsingSettings(PyObject *self)
-{
-    if (!Shiboken::Object::isValid(self))
-        return {};
-    auto cppSelf = reinterpret_cast< ::LedInfo::Led *>(Shiboken::Conversions::cppPointer(SbkUPLSTypes[SBK_LEDINFO_LED_IDX], reinterpret_cast<SbkObject *>(self)));
-    SBK_UNUSED(cppSelf)
-    PyObject *pyResult{};
-
-    // Call function/method
-    {
-
-        if (!PyErr_Occurred()) {
-            // getPulsingSettings()const
-            LedInfo::Led::Pulsing cppResult = const_cast<const ::LedInfo::Led *>(cppSelf)->getPulsingSettings();
-            pyResult = Shiboken::Conversions::copyToPython(reinterpret_cast<SbkObjectType *>(SbkUPLSTypes[SBK_LEDINFO_LED_PULSING_IDX]), &cppResult);
+            // getSettings()const
+            LedInfo::Led::Settings cppResult = const_cast<const ::LedInfo::Led *>(cppSelf)->getSettings();
+            pyResult = Shiboken::Conversions::copyToPython(reinterpret_cast<SbkObjectType *>(SbkUPLSTypes[SBK_LEDINFO_LED_SETTINGS_IDX]), &cppResult);
         }
     }
 
@@ -396,13 +250,10 @@ static PyObject *Sbk_LedInfo_Led___copy__(PyObject *self)
 }
 
 static PyMethodDef Sbk_LedInfo_Led_methods[] = {
-    {"getBlinking", reinterpret_cast<PyCFunction>(Sbk_LedInfo_LedFunc_getBlinking), METH_NOARGS},
-    {"getCurrent_value", reinterpret_cast<PyCFunction>(Sbk_LedInfo_LedFunc_getCurrent_value), METH_NOARGS},
+    {"getCurrentValue", reinterpret_cast<PyCFunction>(Sbk_LedInfo_LedFunc_getCurrentValue), METH_NOARGS},
     {"getEnabled", reinterpret_cast<PyCFunction>(Sbk_LedInfo_LedFunc_getEnabled), METH_NOARGS},
-    {"getFadeInFadeOutSettings", reinterpret_cast<PyCFunction>(Sbk_LedInfo_LedFunc_getFadeInFadeOutSettings), METH_NOARGS},
     {"getMode", reinterpret_cast<PyCFunction>(Sbk_LedInfo_LedFunc_getMode), METH_NOARGS},
-    {"getNormalSettings", reinterpret_cast<PyCFunction>(Sbk_LedInfo_LedFunc_getNormalSettings), METH_NOARGS},
-    {"getPulsingSettings", reinterpret_cast<PyCFunction>(Sbk_LedInfo_LedFunc_getPulsingSettings), METH_NOARGS},
+    {"getSettings", reinterpret_cast<PyCFunction>(Sbk_LedInfo_LedFunc_getSettings), METH_NOARGS},
 
     {"__copy__", reinterpret_cast<PyCFunction>(Sbk_LedInfo_Led___copy__), METH_NOARGS},
     {nullptr, nullptr} // Sentinel
@@ -524,59 +375,15 @@ static PythonToCppFunc is_Led_PythonToCpp_Led_COPY_Convertible(PyObject *pyIn) {
     return {};
 }
 
-// Implicit conversions.
-static void LedInfo_Led_Blinking_PythonToCpp_LedInfo_Led(PyObject *pyIn, void *cppOut) {
-    *reinterpret_cast<::LedInfo::Led *>(cppOut) = ::LedInfo::Led( *reinterpret_cast< ::LedInfo::Led::Blinking *>(Shiboken::Conversions::cppPointer(SbkUPLSTypes[SBK_LEDINFO_LED_BLINKING_IDX], reinterpret_cast<SbkObject *>(pyIn))));
-}
-static PythonToCppFunc is_LedInfo_Led_Blinking_PythonToCpp_LedInfo_Led_Convertible(PyObject *pyIn) {
-    if (SbkObject_TypeCheck(SbkUPLSTypes[SBK_LEDINFO_LED_BLINKING_IDX], pyIn))
-        return LedInfo_Led_Blinking_PythonToCpp_LedInfo_Led;
-    return {};
-}
-
-static void LedInfo_Led_FadeInFadeOut_PythonToCpp_LedInfo_Led(PyObject *pyIn, void *cppOut) {
-    *reinterpret_cast<::LedInfo::Led *>(cppOut) = ::LedInfo::Led( *reinterpret_cast< ::LedInfo::Led::FadeInFadeOut *>(Shiboken::Conversions::cppPointer(SbkUPLSTypes[SBK_LEDINFO_LED_FADEINFADEOUT_IDX], reinterpret_cast<SbkObject *>(pyIn))));
-}
-static PythonToCppFunc is_LedInfo_Led_FadeInFadeOut_PythonToCpp_LedInfo_Led_Convertible(PyObject *pyIn) {
-    if (SbkObject_TypeCheck(SbkUPLSTypes[SBK_LEDINFO_LED_FADEINFADEOUT_IDX], pyIn))
-        return LedInfo_Led_FadeInFadeOut_PythonToCpp_LedInfo_Led;
-    return {};
-}
-
-static void LedInfo_Led_Normal_PythonToCpp_LedInfo_Led(PyObject *pyIn, void *cppOut) {
-    *reinterpret_cast<::LedInfo::Led *>(cppOut) = ::LedInfo::Led( *reinterpret_cast< ::LedInfo::Led::Normal *>(Shiboken::Conversions::cppPointer(SbkUPLSTypes[SBK_LEDINFO_LED_NORMAL_IDX], reinterpret_cast<SbkObject *>(pyIn))));
-}
-static PythonToCppFunc is_LedInfo_Led_Normal_PythonToCpp_LedInfo_Led_Convertible(PyObject *pyIn) {
-    if (SbkObject_TypeCheck(SbkUPLSTypes[SBK_LEDINFO_LED_NORMAL_IDX], pyIn))
-        return LedInfo_Led_Normal_PythonToCpp_LedInfo_Led;
-    return {};
-}
-
-static void LedInfo_Led_Pulsing_PythonToCpp_LedInfo_Led(PyObject *pyIn, void *cppOut) {
-    *reinterpret_cast<::LedInfo::Led *>(cppOut) = ::LedInfo::Led( *reinterpret_cast< ::LedInfo::Led::Pulsing *>(Shiboken::Conversions::cppPointer(SbkUPLSTypes[SBK_LEDINFO_LED_PULSING_IDX], reinterpret_cast<SbkObject *>(pyIn))));
-}
-static PythonToCppFunc is_LedInfo_Led_Pulsing_PythonToCpp_LedInfo_Led_Convertible(PyObject *pyIn) {
-    if (SbkObject_TypeCheck(SbkUPLSTypes[SBK_LEDINFO_LED_PULSING_IDX], pyIn))
-        return LedInfo_Led_Pulsing_PythonToCpp_LedInfo_Led;
-    return {};
-}
-
 // The signatures string for the functions.
 // Multiple signatures have their index "n:" in front.
 static const char *LedInfo_Led_SignatureStrings[] = {
-    "5:UPLS.LedInfo.Led(self)",
-    "4:UPLS.LedInfo.Led(self,_blinking:UPLS.LedInfo.Led.Blinking)",
-    "3:UPLS.LedInfo.Led(self,_fadeInOut:UPLS.LedInfo.Led.FadeInFadeOut)",
-    "2:UPLS.LedInfo.Led(self,_normal:UPLS.LedInfo.Led.Normal)",
-    "1:UPLS.LedInfo.Led(self,_pulsing:UPLS.LedInfo.Led.Pulsing)",
+    "1:UPLS.LedInfo.Led(self)",
     "0:UPLS.LedInfo.Led(self,Led:UPLS.LedInfo.Led)",
-    "UPLS.LedInfo.Led.getBlinking(self)->UPLS.LedInfo.Led.Blinking",
-    "UPLS.LedInfo.Led.getCurrent_value(self)->uint8_t",
+    "UPLS.LedInfo.Led.getCurrentValue(self)->uint8_t",
     "UPLS.LedInfo.Led.getEnabled(self)->bool",
-    "UPLS.LedInfo.Led.getFadeInFadeOutSettings(self)->UPLS.LedInfo.Led.FadeInFadeOut",
     "UPLS.LedInfo.Led.getMode(self)->UPLS.LedInfo.Led.Mode",
-    "UPLS.LedInfo.Led.getNormalSettings(self)->UPLS.LedInfo.Led.Normal",
-    "UPLS.LedInfo.Led.getPulsingSettings(self)->UPLS.LedInfo.Led.Pulsing",
+    "UPLS.LedInfo.Led.getSettings(self)->UPLS.LedInfo.Led.Settings",
     "UPLS.LedInfo.Led.__copy__()",
     nullptr}; // Sentinel
 
@@ -615,19 +422,6 @@ void init_LedInfo_Led(PyObject *enclosingClass)
     Shiboken::Conversions::addPythonToCppValueConversion(converter,
         Led_PythonToCpp_Led_COPY,
         is_Led_PythonToCpp_Led_COPY_Convertible);
-    // Add implicit conversions to type converter.
-    Shiboken::Conversions::addPythonToCppValueConversion(converter,
-        LedInfo_Led_Blinking_PythonToCpp_LedInfo_Led,
-        is_LedInfo_Led_Blinking_PythonToCpp_LedInfo_Led_Convertible);
-    Shiboken::Conversions::addPythonToCppValueConversion(converter,
-        LedInfo_Led_FadeInFadeOut_PythonToCpp_LedInfo_Led,
-        is_LedInfo_Led_FadeInFadeOut_PythonToCpp_LedInfo_Led_Convertible);
-    Shiboken::Conversions::addPythonToCppValueConversion(converter,
-        LedInfo_Led_Normal_PythonToCpp_LedInfo_Led,
-        is_LedInfo_Led_Normal_PythonToCpp_LedInfo_Led_Convertible);
-    Shiboken::Conversions::addPythonToCppValueConversion(converter,
-        LedInfo_Led_Pulsing_PythonToCpp_LedInfo_Led,
-        is_LedInfo_Led_Pulsing_PythonToCpp_LedInfo_Led_Convertible);
 
     // Initialization of enums.
 
@@ -646,13 +440,10 @@ void init_LedInfo_Led(PyObject *enclosingClass)
         SbkUPLSTypes[SBK_LEDINFO_LED_MODE_IDX], "Normal", (long) LedInfo::Led::Mode::Normal))
         return;
     if (!Shiboken::Enum::createScopedEnumItem(SbkUPLSTypes[SBK_LEDINFO_LED_MODE_IDX],
+        SbkUPLSTypes[SBK_LEDINFO_LED_MODE_IDX], "Soft", (long) LedInfo::Led::Mode::Soft))
+        return;
+    if (!Shiboken::Enum::createScopedEnumItem(SbkUPLSTypes[SBK_LEDINFO_LED_MODE_IDX],
         SbkUPLSTypes[SBK_LEDINFO_LED_MODE_IDX], "Pulsing", (long) LedInfo::Led::Mode::Pulsing))
-        return;
-    if (!Shiboken::Enum::createScopedEnumItem(SbkUPLSTypes[SBK_LEDINFO_LED_MODE_IDX],
-        SbkUPLSTypes[SBK_LEDINFO_LED_MODE_IDX], "FadeInOut", (long) LedInfo::Led::Mode::FadeInOut))
-        return;
-    if (!Shiboken::Enum::createScopedEnumItem(SbkUPLSTypes[SBK_LEDINFO_LED_MODE_IDX],
-        SbkUPLSTypes[SBK_LEDINFO_LED_MODE_IDX], "Blinking", (long) LedInfo::Led::Mode::Blinking))
         return;
     // Register converter for enum 'LedInfo::Led::Mode'.
     {

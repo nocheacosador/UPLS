@@ -29,18 +29,15 @@ enum : int {
     SBK_LANDINGGEARINFO_LEG_STATUS_IDX                       = 12,
     SBK_LEDINFO_IDX                                          = 13,
     SBK_LEDINFO_LED_IDX                                      = 14,
-    SBK_LEDINFO_LED_MODE_IDX                                 = 17,
-    SBK_LEDINFO_LED_BLINKING_IDX                             = 15,
-    SBK_LEDINFO_LED_FADEINFADEOUT_IDX                        = 16,
-    SBK_LEDINFO_LED_NORMAL_IDX                               = 18,
-    SBK_LEDINFO_LED_PULSING_IDX                              = 19,
-    SBK_UPLS_CONTROLLER_IDX                                  = 20,
-    SBK_WARNING_IDX                                          = 21,
-    SBK_WARNING_CODE_IDX                                     = 22,
-    SBK_WINCHINFO_IDX                                        = 23,
-    SBK_WINCHINFO_STATUS_IDX                                 = 24,
+    SBK_LEDINFO_LED_MODE_IDX                                 = 15,
+    SBK_LEDINFO_LED_SETTINGS_IDX                             = 16,
+    SBK_UPLS_CONTROLLER_IDX                                  = 17,
+    SBK_WARNING_IDX                                          = 18,
+    SBK_WARNING_CODE_IDX                                     = 19,
+    SBK_WINCHINFO_IDX                                        = 20,
+    SBK_WINCHINFO_STATUS_IDX                                 = 21,
     SBK_DEVICE_IDX                                           = 2,
-    SBK_UPLS_IDX_COUNT                                       = 25
+    SBK_UPLS_IDX_COUNT                                       = 22
 };
 // This variable stores all Python types exported by this module.
 extern PyTypeObject **SbkUPLSTypes;
@@ -78,10 +75,7 @@ template<> inline PyTypeObject *SbkType< ::LandingGearInfo::Leg >() { return rei
 template<> inline PyTypeObject *SbkType< ::LedInfo >() { return reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_LEDINFO_IDX]); }
 template<> inline PyTypeObject *SbkType< ::LedInfo::Led::Mode >() { return SbkUPLSTypes[SBK_LEDINFO_LED_MODE_IDX]; }
 template<> inline PyTypeObject *SbkType< ::LedInfo::Led >() { return reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_LEDINFO_LED_IDX]); }
-template<> inline PyTypeObject *SbkType< ::LedInfo::Led::Blinking >() { return reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_LEDINFO_LED_BLINKING_IDX]); }
-template<> inline PyTypeObject *SbkType< ::LedInfo::Led::FadeInFadeOut >() { return reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_LEDINFO_LED_FADEINFADEOUT_IDX]); }
-template<> inline PyTypeObject *SbkType< ::LedInfo::Led::Normal >() { return reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_LEDINFO_LED_NORMAL_IDX]); }
-template<> inline PyTypeObject *SbkType< ::LedInfo::Led::Pulsing >() { return reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_LEDINFO_LED_PULSING_IDX]); }
+template<> inline PyTypeObject *SbkType< ::LedInfo::Led::Settings >() { return reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_LEDINFO_LED_SETTINGS_IDX]); }
 template<> inline PyTypeObject *SbkType< ::UPLS_Controller >() { return reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_UPLS_CONTROLLER_IDX]); }
 template<> inline PyTypeObject *SbkType< ::Warning::Code >() { return SbkUPLSTypes[SBK_WARNING_CODE_IDX]; }
 template<> inline PyTypeObject *SbkType< ::Warning >() { return reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_WARNING_IDX]); }

@@ -15,6 +15,19 @@
 
 namespace fs = std::filesystem;
 
+const std::array<SerialPort::BaudRateConversionTableItem, 9> SerialPort::m_baudRateConversionTable
+{	
+	SerialPort::BaudRateConversionTableItem(BaudRate::Baud1200,		B1200, 		1200),
+	SerialPort::BaudRateConversionTableItem(BaudRate::Baud2400, 	B2400,		2400),
+	SerialPort::BaudRateConversionTableItem(BaudRate::Baud4800, 	B4800,		4800),
+	SerialPort::BaudRateConversionTableItem(BaudRate::Baud9600, 	B9600,		9600),
+	SerialPort::BaudRateConversionTableItem(BaudRate::Baud19200, 	B19200,		19200),
+	SerialPort::BaudRateConversionTableItem(BaudRate::Baud38400, 	B38400,		38400),
+	SerialPort::BaudRateConversionTableItem(BaudRate::Baud57600, 	B57600,		57600),
+	SerialPort::BaudRateConversionTableItem(BaudRate::Baud115200,	B115200,	115200),
+	SerialPort::BaudRateConversionTableItem(BaudRate::Unknown, -1, -1) 
+};
+
 SerialPort::SerialPort() : m_serialPort(0), m_portName(nullptr), m_isOpen(false),
 	m_baudRate(BaudRate::Unknown), m_dataBits(DataBits::Unknown),
 	m_stopBits(StopBits::Unknown), m_parity(Parity::Unknown),
@@ -125,6 +138,15 @@ bool SerialPort::open()
 				return false;
 			}
 
+			usleep(2000);
+
+			if (tcsetattr(m_serialPort, TCSAFLUSH, &tty) < 0) 
+			{
+				std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcsetattr(int, int, const struct termios*) in SerialPort::open(): " 
+					<< strerror(errno) << std::endl;
+				return false;
+			}
+			
 			setBaudRate(m_baudRate);
 			setParity(m_parity);
 			setFlowControl(m_flowControl);
@@ -137,6 +159,7 @@ bool SerialPort::open()
 			printSettings();
 
 			std::cout << '[' << Format("SerialPort").color(Color::Magenta).bold() << "] Launching receiver thread...\n";
+			
 			m_receiverThread = new std::thread(&SerialPort::m_receiver, this);
 
 			success = true;
@@ -150,11 +173,23 @@ void SerialPort::close()
 {
 	if (m_isOpen)
 	{
+		std::cout << '[' << Format("SerialPort").color(Color::Magenta).bold() << "] " 
+			<< "Closing " << Format(m_portName).color(Color::Yellow) << "...\n";
+		
 		m_isOpen = false;
-		m_receiverThread->join();
-		delete m_receiverThread;
+		
+		if (m_receiverThread)
+		{
+			m_receiverThread->join();
+			delete m_receiverThread;
+			m_receiverThread = nullptr;
+		}
+		
 		::close(m_serialPort);
 		m_serialPort = 0;
+		
+		std::cout << '[' << Format("SerialPort").color(Color::Magenta).bold() << "] " 
+			<< Format(m_portName).color(Color::Yellow) << " closed.\n";
 	}
 }
 
@@ -507,7 +542,10 @@ bool SerialPort::available()
 void SerialPort::putChar(const char ch)
 {
 	if (m_isOpen)
+	{
+		std::scoped_lock<std::mutex> lock(mux);
 		::write(m_serialPort, &ch, 1);
+	}
 }
 
 void SerialPort::print(const char* str)
@@ -526,7 +564,7 @@ void SerialPort::print(const char* str)
 			size++;
 		}
 
-		//std::lock_guard<std::mutex> lock(m_mux);
+		std::scoped_lock<std::mutex> lock(mux);
 		int i = ::write(m_serialPort, str, size);
 	}
 }
@@ -535,7 +573,7 @@ void SerialPort::print(const std::string& str)
 {
 	if (m_isOpen)
 	{
-		//std::lock_guard<std::mutex> lock(m_mux);
+		std::scoped_lock<std::mutex> lock(mux);
 		int i = ::write(m_serialPort, str.c_str(), str.size());
 	}
 }
@@ -544,6 +582,7 @@ void SerialPort::write(const void* data, size_t size)
 {
 	if (m_isOpen)
 	{
+		std::scoped_lock<std::mutex> lock(mux);
 		int i = ::write(m_serialPort, data, size);
 	}
 }
@@ -555,17 +594,27 @@ char SerialPort::getChar()
 
 void SerialPort::m_receiver()
 {
+	std::cout << '[' << Format("SerialPort").color(Color::Magenta).bold() << "] " 
+		<< "Receiver thread started.\n";
+
 	char buffer[256];
 	int bytes_read;
 
 	while (m_isOpen)
 	{
-		bytes_read = read(m_serialPort, buffer, sizeof (buffer));
-		
+		{
+			std::scoped_lock<std::mutex> lock(mux);
+			bytes_read = read(m_serialPort, buffer, sizeof (buffer));
+		}
+
 		if (bytes_read)
 		{
 			for (int i = 0; i < bytes_read; i++)
 				m_buffer.push(buffer[i]);
 		}
+		
+		usleep(100);
 	}
+	std::cout << '[' << Format("SerialPort").color(Color::Magenta).bold() << "] " 
+		<< "Receiver thread exiting...\n";
 }

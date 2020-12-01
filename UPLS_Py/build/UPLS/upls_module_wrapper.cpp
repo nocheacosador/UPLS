@@ -27,16 +27,13 @@ void init_Warning(PyObject *module);
 void init_UPLS_Controller(PyObject *module);
 void init_LedInfo(PyObject *module);
 void init_LedInfo_Led(PyObject *enclosingClass);
-void init_LedInfo_Led_Pulsing(PyObject *enclosingClass);
-void init_LedInfo_Led_Normal(PyObject *enclosingClass);
+void init_LedInfo_Led_Settings(PyObject *enclosingClass);
 void init_LandingGearInfo(PyObject *module);
 void init_LandingGearInfo_Leg(PyObject *enclosingClass);
 void init_HookInfo(PyObject *module);
 void init_HookInfo_Latch(PyObject *enclosingClass);
-void init_LedInfo_Led_FadeInFadeOut(PyObject *enclosingClass);
 void init_Error(PyObject *module);
 void init_Command(PyObject *module);
-void init_LedInfo_Led_Blinking(PyObject *enclosingClass);
 void init_HookInfo_Battery(PyObject *enclosingClass);
 
 // Enum definitions ------------------------------------------------------------
@@ -143,16 +140,13 @@ SBK_MODULE_INIT_FUNCTION_BEGIN(UPLS)
     init_UPLS_Controller(module);
     init_LedInfo(module);
     init_LedInfo_Led(reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_LEDINFO_IDX])->tp_dict);
-    init_LedInfo_Led_Pulsing(reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_LEDINFO_LED_IDX])->tp_dict);
-    init_LedInfo_Led_Normal(reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_LEDINFO_LED_IDX])->tp_dict);
+    init_LedInfo_Led_Settings(reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_LEDINFO_LED_IDX])->tp_dict);
     init_LandingGearInfo(module);
     init_LandingGearInfo_Leg(reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_LANDINGGEARINFO_IDX])->tp_dict);
     init_HookInfo(module);
     init_HookInfo_Latch(reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_HOOKINFO_IDX])->tp_dict);
-    init_LedInfo_Led_FadeInFadeOut(reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_LEDINFO_LED_IDX])->tp_dict);
     init_Error(module);
     init_Command(module);
-    init_LedInfo_Led_Blinking(reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_LEDINFO_LED_IDX])->tp_dict);
     init_HookInfo_Battery(reinterpret_cast<PyTypeObject *>(SbkUPLSTypes[SBK_HOOKINFO_IDX])->tp_dict);
 
     // Register converter for type 'std::list<std::string>'.

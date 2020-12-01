@@ -2,6 +2,8 @@
 
 #include "global_macros.h"
 #include "packet.h"
+#include "LoopController.h"
+
 
 #define UART_TX		PA_2
 #define UART_RX		PA_3
@@ -9,20 +11,29 @@
 PacketHandler  packetHandler;
 UARTSerial 	   serial(UART_TX, UART_RX, 38400);
 DigitalOut 	   led(PB_4);
-Ticker 		   ticker;
+
+Ticker 		   tick_HookInfo;
+Ticker 		   tick_LandingGearInfo;
+Ticker 		   tick_WinchInfo;
+
 // handle functions
 void handleReceivedPacket(const Packet& packet);
 void handleReceivedCommand(const Command& command);
 
-void sendSomething();
+void sendHookInfo();
+void sendWinchInfo();
+void sendLandingGearInfo();
+
 void sendSun();
 
 int main()
 {
-	//serial.baud(115200);
+	LoopController loop(1000.f);
 	led = 0;
 
-	ticker.attach(&sendSomething, 1.0);
+	tick_HookInfo.attach(&sendHookInfo, 0.1);
+	tick_LandingGearInfo.attach(&sendWinchInfo, 0.4);
+	tick_WinchInfo.attach(&sendLandingGearInfo, 1.0);
 	// put your setup code here, to run once:
 	
 	while (1) 
@@ -44,8 +55,8 @@ int main()
 			if (packet.receiver != THIS_DEVICE)
 			{
 				// redirect packet
-				auto error_packet = PacketHandler::createMessage("This packet isn't for me.", Device::Xavier);
-				serial.write(&error_packet, sizeof(Packet));
+				auto message_packet = PacketHandler::createMessage("This packet isn't for me.", Device::Xavier);
+				serial.write(&message_packet, sizeof(Packet));
 			}
 			else
 			{
@@ -54,7 +65,7 @@ int main()
 		}
 
 
-		
+		loop.handle();
 	}
 }
 
@@ -76,54 +87,77 @@ void handleReceivedPacket(const Packet& packet)
 
 void handleReceivedCommand(const Command& command)
 {
+	Packet packet;
+
 	switch (command.code)
 	{
 	case Command::Code::LedsOn:
-		led = 1;
+		packet = PacketHandler::createMessage("Led on.", Device::Xavier);
+		serial.write(&packet, sizeof(Packet));
+		//led = 1;
 		break;
 	
 	case Command::Code::LedsOff:
-		led = 0;
+		packet = PacketHandler::createMessage("Led off.", Device::Xavier);
+		serial.write(&packet, sizeof(Packet));
+		//led = 0;
 		break;
 
 	default:
 		//serial.write("Unknown command!\n", 18);
-		auto packet = PacketHandler::createError(Error(Error::Code::UnknownPacket, "Unknown command received."), Device::Xavier);
+		packet = PacketHandler::createError(Error(Error::Code::UnknownPacket, "Unknown command received."), Device::Xavier);
 		serial.write(&packet, sizeof(Packet));
 		break;
 	}
 }
 
-void sendSomething()
+void sendHookInfo()
 {
-	static uint8_t count;
+	static Packet packet;
 
-	if (count == 0)
-	{
-		auto packet = PacketHandler::createError(Error(Error::Code::LatchFailedToOpen), Device::Xavier);
-		serial.write(&packet, sizeof(Packet));
-	}
-	else if (count == 1)
-	{
-		auto packet = PacketHandler::createMessage("Hi, handsome :}", Device::Xavier);
-		serial.write(&packet, sizeof(Packet));
-	}
-	else if (count == 2)
-	{
-		auto packet = PacketHandler::createMessage("Here's some sunshine 4 ya", Device::Xavier);
-		serial.write(&packet, sizeof(Packet));
+	packet.receiver = Device::Xavier;
+	packet.type = Packet::Type::HookInfo;
 
-		sendSun();
+	packet.hook.averageRetrie+= 0.01f;
+	packet.hook.battery.state = Battery::State::Discharging;
+	packet.hook.battery.voltage = 4200;
+	packet.hook.latch.state = Latch::State::Open;
+	packet.hook.latch.current += uint16_t(1000.f * (sin(packet.hook.averageRetrie) + 1.f));
+	packet.hook.lostMessages += 10;
+	packet.hook.mcuRuntime += 0.1f;
+	packet.hook.temperature = 210;
 
-	}
-	count = (count + 1) % 3;
+	serial.write(&packet, sizeof(Packet));
 }
 
-void sendSun()
+void sendWinchInfo()
 {
-	for (size_t i = 0; i < 9; i++)
-	{
-		auto packet = PacketHandler::createMessage(sun[i], Device::Xavier);
-		serial.write(&packet, sizeof(Packet));
-	}
+	static Packet packet;
+	
+	packet.receiver = Device::Xavier;
+	packet.type = Packet::Type::WinchInfo;
+
+	packet.winch.current = 1234;
+	packet.winch.position = -5.9f;
+	packet.winch.status = WinchInfo::Status::Lowered;
+
+	serial.write(&packet, sizeof(Packet));
+}
+
+void sendLandingGearInfo()
+{
+	static Packet packet;
+	
+	packet.receiver = Device::Xavier;
+	packet.type = Packet::Type::LandingGearInfo;
+
+	packet.landingGear.front.current = 4321;
+	packet.landingGear.front.status = LandingGearInfo::Leg::Status::Opening;
+	packet.landingGear.front.value = 255;
+
+	packet.landingGear.rear.current = 5468;
+	packet.landingGear.rear.status = LandingGearInfo::Leg::Status::Closed;
+	packet.landingGear.rear.value = 128;
+
+	serial.write(&packet, sizeof(Packet));
 }

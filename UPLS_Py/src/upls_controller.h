@@ -237,11 +237,15 @@ private:
 	std::atomic<float> m_ledInfoUpdateFrequency;
 	std::atomic<float> m_winchInfoUpdateFrequency;
 
+
+#if !defined(DOXYGEN_ONLY) && !defined(__BINDINGS)
 protected:
 	std::mutex muxHookinfo;
 	std::mutex muxLandingGearInfo;
 	std::mutex muxLedInfo;
 	std::mutex muxWinchInfo;
+	std::mutex muxInfoStream;
+#endif // !DOXYGEN_ONLY and !__BINDINGS
 
 private:
 	void m_receivedPacketHandler();

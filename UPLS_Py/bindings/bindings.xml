@@ -62,10 +62,7 @@
 	<value-type name="LedInfo">
 		<value-type name="Led">
 			<enum-type name="Mode"/>
-			<value-type name="Pulsing"/>
-			<value-type name="Blinking"/>
-			<value-type name="Normal"/>
-			<value-type name="FadeInFadeOut"/>
+			<value-type name="Settings"/>
 		</value-type>
 	</value-type>
 

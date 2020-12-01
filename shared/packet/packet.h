@@ -92,13 +92,11 @@ struct BINDINGS_API __NO_PADDING__ HookInfo
 		};
 #if defined(__XAVIER)
 
-		//void 	 setVoltage(uint16_t _voltage) { voltage = _voltage; }
-		float getVoltage() const { return float(voltage) / 1000.f; }
-
-		//void  setState(State _state) { state = _state; }
-		State getState() const { return state; }
-
-		Battery(uint16_t _voltage = 0, State _state = State::Unknown) : voltage(_voltage), state(_state) { ; }
+		//void setVoltage(uint16_t _voltage);
+		//void setState(State _state);
+		float getVoltage() const;
+		State getState() const;
+		Battery(uint16_t _voltage = 0, State _state = State::Unknown);
 
 	private:
 #endif
@@ -169,107 +167,49 @@ struct BINDINGS_API __NO_PADDING__ LedInfo
 		{
 			Unknown = 0,
 			Normal,
-			Pulsing,
-			FadeInOut,
-			Blinking
+			Soft,
+			Pulsing
 		};
 
-		struct __NO_PADDING__ Pulsing 
+		struct __NO_PADDING__ Settings
 		{
 #if defined(__XAVIER)
-			Pulsing(uint16_t _fadeInDuration = 900, uint16_t _fadeOutDuration = 900, uint16_t _maxValueDuration = 100, 
-				uint16_t _minValueDuration = 100, uint8_t _maxValue = 255, uint8_t _minValue = 0) : fadeInDuration(_fadeInDuration),
-				fadeOutDuration(_fadeOutDuration), maxValueDuration(_maxValueDuration), minValueDuration(_minValueDuration), 
-				maxValue(_maxValue), minValue(_minValue) { ; }
+			Settings(uint8_t onValue = 255, uint8_t offValue = 0, uint16_t fadeInDuration = 500, 
+				uint16_t fadeOutDuration = 500, uint16_t onDuration = 1000, 
+				uint16_t offDuration = 1000) 
+					: on_value(onValue), off_value(offValue), 
+					fade_in_duration(fadeInDuration), fade_out_duration(fadeOutDuration), 
+					on_duration(onDuration), off_duration(offDuration) { ; }
 
-			uint16_t getFadeInDuration() const { return fadeInDuration; }
-			uint16_t getFadeOutDuration() const { return fadeOutDuration; }
-			uint16_t getMaxValueDuration() const { return maxValueDuration; }
-			uint16_t getMinValueDuration() const { return minValueDuration; }
-			uint8_t getMaxValue() const { return maxValue; }
-			uint8_t getMinValue() const { return minValue; }
+			uint16_t getFadeInDuration() const { return fade_in_duration; }
+			uint16_t getFadeOutDuration() const { return fade_out_duration; }
+			uint16_t getOnDuration() const { return on_duration; }
+			uint16_t getOffDuration() const { return off_duration; }
+			uint8_t getOnValue() const { return on_value; }
+			uint8_t getOffValue() const { return off_value; }
 		private:
 #endif // __XAVIER
-			uint16_t fadeInDuration;	// in ms
-			uint16_t fadeOutDuration;	// in ms
-			uint16_t maxValueDuration;	// in ms
-			uint16_t minValueDuration;	// in ms
-			uint8_t  maxValue;
-			uint8_t  minValue;
+			uint8_t on_value;
+			uint8_t off_value;
+			uint16_t on_duration;
+			uint16_t off_duration;
+			uint8_t fade_in_duration;
+			uint8_t fade_out_duration;
 		};
-
-		struct __NO_PADDING__ Blinking 
-		{
-#if defined(__XAVIER)
-		Blinking(uint16_t _onDuration = 1000, uint16_t _offDuration = 1000) : onDuration(_onDuration), offDuration(_offDuration) { ; }
-		
-		uint16_t getOnDuration() const { return onDuration; }
-		uint16_t getOffDuration() const { return offDuration; }
-		
-		private:
-#endif // __XAVIER
-			uint16_t onDuration;	// in ms
-			uint16_t offDuration;	// in ms
-		};
-
-		struct __NO_PADDING__ Normal
-		{
-#if defined(__XAVIER)
-		Normal(uint8_t _brightness = 255) : brightness(_brightness) { ; }
-
-		uint8_t getBrightness() const { return brightness; }
-
-		private:
-#endif // __XAVIER
-			uint8_t brightness;
-		};
-
-		struct __NO_PADDING__ FadeInFadeOut 
-		{
-#if defined(__XAVIER)
-			FadeInFadeOut(uint8_t _brightness = 255, uint16_t _fadeInDuration = 1000, uint16_t _fadeOutDuration = 1000)
-				: fadeInDuration(_fadeInDuration), fadeOutDuration(_fadeOutDuration), brightness(_brightness) { ; }
-
-			uint16_t getFadeInDuration() const { return fadeInDuration; }
-			uint16_t getFadeOutDuration() const { return fadeOutDuration; }
-			uint8_t  getBrightness() const { return brightness; }
-
-		private:
-#endif // __XAVIER
-			uint16_t fadeInDuration;	// in ms
-			uint16_t fadeOutDuration;	// in ms
-			uint8_t  brightness;
-		};
-
-#if defined(__XAVIER)
-		
+#if defined(__XAVIER)		
 		Led() { memset(this, 0, sizeof(Led)); } 
-		Led(Pulsing _pulsing) : pulsing(_pulsing), mode(Mode::Pulsing) { ; }
-		Led(Blinking _blinking) : blinking(_blinking), mode(Mode::Blinking) { ; }
-		Led(Normal _normal) : normal(_normal), mode(Mode::Normal) { ; }
-		Led(FadeInFadeOut _fadeInOut) : fadeInOut(_fadeInOut), mode(Mode::FadeInOut) { ; }
 
 		bool getEnabled() const { return enabled; }
 		uint8_t getCurrentValue() const { return current_value; }
 		Mode getMode() const { return mode; }
-		Pulsing	getPulsingSettings() const { return pulsing; }
-		Blinking getBlinking() const { return blinking; }
-		Normal getNormalSettings() const { return normal; }
-		FadeInFadeOut getFadeInFadeOutSettings() const { return fadeInOut; }
+		Settings getSettings() const { return settings; }
 
 	private:
 #endif // __XAVIER
-		bool    enabled;
-		uint8_t current_value;
-		Mode	mode;
-
-		union __NO_PADDING__
-		{
-			Pulsing			pulsing;
-			Blinking		blinking;
-			Normal			normal;
-			FadeInFadeOut	fadeInOut;
-		};
+		bool     enabled;
+		uint8_t  current_value;
+		Mode	 mode;
+		Settings settings;
 	};
 
 #if defined(__XAVIER)
@@ -307,7 +247,7 @@ struct BINDINGS_API __NO_PADDING__ LandingGearInfo
 		uint16_t getCurrent() const { return current; }
 
 	private:
-#endif
+#endif // __XAVIER
 		Status	 status;
 		uint8_t  value;
 		uint16_t current;
@@ -317,7 +257,7 @@ struct BINDINGS_API __NO_PADDING__ LandingGearInfo
 	Leg frontInfo() const { return front; }
 	Leg rearInfo() const { return rear; }
 private:
-#endif
+#endif // __XAVIER
 
 	Leg front;
 	Leg rear;
@@ -343,7 +283,7 @@ struct BINDINGS_API __NO_PADDING__ WinchInfo
 	float	 getPosition() const { return position; }
 	uint16_t getCurrent() const { return current; }
 private:
-#endif
+#endif // __XAVIER
 	uint16_t current;
 	float  position;
 	Status 	 status;
@@ -351,7 +291,7 @@ private:
 public:
 	WinchInfo();
 };
-#endif 
+#endif // !__HOOK
 
 struct BINDINGS_API __NO_PADDING__ Error
 {
@@ -368,7 +308,7 @@ struct BINDINGS_API __NO_PADDING__ Error
 	Code getCode() const { return code; }
 	const char* getMessage() const { return message; }
 private:
-#endif
+#endif // __XAVIER
 	Code code;
 	char message[26];
 
@@ -390,7 +330,7 @@ struct BINDINGS_API __NO_PADDING__ Warning
 	Code getCode() const { return code; }
 	const char* getMessage() const { return message; }
 private:
-#endif
+#endif // __XAVIER
 	Code code;
 	char message[26];
 
@@ -413,7 +353,7 @@ struct __NO_PADDING__ LatencyCheck
 	Code getCode() { return code; }
 
 private:
-#endif
+#endif // __XAVIER
 	Code code;
 
 public:
@@ -431,35 +371,45 @@ enum class Device : uint8_t
 
 #if defined(THIS_DEVICE)
 	#if THIS_DEVICE == 1
+		#undef THIS_DEVICE
 		#define THIS_DEVICE		Device::Xavier
 	#elif THIS_DEVICE == 2
+		#undef THIS_DEVICE
 		#define THIS_DEVICE		Device::Hook
 	#elif THIS_DEVICE == 3
+		#undef THIS_DEVICE
 		#define THIS_DEVICE		Device::MainController
 	#else
-		#warning "THIS_DEVICE macro has invalid value."
+		#warning THIS_DEVICE macro has invalid value. Valid values are: 1 - Xavier; 2 - Hook; 3 - Main Controller.
+		#undef THIS_DEVICE
 		#define THIS_DEVICE Device::Unknown
 	#endif
 #else
-	#warning "THIS_DEVICE macro is not defined."
+	#warning THIS_DEVICE macro is not defined.
+	#undef THIS_DEVICE
 	#define THIS_DEVICE Device::Unknown
-#endif
+#endif // THIS_DEVICE
 
 #if defined(DEFAULT_RECEIVER_DEVICE)
-	#if DEFAULT_RECEIVER_DEVICE == 1		
+	#if DEFAULT_RECEIVER_DEVICE == 1
+		#undef DEFAULT_RECEIVER_DEVICE
 		#define DEFAULT_RECEIVER_DEVICE		Device::Xavier
 	#elif DEFAULT_RECEIVER_DEVICE == 2
+		#undef DEFAULT_RECEIVER_DEVICE
 		#define DEFAULT_RECEIVER_DEVICE		Device::Hook
 	#elif DEFAULT_RECEIVER_DEVICE == 3
+		#undef DEFAULT_RECEIVER_DEVICE
 		#define DEFAULT_RECEIVER_DEVICE		Device::MainController
 	#else
-		#warning "DEFAULT_RECEIVER_DEVICE macro has invalid value."
+		#undef DEFAULT_RECEIVER_DEVICE
+		#warning DEFAULT_RECEIVER_DEVICE macro has invalid value. Valid values are: 1 - Xavier; 2 - Hook; 3 - Main Controller.
 		#define DEFAULT_RECEIVER_DEVICE Device::Unknown
 	#endif
 #else
-	#warning "DEFAULT_RECEIVER_DEVICE macro is not defined."
+	#undef DEFAULT_RECEIVER_DEVICE
+	#warning DEFAULT_RECEIVER_DEVICE macro is not defined.
 	#define DEFAULT_RECEIVER_DEVICE Device::Unknown
-#endif
+#endif // THIS_DEVICE
 
 #if !defined(DOXYGEN_ONLY)
 struct __NO_PADDING__ Packet

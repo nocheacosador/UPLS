@@ -89,10 +89,14 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a17d6c50dd88c27ffc67294703aca0367"><td class="memItemLeft" align="right" valign="top"><a id="a17d6c50dd88c27ffc67294703aca0367"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>Mode</b> : uint8_t { <b>Normal</b>
+<tr class="memitem:a17d6c50dd88c27ffc67294703aca0367"><td class="memItemLeft" align="right" valign="top"><a id="a17d6c50dd88c27ffc67294703aca0367"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>Mode</b> : uint8_t { <br />
+&#160;&#160;<b>Unknown</b> = 0
+, <b>Normal</b>
 , <b>Pulsing</b>
 , <b>FadeInOut</b>
-, <b>Blinking</b>
+, <br />
+&#160;&#160;<b>Blinking</b>
+<br />
  }</td></tr>
 <tr class="separator:a17d6c50dd88c27ffc67294703aca0367"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -113,9 +117,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3a62933979cc70dfb295f3e85fc93693"><td class="memItemLeft" align="right" valign="top"><a id="a3a62933979cc70dfb295f3e85fc93693"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>getEnabled</b> () const</td></tr>
 <tr class="separator:a3a62933979cc70dfb295f3e85fc93693"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f572317abb770d533f8ca1c5b37ec93"><td class="memItemLeft" align="right" valign="top"><a id="a9f572317abb770d533f8ca1c5b37ec93"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>getCurrent_value</b> () const</td></tr>
-<tr class="separator:a9f572317abb770d533f8ca1c5b37ec93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaab22ed36485146dd004873ac90966df"><td class="memItemLeft" align="right" valign="top"><a id="aaab22ed36485146dd004873ac90966df"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>getCurrentValue</b> () const</td></tr>
+<tr class="separator:aaab22ed36485146dd004873ac90966df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0382789da4f28ab6d1be6de35560b4e8"><td class="memItemLeft" align="right" valign="top"><a id="a0382789da4f28ab6d1be6de35560b4e8"></a>
 Mode&#160;</td><td class="memItemRight" valign="bottom"><b>getMode</b> () const</td></tr>
 <tr class="separator:a0382789da4f28ab6d1be6de35560b4e8"><td class="memSeparator" colspan="2">&#160;</td></tr>

@@ -1,27 +1,22 @@
 # This Python file uses the following encoding: utf-8
 import sys
 
-from UPLS import UPLS_Controller, HookInfo, LandingGearInfo
+from UPLS import *
 from tkinter import *
 from tkinter import ttk
 from custom_widgets import HookInfoWidget, LandingGearInfoWidget, WinchInfoWidget
 
 class ChooseSerialBox:
-	def __init__(self, root = Tk, parent = 0, title=""):
+	def __init__(self, parent = 0, title="", on_destruction = 0):
+		self.running = False
+		self.parent = parent
 		self.start_success = False
 		self.str_portName = ""
 		self.lst_AvailablePorts = []
-		self.win_Window = Toplevel()
-		self.win_Window.title(title)
 		
-		if parent:
-			x = int(parent.winfo_x() + parent.winfo_width() / 2 - 90)
-			y = int(parent.winfo_y() + parent.winfo_height() / 2 - 50)
-			self.win_Window.geometry("180x100+" + str(x) + "+" + str(y))
-		else:
-			self.win_Window.geometry("180x100+300+300")
+		self.win_Window = Tk()
+		self.win_Window.title(title)
 
-		self.win_Window.resizable(False, False)
 		self.win_Window.protocol("WM_DELETE_WINDOW", self.__onClosing)
 		self.lbl_Top = Label(self.win_Window, text = "Choose serial port:")
 		self.cmb_PortSelection = ttk.Combobox(self.win_Window, values=[], state="readonly", 
@@ -30,6 +25,10 @@ class ChooseSerialBox:
 		self.lbl_Top.grid(column=0, row=0)
 		self.cmb_PortSelection.grid(column=0, row=1)
 		self.btn_Button.grid(column=0, row=2)
+
+		self.win_Window.resizable(False, False)
+
+		self.callback = on_destruction
 
 	def __onClosing(self):
 		self.win_Window.destroy()
@@ -43,20 +42,30 @@ class ChooseSerialBox:
 
 	def __onButtonClick(self):
 		if not self.lst_AvailablePorts:
-			print("No ports found.")
 			self.win_Window.destroy()
+			if self.callback:
+				self.callback()
 		else:
-			self.str_portName = self.lst_AvailablePorts[self.cmb_PortSelection.current()]
-			print("Selected: ", self.str_portName)
-			self.win_Window.destroy()
 			self.start_success = True
+			self.str_portName = self.lst_AvailablePorts[self.cmb_PortSelection.current()]
+			self.win_Window.destroy()
+			if self.callback:
+				self.callback()
 
 	def run(self):
-		print("entering from mainloop")
+		if self.parent:
+			self.win_Window.update()
+			width = self.win_Window.winfo_width()
+			height = self.win_Window.winfo_height()
+			x = int(self.parent.winfo_x() + (self.parent.winfo_width() - width) / 2)
+			y = int(self.parent.winfo_y() + (self.parent.winfo_height() - height) / 2)
+			self.win_Window.geometry(str(width) + "x" + str(height) + "+" + str(x) + "+" + str(y))
+		
+		self.running = True
 		self.win_Window.mainloop()
 		
 	def success(self):
-		return self.success
+		return self.start_success
 
 	def getSelectedPort(self):
 		return self.str_portName		
@@ -68,6 +77,9 @@ class MainApp:
 
 		self.root = Tk()
 		self.root.withdraw()
+
+		self.upls = UPLS_Controller()
+		self.choose_serial = 0
 
 		# info window
 		self.win_Info = Toplevel()
@@ -97,77 +109,90 @@ class MainApp:
 		self.win_Command.title(title + ": Commands")
 		self.win_Command.resizable(False, False)
 		self.win_Command.protocol("WM_DELETE_WINDOW", self.__onClosing)
+		self.btn_ledOn = Button(self.win_Command, state="disabled", text="Led On", command=self.upls.ledOn)
+		self.btn_ledOff = Button(self.win_Command, state="disabled", text="Led Off", command=self.upls.ledOff)
+
+		self.btn_ledOn.grid(column=0, row=0)
+		self.btn_ledOff.grid(column=0, row=1)
 
 	def __onClosing(self):
 		self.__onDisconnect()
 		self.root.destroy()
-		sys.exit()
+
+	def __enableCommands(self, enable = True):
+		if enable:
+			self.btn_ledOn["state"] = "normal"
+			self.btn_ledOff["state"] = "normal"
+		else:
+			self.btn_ledOn["state"] = "disabled"
+			self.btn_ledOff["state"] = "disabled"
 
 	def __enableWidgets(self, enable = True):
 		self.b_ececutePeriodicTasks = enable
-		state = str()
+
+		self.__enableCommands(enable)
+
 		if enable:
-			state = "readonly"
 			self.hki_HookInfo.state("readonly")
 			self.lgi_LandingGearInfo.state("readonly")
 			self.wni_WinchInfo.state("readonly")
 		else:
-			state = "disabled"
 			self.hki_HookInfo.state("disabled")
 			self.lgi_LandingGearInfo.state("disabled")
 			self.wni_WinchInfo.state("disabled")
 
 	def __resetWidgets(self):
-		self.hki_HookInfo.update()
-		self.lgi_LandingGearInfo.update()
-		self.wni_WinchInfo.update()
+		self.hki_HookInfo.updateVal()
+		self.lgi_LandingGearInfo.updateVal()
+		self.wni_WinchInfo.updateVal()
 
-	def __onChooseSerial(self):
-		self.__enableWidgets(False)
-		choose_serial = ChooseSerialBox(root=self.root, parent=self.win_Info, title="Choose serial port")
-		choose_serial.run()
-
-		if choose_serial.success():
+	def __onChooseSerialExit(self):
+		if self.choose_serial.success():
 			print("Success!")
+			self.upls.setSerialPort(self.choose_serial.getSelectedPort())
+			self.upls.start()
 			self.__enableWidgets()
 		else:
 			self.__onDisconnect()
 
-	def __onDisconnect(self):
-		print("entring __onDisconnect")
-		self.__resetWidgets()
+	def __onChooseSerial(self):
 		self.__enableWidgets(False)
+		self.choose_serial = ChooseSerialBox(parent=self.win_Info, title="Choose serial port", on_destruction=self.__onChooseSerialExit)
+		self.choose_serial.run()
+
+	def __onDisconnect(self):
+		self.upls.stop()
+		self.__enableWidgets(False)
+		self.__resetWidgets()
 
 	def __periodicalTasks(self):
-		if self.b_ececutePeriodicTasks:
-			print("periodic")
+		if self.upls.messagesReceived():
+			self.upls.printAllMessages()
 		
-		self.root.after(1000, self.__periodicalTasks)
+		if self.upls.errorsOccured():
+			self.upls.printAllErrors()
+			self.upls.clearAllErrors()
+		
+		if self.upls.warningsReceived():
+			self.upls.printAllWarnings()
+			self.upls.clearAllWarnings()
+
+		self.hki_HookInfo.updateVal(self.upls.hookInfo(), self.upls.hookInfoUpdateFrequency())
+		self.lgi_LandingGearInfo.updateVal(self.upls.landingGearInfo(), self.upls.landingGearInfoUpdateFrequency())
+		self.wni_WinchInfo.updateVal(self.upls.winchInfo(), self.upls.winchInfoUpdateFrequency())
+
+	def __executePeriodicalTasks(self):
+		if self.b_ececutePeriodicTasks:
+			self.__periodicalTasks()
+		
+		self.root.after(100, self.__executePeriodicalTasks)
 
 	def run(self):
-		
-		self.root.after(1000, self.__periodicalTasks)
+		self.root.after(100, self.__executePeriodicalTasks)
 		self.root.mainloop()
-		#while self.running:
-		#	self.win_Info.update_idletasks()
-		#	self.win_Info.update()			
-		#	
-		#	self.win_Command.update_idletasks()
-		#	self.win_Command.update()	
-
-#			if upls.messagesReceived():
-#				upls.printAllMessages()
-#
-#			if upls.errorsOccured():
-#				upls.printAllErrors()
-#				upls.clearAllErrors()
-#
-#			if upls.warningsReceived():
-#				upls.printAllWarnings()
-#				upls.clearAllWarnings()
+		
 
 
 if __name__ == "__main__":
-	main_app = MainApp("Demo")
+	main_app = MainApp(title = "Demo")
 	main_app.run()
-

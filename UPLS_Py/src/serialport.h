@@ -4,6 +4,7 @@
 #include <list>
 #include <array>
 #include <string>
+#include <mutex>
 #include <thread>
 #include <atomic>
 
@@ -104,13 +105,15 @@ public:
 
 	char getChar();
 
+protected:
+	std::mutex mux;
+
 private:
 	int m_serialPort;
 	char* m_portName;
 	std::atomic<bool> m_isOpen;
 
 	std::thread* m_receiverThread;
-	std::mutex m_mux;
 	
 	BaudRate m_baudRate;
 	DataBits m_dataBits;
@@ -120,29 +123,16 @@ private:
 
 	RingBuffer<char> m_buffer;
 
-	struct BaudRateConversionTable
+	struct BaudRateConversionTableItem
 	{
 		BaudRate enumRate;
 		speed_t  termosEnumRate;
 		int 	 rawRate;
 
-		BaudRateConversionTable(BaudRate er, speed_t ter, int raw) : enumRate(er), termosEnumRate(ter), rawRate(raw) { ; }
+		BaudRateConversionTableItem(BaudRate er, speed_t ter, int raw) : enumRate(er), termosEnumRate(ter), rawRate(raw) { ; }
 	};
 
-
-#warning "Change 'const std::array<BaudRateConversionTable, 9> m_baudRateConversionTable' " \
-			"to 'static constexpr std::array<BaudRateConversionTable, 9> m_baudRateConversionTable'."
-	const std::array<BaudRateConversionTable, 9> m_baudRateConversionTable
-	{	BaudRateConversionTable(BaudRate::Baud1200,		B1200, 		1200),
-		BaudRateConversionTable(BaudRate::Baud2400, 	B2400,		2400),
-		BaudRateConversionTable(BaudRate::Baud4800, 	B4800,		4800),
-		BaudRateConversionTable(BaudRate::Baud9600, 	B9600,		9600),
-		BaudRateConversionTable(BaudRate::Baud19200, 	B19200,		19200),
-		BaudRateConversionTable(BaudRate::Baud38400, 	B38400,		38400),
-		BaudRateConversionTable(BaudRate::Baud57600, 	B57600,		57600),
-		BaudRateConversionTable(BaudRate::Baud115200,	B115200,	115200),
-		BaudRateConversionTable(BaudRate::Unknown, -1, -1) 
-	};
+	static const std::array<BaudRateConversionTableItem, 9> m_baudRateConversionTable;
 
 	int m_convertToInt(BaudRate baudRate)
 	{

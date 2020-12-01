@@ -70,8 +70,7 @@ bool UPLS_Controller::start()
 			delete m_receiverThread;
 		}
 
-		std::cout << '[' << Format("UPLS_Constroller").color(Color::Magenta).bold() << "] Launching packet handler thread...\n";
-
+		info("Launching packet handler thread...");
 		m_receiverRunning = true;
 		m_receiverThread = new std::thread(&UPLS_Controller::m_receivedPacketHandler, this);
 	}
@@ -86,10 +85,12 @@ bool UPLS_Controller::start()
 void UPLS_Controller::stop()
 {
 	m_receiverRunning = false;
-	m_receiverThread->join();
-	
-	delete m_receiverThread;
-	m_receiverThread = nullptr;
+	if (m_receiverThread)
+	{
+		m_receiverThread->join();
+		delete m_receiverThread;
+		m_receiverThread = nullptr;
+	}
 
 	m_serial.close();
 
@@ -257,6 +258,8 @@ void UPLS_Controller::message(const char* msg)
 
 void UPLS_Controller::m_receivedPacketHandler()
 {
+	info("Packet handler thread started.");
+	
 	PacketHandler handler;
 	
 	while (m_receiverRunning)
@@ -275,47 +278,49 @@ void UPLS_Controller::m_receivedPacketHandler()
 			{
 			case Packet::Type::HookInfo:
 				m_updateHookInfo(packet.hook);
-				ss << Format("HookInfo").color(Color::Green).faint() << '\n';
+				ss << Format("HookInfo").color(Color::Green);
 				break;
 
 			case Packet::Type::LandingGearInfo:
 				m_updateLandingGearInfo(packet.landingGear);
-				ss << Format("LandingGearInfo").color(Color::Green).faint() << '\n';
+				ss << Format("LandingGearInfo").color(Color::Green);
 				break;
 
 			case Packet::Type::LedInfo:
 				m_updateLedInfo(packet.led);
-				ss << Format("LedInfo").color(Color::Green).faint() << '\n';
+				ss << Format("LedInfo").color(Color::Green);
 				break;
 
 			case Packet::Type::WinchInfo:
 				m_updateWinchInfo(packet.winch);
-				ss << Format("WinchInfo").color(Color::Green).faint() << '\n';
+				ss << Format("WinchInfo").color(Color::Green);
 				break;
 
 			case Packet::Type::Error:
 				m_errorQueue.push(packet);
-				ss << Format("Error").color(Color::Green).faint() << '\n';
+				ss << Format("Error").color(Color::Green);
 				break;
 
 			case Packet::Type::Warning:
 				m_warningQueue.push(packet);
-				ss << Format("Warning").color(Color::Green).faint() << '\n';
+				ss << Format("Warning").color(Color::Green);
 				break;
 
 			case Packet::Type::Message:
 				m_messageQueue.push(packet);
-				ss << Format("Message").color(Color::Green).faint() << '\n';
+				ss << Format("Message").color(Color::Green);
 				break;
 
 			default:
-				ss << Format("Unknown").color(Color::Red).faint() << '\n';
+				ss << Format("Unknown").color(Color::Red);
 				break;
 			}
 
 			info(ss.str().c_str());
 		}
 	}
+
+	info("Packet handler thread exiting...");
 }
 
 void UPLS_Controller::m_updateHookInfo(HookInfo& info)
@@ -372,5 +377,6 @@ void UPLS_Controller::m_updateWinchInfo(WinchInfo& info)
 
 void UPLS_Controller::info(const char* info_msg)
 {
+	std::scoped_lock<std::mutex> lock(muxInfoStream);
 	std::cout << '[' << Format().bold().color(Format::Color::BrightCyan).text("UPLS_Controller") << "] " << info_msg << '\n'; 
 }
