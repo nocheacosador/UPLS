@@ -6,7 +6,7 @@
  version 2 as published by the Free Software Foundation.
  */
 
-#include "../../include/definitions.h"
+#include "../../include/global_macros.h"
 #include "../../include/nRF24L01.h"
 #include "../../include/RF24_config.h"
 #include "RF24.h"
@@ -385,7 +385,7 @@ void RF24::stopListening(void)
 void RF24::powerDown(void)
 {
   ce(0); // Guarantee CE is low on powerDown
-  write_register(NRF_CONFIG,read_register(NRF_CONFIG) & ~_BV(PWR_UP));
+  write_register(NRF_CONFIG, read_register(NRF_CONFIG) & ~_BV(PWR_UP));
 }
 
 /****************************************************************************/

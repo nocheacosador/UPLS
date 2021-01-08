@@ -6,23 +6,24 @@
  */ 
 
 /*
-* To configure AtTiny84 to work on 8MHz run this command on avrdude:
-*		-c usbasp -p t84 -P usb -U lfuse:w:0xe2:m
+* To configure AtTiny84 to work on 8MHz run this command on avrdude
+ *(asuming UPBasp programmer is used):
+*		avrdude -c usbasp -p t84 -P usb -U lfuse:w:0xe2:m
 */
-
-#include "definitions.h"
+#include "global_macros.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 #include <avr/power.h>
 #include <string.h>
-#include "messages.h"
+#include "Packet.h"
 #include "ADC.h"
 #include "nRF24L01.h"
 #include "RF24.h"
 #include "Timer0.h"
 #include "Latch.h"
 #include "Battery.h"
+
 
 uint8_t		past_retries[RETRY_BUFFER_SIZE];
 uint8_t		last_retry_index = 0;
@@ -32,8 +33,8 @@ uint32_t	last_battery_check = 0;
 
 bool send_status_periodically = true;
 
-Package receiveBuffer;
-HookStatus hookStatus;
+Packet receiveBuffer;
+HookInfo hookInfo;
 
 RF24		radio(PB_0, PB_1);
 Latch		latch(PA_1, DifferentialADC::Channel::ADC3_ADC2);
@@ -41,16 +42,16 @@ Battery		battery(SingleADC::Channel::ADC0, PA_7);
 SingleADC	temp(SingleADC::Channel::TEMP, SingleADC::Reference::INT);
 
 void answerLatencyCheckRequest();
-void updateStatus(HookStatus& status);
+void updateHookInfo(HookInfo& info);
 
 void handleCommand(Command& command);
 void handleLatencyCheck(LatencyCheck& latencyCheck);
 
-void sendStatus(const HookStatus& status);
-void sendWarning(const Warning& warning);
-void sendError(const Error& error);
-void sendMessage(const char* message);
-void sendPackage(Package& message);
+void sendHookInfo(const HookInfo& info, const Device receiver = Device::Xavier);
+void sendWarning(const Warning& warning, const Device receiver = Device::Xavier);
+void sendError(const Error& error, const Device receiver = Device::Xavier);
+void sendMessage(const char* message, const Device receiver = Device::Xavier);
+void sendPacket(Packet& message);
 
 void shutdown();
 
@@ -63,7 +64,7 @@ int main(void)
 
 	radio.setChannel(16);
 	radio.setRetries(15, 15);
-	radio.setPALevel(RF24_PA_MIN);
+	radio.setPALevel(RF24_PA_MAX);
 	radio.setDataRate(RF24_250KBPS);
 	radio.setCRCLength(RF24_CRC_8);
 	
@@ -75,16 +76,16 @@ int main(void)
 		// handle incoming commands if any
 		if (radio.available())
 		{
-			radio.read(&receiveBuffer, sizeof(Package));
+			radio.read(&receiveBuffer, sizeof(Packet));
 			
-			switch (receiveBuffer.payload.type)
+			switch (receiveBuffer.type)
 			{
-			case Package::Type::LATENCY_CHECK:
-				handleLatencyCheck(receiveBuffer.payload.latencyCheck);
+			case Packet::Type::LatencyCheck:
+				handleLatencyCheck(receiveBuffer.latencyCheck);
 				break;
 		
-			case Package::Type::COMMAND:
-				handleCommand(receiveBuffer.payload.command);
+			case Packet::Type::Command:
+				handleCommand(receiveBuffer.command);
 				break;
 		
 			default:
@@ -93,9 +94,11 @@ int main(void)
 		}
 		
 		// this allows latch object to handle internal logic for closing, opening and retries without blocking
-		latch.handle();
+		Error latch_error;
+		if (!latch.handle(&latch_error))
+			sendError(latch_error);
 		
-		updateStatus(hookStatus);
+		updateHookInfo(hookInfo);
 
 		if (millis() - last_battery_check >= BATTERY_CHECK_PERIOD)
 		{
@@ -105,23 +108,23 @@ int main(void)
 
 			last_battery_check = millis();
 
-			if (hookStatus.batteryVoltage <= BATTERY_EMPTY_VOLTAGE && last_battery_voltage <= BATTERY_EMPTY_VOLTAGE 
-				&& hookStatus.batteryState != Battery::CHARGING)
+			if (hookInfo.battery.voltage <= BATTERY_EMPTY_VOLTAGE && last_battery_voltage <= BATTERY_EMPTY_VOLTAGE 
+				&& hookInfo.battery.state != Battery::State::Charging)
 			{
 				if (shutdown_counter++ >= BATTERY_EMPTY_TRESHOLD_COUNTER)
 				{
-					sendError(Error(Error::Code::BATTERY_EMPTY, "Battery is empty. Shutting down..."));
+					sendError(Error(Error::Code::LatchBatteryEmpty, "Bat empty. Shutting down..."));
 					shutdown();
 					shutdown_counter = 0;
 					warning_sent = false;
 				}
 			}
-			else if (hookStatus.batteryVoltage <= BATTERY_WARNING_VOLTAGE && last_battery_voltage <= BATTERY_WARNING_VOLTAGE
-				&& hookStatus.batteryState != Battery::CHARGING)
+			else if (hookInfo.battery.voltage <= BATTERY_WARNING_VOLTAGE && last_battery_voltage <= BATTERY_WARNING_VOLTAGE
+				&& hookInfo.battery.state != Battery::State::Charging)
 			{
 				if (!warning_sent)
 				{
-					sendWarning(Warning(Warning::Code::BATTERY_LOW, "Low battery. Please recharge."));
+					sendWarning(Warning(Warning::Code::LatchBatteryLow, "Low battery. Please recharge."));
 					warning_sent = true;
 				}
 
@@ -133,72 +136,72 @@ int main(void)
 				shutdown_counter = 0;
 			}
 
-			last_battery_voltage = hookStatus.batteryVoltage;
+			last_battery_voltage = hookInfo.battery.voltage;
 		}
 
 		if (send_status_periodically && millis() - last_status_report >= STATUS_REPORT_PERIOD)
 		{
 			last_status_report = millis();
-			sendStatus(hookStatus);
+			sendHookInfo(hookInfo);
 		}
     }
 }
 
 void answerLatencyCheckRequest()
 {
-	Package package;
-	
-	package.payload.type = Package::LATENCY_CHECK;
-	package.payload.latencyCheck.code = LatencyCheck::Code::ANSWER;
+	Packet packet;
 
-	sendPackage(package);
+	packet.type = Packet::Type::LatencyCheck;
+	packet.latencyCheck.code = LatencyCheck::Code::Answer;
+
+	sendPacket(packet);
 }
 
-void updateStatus(HookStatus& status)
+void updateHookInfo(HookInfo& info)
 {	
-	status.averageRetries = 0.f;
+	info.averageRetrie = 0.f;
 
 	for (uint8_t i = 0; i < RETRY_BUFFER_SIZE; i++)
-	status.averageRetries += float(past_retries[i]);
+		info.averageRetrie += float(past_retries[i]);
 	
-	status.averageRetries /= float(RETRY_BUFFER_SIZE);
+	info.averageRetrie /= float(RETRY_BUFFER_SIZE);
 
-	status.batteryState		= battery.getState();
-	status.batteryVoltage	= battery.getVoltage();
-	status.latchCurrent		= uint16_t(latch.getCurrent() * 1000.f);
-	status.latchState		= latch.getStatus();
-	status.lostMessages		= failed_send_attempts;
-	status.mcuRuntime		= float(millis()) / 1000.f;
-	status.temperature		= int16_t(float(temp.read()) * 8.33333f - 2156.66666f);
+	info.battery.state		= battery.getState();
+	info.battery.voltage	= battery.getVoltage();
+	info.latch.current		= uint16_t(latch.getCurrent() * 1000.f);
+	info.latch.state		= latch.getStatus();
+	info.latch.closePulseDuration = latch.getClosePulseDuration();
+	info.latch.openPulseDuration  = latch.getOpenPulseDuration();
+	info.lostMessages		= failed_send_attempts;
+	info.mcuRuntime			= float(millis()) / 1000.f;
+	info.temperature		= int16_t(float(temp.read()) * 8.33333f - 2156.66666f);
 }
 
 void handleCommand(Command& command)
 {
 	switch (command.code)
 	{
-	case Command::Code::STATUS_REQUEST:
-		sendStatus(hookStatus);
+	case Command::Code::StatusRequest:
+		sendHookInfo(hookInfo);
 		break;
 		
-	case Command::Code::LATCH_OPEN:
+	case Command::Code::LatchOpen:
 		latch.open();
-		sendMessage("Opening");
 		break;
 		
-	case Command::Code::LATCH_CLOSE:
+	case Command::Code::LatchClose:
 		latch.close();
-		sendMessage("Closing");
 		break;
 	
-	case Command::Code::SET_LATCH_OPEN_PULSE:
+	case Command::Code::SetLatchOpenPulseDuration:
 		latch.setOpenPulseDuration(command.pulseLength);
 		break;
 
-	case Command::Code::SET_LATCH_CLOSE_PULSE:
+	case Command::Code::SetLatchClosePulseDuration:
 		latch.setClosePulseDuration(command.pulseLength);
 		break;
 
-	case Command::Code::SHUTDOWN:
+	case Command::Code::HookShutdown:
 		sendMessage("Shutting down...");
 		shutdown();
 		break;
@@ -210,63 +213,69 @@ void handleCommand(Command& command)
 
 void handleLatencyCheck(LatencyCheck& latencyCheck)
 {
-	if (latencyCheck.code == LatencyCheck::Code::REQUUEST)
+	if (latencyCheck.code == LatencyCheck::Code::Request)
 		answerLatencyCheckRequest();
 }
 
-void sendStatus(const HookStatus& status)
+void sendHookInfo(const HookInfo& info, const Device receiver)
 {
-	Package package;
-	
-	package.payload.type = Package::Type::STATUS;
-	package.payload.status = status;
+	Packet packet;
 
-	sendPackage(package);
+	packet.type = Packet::Type::HookInfo;
+	packet.receiver = receiver;
+	packet.hook = info;
+
+	sendPacket(packet);
 }
 
-void sendWarning(const Warning& warning)
+void sendWarning(const Warning& warning, const Device receiver)
 {
-	Package package;
+	Packet packet;
 
-	package.payload.type = Package::Type::WARNING;
-	package.payload.warning = warning;
+	packet.type = Packet::Type::Warning;
+	packet.receiver = receiver;
+	packet.warning = warning;
 
-	sendPackage(package);
+	sendPacket(packet);
 }
 
-void sendError(const Error& error)
+void sendError(const Error& error, const Device receiver)
 {
-	Package package;
+	Packet packet;
+	size_t size = sizeof(Packet);
+	packet.type = Packet::Type::Error;
+	packet.receiver = receiver;
+	packet.error = error;
 
-	package.payload.type = Package::Type::ERROR;
-	package.payload.error = error;
-
-	sendPackage(package);
+	sendPacket(packet);
 }
 
-void sendMessage(const char* message)
+void sendMessage(const char* message, const Device receiver)
 {
-	Package package;
+	Packet packet;
 
-	package.payload.type = Package::Type::MESSAGE;
-	
+	packet.type = Packet::Type::Message;
+	packet.receiver = receiver;
+
 	uint8_t i = 0;
-	while (i < 30 && message[i] != '\0' && message[i] != '\n' && message[i] != '\r')
+	while (i < 26 && message[i] != '\0' && message[i] != '\n' && message[i] != '\r')
 	{
-		package.payload.message[i] = message[i];
+		packet.message[i] = message[i];
 		i++;
 	}
-	package.payload.message[i] = '\0';
+	packet.message[i] = '\0';
 
-	sendPackage(package);
+	sendPacket(packet);
 }
 
-void sendPackage(Package& package)
+void sendPacket(Packet& packet)
 {
+	packet.sender = Device::Hook;
+
 	radio.stopListening();
 	radio.openWritingPipe(addresses[1]);
 
-	bool success = radio.write(&package, sizeof(Package));
+	bool success = radio.write(&packet, sizeof(Packet));
 
 	radio.openReadingPipe(1, addresses[0]);
 	radio.startListening();
@@ -308,4 +317,9 @@ void shutdown()
 	radio.powerUp();
 	radio.openReadingPipe(1, addresses[0]);
 	radio.startListening();
+}
+
+ISR(PCINT0_vect)
+{
+	
 }

@@ -14,6 +14,9 @@
 
 #include "ringbuffer.h"
 
+#include <csignal>
+#include <signal.h>
+
 class SerialPort
 {
 public:
@@ -121,7 +124,7 @@ private:
 	Parity   m_parity;
 	FlowControl m_flowControl;
 
-	RingBuffer<char> m_buffer;
+	RingBuffer<char, 1024> m_buffer;
 
 	struct BaudRateConversionTableItem
 	{

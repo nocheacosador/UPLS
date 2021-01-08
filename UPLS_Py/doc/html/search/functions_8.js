@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['upls_5fcontroller_79',['UPLS_Controller',['../classUPLS__Controller.html#a3f407ff7a9fd6f0522887ec24b2d2cbc',1,'UPLS_Controller']]]
+  ['setserialport_85',['setSerialPort',['../classUPLS__Controller.html#a6c6c12f1c9a51e8a1dcfd25a98de29a3',1,'UPLS_Controller']]],
+  ['start_86',['start',['../classUPLS__Controller.html#aefa62caefd06d1e9657507eae163a672',1,'UPLS_Controller']]],
+  ['stop_87',['stop',['../classUPLS__Controller.html#a5f7876c7655d3e49f681a49780ff919e',1,'UPLS_Controller']]]
 ];

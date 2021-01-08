@@ -11,29 +11,25 @@
 
 #include "ADC.h"
 #include "Pin.h"
-#include "../../include/definitions.h"
+#include "../../include/global_macros.h"
+
+#include "Packet.h"
 
 class Battery
 {
 public:
-	enum State : uint8_t
-	{
-		CHARGING = 0x1F,
-		DISCHARGING = 0x2F,
-
-		UNKNOWN = 0x0F
-	};
+	typedef typename HookInfo::Battery::State State;
 	
 	Battery(SingleADC::Channel channel, PinName charging_pin = PinName::NC);
 
 	State getState()
 	{
 		if (_charging_pin.read() == 0)
-			return State::CHARGING;
+			return State::Charging;
 		else if (_charging_pin.read() == 1)
-			return State::DISCHARGING;
+			return State::Discharging;
 		else 
-			return State::UNKNOWN;
+			return State::Unknown;
 	}
 
 	uint16_t getVoltage()

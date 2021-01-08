@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++17 -O3  -rdynamic CMakeFiles/naqueue.dir/test.cpp.o CMakeFiles/naqueue.dir/naqueue.cpp.o  -o naqueue 

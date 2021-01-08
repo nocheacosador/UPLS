@@ -2,7 +2,10 @@
 #define LOOPCONTROLLER_H_
 
 #include <platform/NonCopyable.h>
-#include "drivers/Timer.h"
+#include <Timer.h>
+#include "Buffer/MyBuffer.h"
+
+#define PREVIOUS_LOOP_TIMES_BUFFER_SIZE		100
 
 class LoopController : mbed::NonCopyable<LoopController>
 {
@@ -15,8 +18,11 @@ public:
 
 private:
 	int _period;
-	int _lastLoopTime;
 	int _pastTimePoint;
+
+	int _prevLoopTimes[PREVIOUS_LOOP_TIMES_BUFFER_SIZE];
+	int _buf_index;
+	int _loop_time_sum;
 
 	mbed::Timer _timer;
 };

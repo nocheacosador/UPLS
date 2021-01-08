@@ -14,11 +14,11 @@
 
 Latch::Latch(PinName servo_pin, DifferentialADC::Channel adc_ch) 
 	: _adc(adc_ch, DifferentialADC::Gain::x20, DifferentialADC::Reference::INT),
-	_check(0), _check_time(0), _retries(0)
+	_next_time_point(0), _retries(0)
 {
 	uint16_t memory_read_pulse = eeprom_read_word(EEPROM_LATCH_OPEN_PULSE_ADDR);
 	
-	if (memory_read_pulse >= PULSE_MIN && memory_read_pulse <= PULSE_MAX)
+	if (memory_read_pulse >= LATCH_PULSE_MIN && memory_read_pulse <= LATCH_PULSE_MAX)
 	{
 		_open_pulse_duration = memory_read_pulse;
 	}
@@ -30,7 +30,7 @@ Latch::Latch(PinName servo_pin, DifferentialADC::Channel adc_ch)
 
 	memory_read_pulse = eeprom_read_word(EEPROM_LATCH_CLOSE_PULSE_ADDR);
 
-	if (memory_read_pulse >= PULSE_MIN && memory_read_pulse <= PULSE_MAX)
+	if (memory_read_pulse >= LATCH_PULSE_MIN && memory_read_pulse <= LATCH_PULSE_MAX)
 	{
 		_close_pulse_duration = memory_read_pulse;
 	}
@@ -47,21 +47,21 @@ Latch::Latch(PinName servo_pin, DifferentialADC::Channel adc_ch)
 
 void Latch::setOpenPulseDuration(uint16_t pulse)
 {
-	if (pulse < PULSE_MIN)
-		pulse = PULSE_MIN;
-	else if (pulse > PULSE_MAX)
-		pulse = PULSE_MAX;
+	if (pulse < LATCH_PULSE_MIN)
+		pulse = LATCH_PULSE_MIN;
+	else if (pulse > LATCH_PULSE_MAX)
+		pulse = LATCH_PULSE_MAX;
 	
 	_open_pulse_duration = pulse;
-	eeprom_update_word((uint16_t*)EEPROM_LATCH_OPEN_PULSE_ADDR, pulse);
+	eeprom_update_word(EEPROM_LATCH_OPEN_PULSE_ADDR, pulse);
 }
 
 void Latch::setClosePulseDuration(uint16_t pulse)
 {
-	if (pulse < PULSE_MIN)
-		pulse = PULSE_MIN;
-	else if (pulse > PULSE_MAX)
-		pulse = PULSE_MAX;
+	if (pulse < LATCH_PULSE_MIN)
+		pulse = LATCH_PULSE_MIN;
+	else if (pulse > LATCH_PULSE_MAX)
+		pulse = LATCH_PULSE_MAX;
 	
 	_close_pulse_duration = pulse;
 	eeprom_update_word(EEPROM_LATCH_CLOSE_PULSE_ADDR, pulse);
@@ -69,19 +69,20 @@ void Latch::setClosePulseDuration(uint16_t pulse)
 
 void Latch::open()
 {
-	servo.pulse(_open_pulse_duration);
+	servo.pulse(_open_pulse_duration + LATCH_OVERCOMPENSATED_PULSE_DIF);
 
-	_stat = State::OPEN;
+	_next_time_point = millis() + LATCH_OVERCOMPENSATED_PULSE_DUR;
+	_int_stat = InternalState::opening_overcompensated_pulse;
+	_stat = State::Opening;
 }
 
 void Latch::close()
 {
-	servo.pulse(_close_pulse_duration);
+	servo.pulse(_close_pulse_duration - LATCH_OVERCOMPENSATED_PULSE_DIF);
 	
-	_check_time = millis() + LATCH_CHECK_DELAY;
-	_check = 1;
-	//_retry = false;
-	_stat = State::CLOSING;
+	_next_time_point = millis() + LATCH_OVERCOMPENSATED_PULSE_DUR;
+	_int_stat = InternalState::closing_overcompensated_pulse;
+	_stat = State::Closing;
 }
 
 void Latch::turnOff()
@@ -99,63 +100,108 @@ float Latch::getCurrent()
 	return _adc.readVoltage() / CURRENT_SENSE;
 }
 
-bool Latch::handle()
+bool Latch::handle(Error* err)
 {
-	bool no_error = true;
-
-	switch (_stat)
+	bool ok = true;
+	
+	switch (_int_stat)
 	{
-	case State::OPEN:
-		if (servo.getPulseLength() != _open_pulse_duration)
-			open();
+	case InternalState::closing_overcompensated_pulse:
+		if (millis() >= _next_time_point)
+		{
+			servo.pulse(_close_pulse_duration);
+			_int_stat = InternalState::closing_normal_pulse;
+			_next_time_point = millis() + LATCH_NORMAL_PULSE_CHECK_DELAY_DUR;
+		}
 		break;
 
-	case State::CLOSED:
-		if (servo.getPulseLength() != _close_pulse_duration)
-			close();
-		break;
-
-	case State::CLOSING:
-		if (millis() >= _check_time && _check == 1)
+	case InternalState::closing_normal_pulse:
+		if (millis() >= _next_time_point)
 		{
 			if (getCurrent() >= LATCH_CHECK_TRESHOLD_CURRENT)
 			{
 				if (_retries < LATCH_MAX_RETRIES)
 				{
-					// open to reattempt closing
 					servo.pulse(_open_pulse_duration);
+					_int_stat = InternalState::closing_retry_open;
+					_next_time_point = millis() + LATCH_RETRY_DELAY_DUR;
 					_retries++;
-					//_retry = true;
-					_check = 2;
-					_check_time = millis() + LATCH_RETRY_DELAY;
 				}
 				else
 				{
-					no_error = false;
-					_retries = 0;
-					//_retry = false;
-					_check = 0;
 					open();
+					ok = false;
+					err->code = Error::LatchFailedToClose;
+					_retries = 0;
 				}
 			}
 			else
 			{
+				_int_stat = InternalState::closed;
+				_stat = State::Closed;
 				_retries = 0;
-				_check = 0;
-				_stat = State::CLOSED;
 			}
 		}
-		else if (millis() >= _check_time && _check == 2)
-		{
+		break;
+	
+	case InternalState::closing_retry_open:
+		if (millis() >= _next_time_point)
 			close();
-		}
-
 		break;
 
-	case State::OPENING:
-		
-		break; 
-	}
+	case InternalState::closed:
+		if (servo.getPulseLength() != _close_pulse_duration)
+			close();
+		break;
 
-	return no_error;
+	case InternalState::opening_overcompensated_pulse:
+		if (millis() >= _next_time_point)
+		{
+			servo.pulse(_open_pulse_duration);
+			_int_stat = InternalState::opening_normal_pulse;
+			_next_time_point = millis() + LATCH_NORMAL_PULSE_CHECK_DELAY_DUR;
+		}
+		break;
+
+	case InternalState::opening_normal_pulse:
+		if (millis() >= _next_time_point)
+		{
+			if (getCurrent() >= LATCH_CHECK_TRESHOLD_CURRENT)
+			{
+				if (_retries < LATCH_MAX_RETRIES)
+				{
+					servo.pulse(_close_pulse_duration);
+					_int_stat = InternalState::opening_retry_close;
+					_next_time_point = millis() + LATCH_RETRY_DELAY_DUR;
+					_retries++;
+				}
+				else
+				{
+					close();
+					ok = false;
+					err->code = Error::LatchFailedToOpen;
+					_retries = 0;
+				}
+			}
+			else
+			{
+				_int_stat = InternalState::open;
+				_stat = State::Open;
+				_retries = 0;
+			}
+		}
+		break;
+	
+	case InternalState::opening_retry_close:
+		if (millis() >= _next_time_point)
+			open();
+		break;	
+
+	case InternalState::open:
+		if (servo.getPulseLength() != _open_pulse_duration)
+			open();
+		break;
+	}
+	
+	return ok;
 }

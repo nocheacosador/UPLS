@@ -4,6 +4,7 @@
 #include <string>
 #include <list>
 #include <thread>
+#include <shared_mutex>
 #include <mutex>
 #include <atomic>
 #include "global_macros.h"
@@ -58,18 +59,31 @@ public:
 	 * \return Returns true on succesful connection.
 	 */
 	bool start();
-	
+
 	/**
 	 * \brief Stops serial comunication with UPLS.
 	 */
 	void stop();
 	
 	/**
+	 * \brief Utility function for checking if packet logging is enabled.
+	 * \return Returns true if enabled, flase if disabled.
+	 */
+	bool receivedPacketLoggingEnabled();
+
+	/**
+	 * \brief Utility function enabling packet logging.
+	 */
+	void enableReceivedPacketLogging(bool enable);
+
+	/**
 	 * \brief Checks if any errors have been received or occured.
 	 * \return Returns true if any errors have been received or occured.
 	 */
 	bool errorsOccured();
 	
+	Error getError();
+
 	/**
 	 * \brief Prints error that occured.
 	 * Prints oldest error that occured and deletes it from the queue.
@@ -87,8 +101,6 @@ public:
 	 * Deletes all errors from the queue.
 	 */
 	void clearAllErrors();
-
-	//int popError();
 	
 	/**
 	 * \brief Checks if any warnings have been received or occured.
@@ -155,6 +167,13 @@ public:
 	WinchInfo winchInfo();
 
 	/**
+	 * \brief Access function.
+	 * Returns object, containing latest information about UAV's UPLS controller.
+	 * \return Returns latest UPLS's main controller information.
+	 */
+	MainControllerInfo mainControllerInfo();
+
+	/**
 	 * \brief Utility function.
 	 * Returns current information about hook update frequency.
 	 * \return Returns update frequeny in hertz.
@@ -181,15 +200,53 @@ public:
 	 * \return Returns update frequeny in hertz.
 	 */
 	float winchInfoUpdateFrequency();
+
+	/**
+	 * \brief Utility function.
+	 * Returns current information about UAV's UPLS controller update frequency.
+	 * \return Returns update frequeny in hertz.
+	 */
+	float mainControllerInfoUpdateFrequency();
 	
 	/**
 	 * \brief Test function.
 	 */
-	void ledOn();
+	void ledsOn();
+	
 	/**
 	 * \brief Test function.
 	 */
-	void ledOff();
+	void ledsOff();
+
+	void latchOpen();
+
+	void latchClose();
+
+	void latchSetOpenPulseDuration(int pulse_duration);
+
+	void latchSetClosePulseDuration(int pulse_duration);
+
+	void hookShutdown();
+
+	void landingGearExtract();
+
+	void landingGearRetract();
+
+	void winchManualUp(float speed = 0.5f, float duration = 0.1f);
+
+	void winchManualDown(float speed = 0.5f, float duration = 0.1f);
+
+	void winchLower(float distance);
+
+	void winchHome();
+
+	void winchHalt();
+
+	void winchResume();
+
+	void winchManualModeEnable();
+
+	void winchManualModeDisable();
 
 	/**
 	 * \brief Formats and prints string as an error.
@@ -215,6 +272,7 @@ public:
 private:
 	SerialPort 	m_serial;
 
+	std::atomic<bool> m_logReceivedPackets;
 	std::atomic<bool> m_receiverRunning;
 	std::thread* 	  m_receiverThread;
 
@@ -222,28 +280,32 @@ private:
 	tsqueue<Packet> m_warningQueue;
 	tsqueue<Packet> m_messageQueue;
 
-	HookInfo 		m_hookInfo;
-	LandingGearInfo m_landingGearInfo;
-	LedInfo			m_ledInfo;
-	WinchInfo		m_winchInfo;
+	HookInfo 		   m_hookInfo;
+	LandingGearInfo    m_landingGearInfo;
+	LedInfo			   m_ledInfo;
+	WinchInfo		   m_winchInfo;
+	MainControllerInfo m_mainControllerInfo;
 
 	std::chrono::time_point<std::chrono::steady_clock> m_lastHookInfoUpdateTimePoint;
 	std::chrono::time_point<std::chrono::steady_clock> m_lastLandingGearInfoUpdateTimePoint;
 	std::chrono::time_point<std::chrono::steady_clock> m_lastLedInfoUpdateTimePoint;
 	std::chrono::time_point<std::chrono::steady_clock> m_lastWinchInfoUpdateTimePoint;
-
+	std::chrono::time_point<std::chrono::steady_clock> m_lastMainControllerInfoUpdateTimePoint;
+	
 	std::atomic<float> m_hookInfoUpdateFrequency;
 	std::atomic<float> m_landingGearInfoUpdateFrequency;
 	std::atomic<float> m_ledInfoUpdateFrequency;
 	std::atomic<float> m_winchInfoUpdateFrequency;
+	std::atomic<float> m_mainControllerInfoUpdateFrequency;
 
 
 #if !defined(DOXYGEN_ONLY) && !defined(__BINDINGS)
 protected:
-	std::mutex muxHookinfo;
-	std::mutex muxLandingGearInfo;
-	std::mutex muxLedInfo;
-	std::mutex muxWinchInfo;
+	std::shared_mutex muxHookInfo;
+	std::shared_mutex muxLandingGearInfo;
+	std::shared_mutex muxLedInfo;
+	std::shared_mutex muxWinchInfo;
+	std::shared_mutex muxMainControllerInfo;
 	std::mutex muxInfoStream;
 #endif // !DOXYGEN_ONLY and !__BINDINGS
 
@@ -253,7 +315,7 @@ private:
 	void m_updateLandingGearInfo(LandingGearInfo& info);
 	void m_updateLedInfo(LedInfo& info);
 	void m_updateWinchInfo(WinchInfo& info);
-
+	void m_updateMainControllerInfo(MainControllerInfo& info);
 
 	void info(const char* info_msg);
 };

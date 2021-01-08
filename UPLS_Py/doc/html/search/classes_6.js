@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['upls_5fcontroller_50',['UPLS_Controller',['../classUPLS__Controller.html',1,'']]]
+  ['settings_54',['Settings',['../structLedInfo_1_1Led_1_1Settings.html',1,'LedInfo::Led']]]
 ];

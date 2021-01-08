@@ -76,125 +76,154 @@ $(function() {
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;list&gt;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;thread&gt;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;mutex&gt;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;atomic&gt;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;global_macros.h&quot;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;serialport.h&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;tsqueue.h&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;packet.h&quot;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html">   18</a></span>&#160;<span class="keyword">class </span>BINDINGS_API <a class="code" href="classUPLS__Controller.html">UPLS_Controller</a></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;{</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a3f407ff7a9fd6f0522887ec24b2d2cbc">   24</a></span>&#160;    <a class="code" href="classUPLS__Controller.html#a3f407ff7a9fd6f0522887ec24b2d2cbc">UPLS_Controller</a>();</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a8c665ba42db17939492572e403d2a8b5">   29</a></span>&#160;    <a class="code" href="classUPLS__Controller.html#a8c665ba42db17939492572e403d2a8b5">~UPLS_Controller</a>();</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#aa8ddec7ecd2bb4636658766be9317257">   39</a></span>&#160;    std::list&lt;std::string&gt; <a class="code" href="classUPLS__Controller.html#aa8ddec7ecd2bb4636658766be9317257">listAvailablePorts</a>();</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    </div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a1ea441fb5dc43406a27df11c4cc5bbca">   46</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a1ea441fb5dc43406a27df11c4cc5bbca">printAvailablePorts</a>();</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    </div>
-<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a6c6c12f1c9a51e8a1dcfd25a98de29a3">   54</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a6c6c12f1c9a51e8a1dcfd25a98de29a3">setSerialPort</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* portName);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    </div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#aefa62caefd06d1e9657507eae163a672">   60</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classUPLS__Controller.html#aefa62caefd06d1e9657507eae163a672">start</a>();</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    </div>
-<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a5f7876c7655d3e49f681a49780ff919e">   65</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a5f7876c7655d3e49f681a49780ff919e">stop</a>();</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    </div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a67105f36af74b9e0420c21fc3130dbb5">   71</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classUPLS__Controller.html#a67105f36af74b9e0420c21fc3130dbb5">errorsOccured</a>();</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    </div>
-<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#ad2759f9accbc87c617fe4352bac088b6">   77</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#ad2759f9accbc87c617fe4352bac088b6">printError</a>();</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    </div>
-<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a3ed2ede791b4fec19a9ca9074e52fce4">   83</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a3ed2ede791b4fec19a9ca9074e52fce4">printAllErrors</a>();</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;shared_mutex&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;mutex&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;atomic&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;global_macros.h&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;serialport.h&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;tsqueue.h&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;packet.h&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html">   19</a></span>&#160;<span class="keyword">class </span>BINDINGS_API <a class="code" href="classUPLS__Controller.html">UPLS_Controller</a></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;{</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a3f407ff7a9fd6f0522887ec24b2d2cbc">   25</a></span>&#160;    <a class="code" href="classUPLS__Controller.html#a3f407ff7a9fd6f0522887ec24b2d2cbc">UPLS_Controller</a>();</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a8c665ba42db17939492572e403d2a8b5">   30</a></span>&#160;    <a class="code" href="classUPLS__Controller.html#a8c665ba42db17939492572e403d2a8b5">~UPLS_Controller</a>();</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    </div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#aa8ddec7ecd2bb4636658766be9317257">   40</a></span>&#160;    std::list&lt;std::string&gt; <a class="code" href="classUPLS__Controller.html#aa8ddec7ecd2bb4636658766be9317257">listAvailablePorts</a>();</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    </div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a1ea441fb5dc43406a27df11c4cc5bbca">   47</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a1ea441fb5dc43406a27df11c4cc5bbca">printAvailablePorts</a>();</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    </div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a6c6c12f1c9a51e8a1dcfd25a98de29a3">   55</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a6c6c12f1c9a51e8a1dcfd25a98de29a3">setSerialPort</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* portName);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    </div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#aefa62caefd06d1e9657507eae163a672">   61</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classUPLS__Controller.html#aefa62caefd06d1e9657507eae163a672">start</a>();</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a5f7876c7655d3e49f681a49780ff919e">   66</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a5f7876c7655d3e49f681a49780ff919e">stop</a>();</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    </div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#af4b2d054c81b2f3a6bffef68157a2342">   72</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classUPLS__Controller.html#af4b2d054c81b2f3a6bffef68157a2342">receivedPacketLoggingEnabled</a>();</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#ad116bd26ef5a88230a6cb8a49e9600bb">   77</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#ad116bd26ef5a88230a6cb8a49e9600bb">enableReceivedPacketLogging</a>(<span class="keywordtype">bool</span> enable);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a67105f36af74b9e0420c21fc3130dbb5">   83</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classUPLS__Controller.html#a67105f36af74b9e0420c21fc3130dbb5">errorsOccured</a>();</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    </div>
-<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a753c6b36c29fd060007f3dcdd80d6ba0">   89</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a753c6b36c29fd060007f3dcdd80d6ba0">clearAllErrors</a>();</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="comment">//int popError();</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    </div>
-<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a2e51468cde2f796c894ed41e757a2afb">   97</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classUPLS__Controller.html#a2e51468cde2f796c894ed41e757a2afb">warningsReceived</a>();</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a288d0678131eb5f60be8184834f9b108">  103</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a288d0678131eb5f60be8184834f9b108">printWarning</a>();</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#aec34003d0ab8799b9c01b23959898a96">  109</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#aec34003d0ab8799b9c01b23959898a96">printAllWarnings</a>();</div>
+<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#ad2759f9accbc87c617fe4352bac088b6">   89</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#ad2759f9accbc87c617fe4352bac088b6">printError</a>();</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    </div>
+<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a3ed2ede791b4fec19a9ca9074e52fce4">   95</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a3ed2ede791b4fec19a9ca9074e52fce4">printAllErrors</a>();</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    </div>
+<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a753c6b36c29fd060007f3dcdd80d6ba0">  101</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a753c6b36c29fd060007f3dcdd80d6ba0">clearAllErrors</a>();</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="comment">//int popError();</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    </div>
+<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a2e51468cde2f796c894ed41e757a2afb">  109</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classUPLS__Controller.html#a2e51468cde2f796c894ed41e757a2afb">warningsReceived</a>();</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#aa8e13309e72df33e07a00ff128b8cb9e">  115</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#aa8e13309e72df33e07a00ff128b8cb9e">clearAllWarnings</a>();</div>
+<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a288d0678131eb5f60be8184834f9b108">  115</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a288d0678131eb5f60be8184834f9b108">printWarning</a>();</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#acdfb82e7fd8e564fbf63cdd250c7e54a">  121</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classUPLS__Controller.html#acdfb82e7fd8e564fbf63cdd250c7e54a">messagesReceived</a>();</div>
+<div class="line"><a name="l00121"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#aec34003d0ab8799b9c01b23959898a96">  121</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#aec34003d0ab8799b9c01b23959898a96">printAllWarnings</a>();</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
-<div class="line"><a name="l00127"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a257b0b00b95cb4bb97ad9cc3b7269ee4">  127</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a257b0b00b95cb4bb97ad9cc3b7269ee4">printAllMessages</a>();</div>
+<div class="line"><a name="l00127"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#aa8e13309e72df33e07a00ff128b8cb9e">  127</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#aa8e13309e72df33e07a00ff128b8cb9e">clearAllWarnings</a>();</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
-<div class="line"><a name="l00134"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a71b56fb73405107aad5831d557eb2446">  134</a></span>&#160;    <a class="code" href="structHookInfo.html">HookInfo</a> <a class="code" href="classUPLS__Controller.html#a71b56fb73405107aad5831d557eb2446">hookInfo</a>();</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
-<div class="line"><a name="l00141"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#abd52345eea8d1598655f0c427bd7d416">  141</a></span>&#160;    <a class="code" href="structLandingGearInfo.html">LandingGearInfo</a> <a class="code" href="classUPLS__Controller.html#abd52345eea8d1598655f0c427bd7d416">landingGearInfo</a>();</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    </div>
-<div class="line"><a name="l00148"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#aedc8e6557576ac5e9832bc77d25dfb68">  148</a></span>&#160;    <a class="code" href="structLedInfo.html">LedInfo</a> <a class="code" href="classUPLS__Controller.html#aedc8e6557576ac5e9832bc77d25dfb68">ledInfo</a>();</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    </div>
-<div class="line"><a name="l00155"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#afa5f914e13808dd37452006d06a5fc0d">  155</a></span>&#160;    <a class="code" href="structWinchInfo.html">WinchInfo</a> <a class="code" href="classUPLS__Controller.html#afa5f914e13808dd37452006d06a5fc0d">winchInfo</a>();</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
-<div class="line"><a name="l00162"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#aa71a23b8716536b12df1321d264e1cae">  162</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classUPLS__Controller.html#aa71a23b8716536b12df1321d264e1cae">hookInfoUpdateFrequency</a>();</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
-<div class="line"><a name="l00169"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a9db49cac9715820f1a41c50acf02f749">  169</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classUPLS__Controller.html#a9db49cac9715820f1a41c50acf02f749">landingGearInfoUpdateFrequency</a>();</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
-<div class="line"><a name="l00176"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#aa7274380d08224cf9597b17e23e09d62">  176</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classUPLS__Controller.html#aa7274380d08224cf9597b17e23e09d62">ledInfoUpdateFrequency</a>();</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160; </div>
-<div class="line"><a name="l00183"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#ad7c6ad2440ff24f525ad669f52319c5c">  183</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classUPLS__Controller.html#ad7c6ad2440ff24f525ad669f52319c5c">winchInfoUpdateFrequency</a>();</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    </div>
-<div class="line"><a name="l00188"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#ac7b90a3f611c93d7337f0eda92355821">  188</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#ac7b90a3f611c93d7337f0eda92355821">ledOn</a>();</div>
-<div class="line"><a name="l00192"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a9f48d1cf0400149fbb573f42eaf39361">  192</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a9f48d1cf0400149fbb573f42eaf39361">ledOff</a>();</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160; </div>
-<div class="line"><a name="l00199"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a8e46bd6e0b8c7ded61214f0add701f03">  199</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a8e46bd6e0b8c7ded61214f0add701f03">error</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* error_msg);</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
-<div class="line"><a name="l00206"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a4f830d9035e38afd186e4f14d521b561">  206</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a4f830d9035e38afd186e4f14d521b561">warning</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* warning_msg);</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
-<div class="line"><a name="l00213"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#ab6f96642a00c37c490ec24fb9dfdc632">  213</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#ab6f96642a00c37c490ec24fb9dfdc632">message</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* message);</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    SerialPort  m_serial;</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160; </div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    std::atomic&lt;bool&gt; m_receiverRunning;</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    std::thread*      m_receiverThread;</div>
+<div class="line"><a name="l00133"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#acdfb82e7fd8e564fbf63cdd250c7e54a">  133</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classUPLS__Controller.html#acdfb82e7fd8e564fbf63cdd250c7e54a">messagesReceived</a>();</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
+<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a257b0b00b95cb4bb97ad9cc3b7269ee4">  139</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a257b0b00b95cb4bb97ad9cc3b7269ee4">printAllMessages</a>();</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
+<div class="line"><a name="l00146"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a71b56fb73405107aad5831d557eb2446">  146</a></span>&#160;    <a class="code" href="structHookInfo.html">HookInfo</a> <a class="code" href="classUPLS__Controller.html#a71b56fb73405107aad5831d557eb2446">hookInfo</a>();</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
+<div class="line"><a name="l00153"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#abd52345eea8d1598655f0c427bd7d416">  153</a></span>&#160;    <a class="code" href="structLandingGearInfo.html">LandingGearInfo</a> <a class="code" href="classUPLS__Controller.html#abd52345eea8d1598655f0c427bd7d416">landingGearInfo</a>();</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    </div>
+<div class="line"><a name="l00160"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#aedc8e6557576ac5e9832bc77d25dfb68">  160</a></span>&#160;    <a class="code" href="structLedInfo.html">LedInfo</a> <a class="code" href="classUPLS__Controller.html#aedc8e6557576ac5e9832bc77d25dfb68">ledInfo</a>();</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    </div>
+<div class="line"><a name="l00167"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#afa5f914e13808dd37452006d06a5fc0d">  167</a></span>&#160;    <a class="code" href="structWinchInfo.html">WinchInfo</a> <a class="code" href="classUPLS__Controller.html#afa5f914e13808dd37452006d06a5fc0d">winchInfo</a>();</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
+<div class="line"><a name="l00174"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#ad4a1723c9ad49f5dbd25f8ae4a31b80a">  174</a></span>&#160;    <a class="code" href="structMainControllerInfo.html">MainControllerInfo</a> <a class="code" href="classUPLS__Controller.html#ad4a1723c9ad49f5dbd25f8ae4a31b80a">mainControllerInfo</a>();</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
+<div class="line"><a name="l00181"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#aa71a23b8716536b12df1321d264e1cae">  181</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classUPLS__Controller.html#aa71a23b8716536b12df1321d264e1cae">hookInfoUpdateFrequency</a>();</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
+<div class="line"><a name="l00188"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a9db49cac9715820f1a41c50acf02f749">  188</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classUPLS__Controller.html#a9db49cac9715820f1a41c50acf02f749">landingGearInfoUpdateFrequency</a>();</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
+<div class="line"><a name="l00195"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#aa7274380d08224cf9597b17e23e09d62">  195</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classUPLS__Controller.html#aa7274380d08224cf9597b17e23e09d62">ledInfoUpdateFrequency</a>();</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
+<div class="line"><a name="l00202"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#ad7c6ad2440ff24f525ad669f52319c5c">  202</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classUPLS__Controller.html#ad7c6ad2440ff24f525ad669f52319c5c">winchInfoUpdateFrequency</a>();</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
+<div class="line"><a name="l00209"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#addefc69062a2f6f77ae9dfeadc3cfc67">  209</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classUPLS__Controller.html#addefc69062a2f6f77ae9dfeadc3cfc67">mainControllerInfoUpdateFrequency</a>();</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    </div>
+<div class="line"><a name="l00214"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a6d750312655e5a8e6e81f2e0262be33d">  214</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a6d750312655e5a8e6e81f2e0262be33d">ledsOn</a>();</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;    </div>
+<div class="line"><a name="l00219"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a632beb1cf596401ed59ff0d607947157">  219</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a632beb1cf596401ed59ff0d607947157">ledsOff</a>();</div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    tsqueue&lt;Packet&gt; m_errorQueue;</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    tsqueue&lt;Packet&gt; m_warningQueue;</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    tsqueue&lt;Packet&gt; m_messageQueue;</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    <span class="keywordtype">void</span> latchOpen();</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    <span class="keywordtype">void</span> latchClose();</div>
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    <a class="code" href="structHookInfo.html">HookInfo</a>        m_hookInfo;</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <a class="code" href="structLandingGearInfo.html">LandingGearInfo</a> m_landingGearInfo;</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <a class="code" href="structLedInfo.html">LedInfo</a>         m_ledInfo;</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    <a class="code" href="structWinchInfo.html">WinchInfo</a>       m_winchInfo;</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    std::chrono::time_point&lt;std::chrono::steady_clock&gt; m_lastHookInfoUpdateTimePoint;</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    std::chrono::time_point&lt;std::chrono::steady_clock&gt; m_lastLandingGearInfoUpdateTimePoint;</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    std::chrono::time_point&lt;std::chrono::steady_clock&gt; m_lastLedInfoUpdateTimePoint;</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;    std::chrono::time_point&lt;std::chrono::steady_clock&gt; m_lastWinchInfoUpdateTimePoint;</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    <span class="keywordtype">void</span> latchSetOpenPulseDuration(<span class="keywordtype">int</span> pulse_duration);</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160; </div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <span class="keywordtype">void</span> latchSetClosePulseDuration(<span class="keywordtype">int</span> pulse_duration);</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    <span class="keywordtype">void</span> hookShutdown();</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    <span class="keywordtype">void</span> landingGearExtract();</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;    <span class="keywordtype">void</span> landingGearRetract();</div>
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160; </div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    std::atomic&lt;float&gt; m_hookInfoUpdateFrequency;</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    std::atomic&lt;float&gt; m_landingGearInfoUpdateFrequency;</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    std::atomic&lt;float&gt; m_ledInfoUpdateFrequency;</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    std::atomic&lt;float&gt; m_winchInfoUpdateFrequency;</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="preprocessor">#if !defined(DOXYGEN_ONLY) &amp;&amp; !defined(__BINDINGS)</span></div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    std::mutex muxHookinfo;</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    std::mutex muxLandingGearInfo;</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    std::mutex muxLedInfo;</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    std::mutex muxWinchInfo;</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    std::mutex muxInfoStream;</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// !DOXYGEN_ONLY and !__BINDINGS</span></div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    <span class="keywordtype">void</span> m_receivedPacketHandler();</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <span class="keywordtype">void</span> m_updateHookInfo(<a class="code" href="structHookInfo.html">HookInfo</a>&amp; info);</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    <span class="keywordtype">void</span> m_updateLandingGearInfo(<a class="code" href="structLandingGearInfo.html">LandingGearInfo</a>&amp; info);</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="keywordtype">void</span> m_updateLedInfo(<a class="code" href="structLedInfo.html">LedInfo</a>&amp; info);</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    <span class="keywordtype">void</span> m_updateWinchInfo(<a class="code" href="structWinchInfo.html">WinchInfo</a>&amp; info);</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160; </div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="keywordtype">void</span> info(<span class="keyword">const</span> <span class="keywordtype">char</span>* info_msg);</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;};</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// UPLS_CONTROLLER_H</span></div>
-<div class="ttc" id="aclassUPLS__Controller_html"><div class="ttname"><a href="classUPLS__Controller.html">UPLS_Controller</a></div><div class="ttdoc">Class for controlling various peripherals on the UAV. Provides various functions to control UPLS.</div><div class="ttdef"><b>Definition:</b> upls_controller.h:19</div></div>
+<div class="line"><a name="l00240"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a8e46bd6e0b8c7ded61214f0add701f03">  240</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a8e46bd6e0b8c7ded61214f0add701f03">error</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* error_msg);</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160; </div>
+<div class="line"><a name="l00247"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#a4f830d9035e38afd186e4f14d521b561">  247</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#a4f830d9035e38afd186e4f14d521b561">warning</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* warning_msg);</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00254"></a><span class="lineno"><a class="line" href="classUPLS__Controller.html#ab6f96642a00c37c490ec24fb9dfdc632">  254</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classUPLS__Controller.html#ab6f96642a00c37c490ec24fb9dfdc632">message</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* message);</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160; </div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    SerialPort  m_serial;</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    std::atomic&lt;bool&gt; m_logReceivedPackets;</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    std::atomic&lt;bool&gt; m_receiverRunning;</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    std::thread*      m_receiverThread;</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160; </div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    tsqueue&lt;Packet&gt; m_errorQueue;</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    tsqueue&lt;Packet&gt; m_warningQueue;</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    tsqueue&lt;Packet&gt; m_messageQueue;</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160; </div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    <a class="code" href="structHookInfo.html">HookInfo</a>           m_hookInfo;</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    <a class="code" href="structLandingGearInfo.html">LandingGearInfo</a>    m_landingGearInfo;</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <a class="code" href="structLedInfo.html">LedInfo</a>            m_ledInfo;</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    <a class="code" href="structWinchInfo.html">WinchInfo</a>          m_winchInfo;</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    <a class="code" href="structMainControllerInfo.html">MainControllerInfo</a> m_mainControllerInfo;</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160; </div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    std::chrono::time_point&lt;std::chrono::steady_clock&gt; m_lastHookInfoUpdateTimePoint;</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    std::chrono::time_point&lt;std::chrono::steady_clock&gt; m_lastLandingGearInfoUpdateTimePoint;</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    std::chrono::time_point&lt;std::chrono::steady_clock&gt; m_lastLedInfoUpdateTimePoint;</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    std::chrono::time_point&lt;std::chrono::steady_clock&gt; m_lastWinchInfoUpdateTimePoint;</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    std::chrono::time_point&lt;std::chrono::steady_clock&gt; m_lastMainControllerInfoUpdateTimePoint;</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    </div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    std::atomic&lt;float&gt; m_hookInfoUpdateFrequency;</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    std::atomic&lt;float&gt; m_landingGearInfoUpdateFrequency;</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    std::atomic&lt;float&gt; m_ledInfoUpdateFrequency;</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    std::atomic&lt;float&gt; m_winchInfoUpdateFrequency;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    std::atomic&lt;float&gt; m_mainControllerInfoUpdateFrequency;</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160; </div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="preprocessor">#if !defined(DOXYGEN_ONLY) &amp;&amp; !defined(__BINDINGS)</span></div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    std::shared_mutex muxHookInfo;</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    std::shared_mutex muxLandingGearInfo;</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    std::shared_mutex muxLedInfo;</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    std::shared_mutex muxWinchInfo;</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    std::shared_mutex muxMainControllerInfo;</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    std::mutex muxInfoStream;</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// !DOXYGEN_ONLY and !__BINDINGS</span></div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    <span class="keywordtype">void</span> m_receivedPacketHandler();</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    <span class="keywordtype">void</span> m_updateHookInfo(<a class="code" href="structHookInfo.html">HookInfo</a>&amp; info);</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    <span class="keywordtype">void</span> m_updateLandingGearInfo(<a class="code" href="structLandingGearInfo.html">LandingGearInfo</a>&amp; info);</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    <span class="keywordtype">void</span> m_updateLedInfo(<a class="code" href="structLedInfo.html">LedInfo</a>&amp; info);</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    <span class="keywordtype">void</span> m_updateWinchInfo(<a class="code" href="structWinchInfo.html">WinchInfo</a>&amp; info);</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    <span class="keywordtype">void</span> m_updateMainControllerInfo(<a class="code" href="structMainControllerInfo.html">MainControllerInfo</a>&amp; info);</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <span class="keywordtype">void</span> info(<span class="keyword">const</span> <span class="keywordtype">char</span>* info_msg);</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;};</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160; </div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// UPLS_CONTROLLER_H</span></div>
+<div class="ttc" id="aclassUPLS__Controller_html"><div class="ttname"><a href="classUPLS__Controller.html">UPLS_Controller</a></div><div class="ttdoc">Class for controlling various peripherals on the UAV. Provides various functions to control UPLS.</div><div class="ttdef"><b>Definition:</b> upls_controller.h:20</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_a1ea441fb5dc43406a27df11c4cc5bbca"><div class="ttname"><a href="classUPLS__Controller.html#a1ea441fb5dc43406a27df11c4cc5bbca">UPLS_Controller::printAvailablePorts</a></div><div class="ttdeci">void printAvailablePorts()</div><div class="ttdoc">Utility function to check for available serial ports.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_a257b0b00b95cb4bb97ad9cc3b7269ee4"><div class="ttname"><a href="classUPLS__Controller.html#a257b0b00b95cb4bb97ad9cc3b7269ee4">UPLS_Controller::printAllMessages</a></div><div class="ttdeci">void printAllMessages()</div><div class="ttdoc">Prints all messages in the queue. Prints and deletes all messages in the queue.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_a288d0678131eb5f60be8184834f9b108"><div class="ttname"><a href="classUPLS__Controller.html#a288d0678131eb5f60be8184834f9b108">UPLS_Controller::printWarning</a></div><div class="ttdeci">void printWarning()</div><div class="ttdoc">Prints warning that occured. Prints oldest warning that occured and deletes it from the queue.</div></div>
@@ -203,32 +232,37 @@ $(function() {
 <div class="ttc" id="aclassUPLS__Controller_html_a3f407ff7a9fd6f0522887ec24b2d2cbc"><div class="ttname"><a href="classUPLS__Controller.html#a3f407ff7a9fd6f0522887ec24b2d2cbc">UPLS_Controller::UPLS_Controller</a></div><div class="ttdeci">UPLS_Controller()</div><div class="ttdoc">Default constructor for the UPLS_Controller object.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_a4f830d9035e38afd186e4f14d521b561"><div class="ttname"><a href="classUPLS__Controller.html#a4f830d9035e38afd186e4f14d521b561">UPLS_Controller::warning</a></div><div class="ttdeci">void warning(const char *warning_msg)</div><div class="ttdoc">Formats and prints string as an warning. Formats and prints string as an error in to stdout.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_a5f7876c7655d3e49f681a49780ff919e"><div class="ttname"><a href="classUPLS__Controller.html#a5f7876c7655d3e49f681a49780ff919e">UPLS_Controller::stop</a></div><div class="ttdeci">void stop()</div><div class="ttdoc">Stops serial comunication with UPLS.</div></div>
+<div class="ttc" id="aclassUPLS__Controller_html_a632beb1cf596401ed59ff0d607947157"><div class="ttname"><a href="classUPLS__Controller.html#a632beb1cf596401ed59ff0d607947157">UPLS_Controller::ledsOff</a></div><div class="ttdeci">void ledsOff()</div><div class="ttdoc">Test function.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_a67105f36af74b9e0420c21fc3130dbb5"><div class="ttname"><a href="classUPLS__Controller.html#a67105f36af74b9e0420c21fc3130dbb5">UPLS_Controller::errorsOccured</a></div><div class="ttdeci">bool errorsOccured()</div><div class="ttdoc">Checks if any errors have been received or occured.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_a6c6c12f1c9a51e8a1dcfd25a98de29a3"><div class="ttname"><a href="classUPLS__Controller.html#a6c6c12f1c9a51e8a1dcfd25a98de29a3">UPLS_Controller::setSerialPort</a></div><div class="ttdeci">void setSerialPort(const char *portName)</div><div class="ttdoc">Utility function for setting serial port which will be used.</div></div>
+<div class="ttc" id="aclassUPLS__Controller_html_a6d750312655e5a8e6e81f2e0262be33d"><div class="ttname"><a href="classUPLS__Controller.html#a6d750312655e5a8e6e81f2e0262be33d">UPLS_Controller::ledsOn</a></div><div class="ttdeci">void ledsOn()</div><div class="ttdoc">Test function.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_a71b56fb73405107aad5831d557eb2446"><div class="ttname"><a href="classUPLS__Controller.html#a71b56fb73405107aad5831d557eb2446">UPLS_Controller::hookInfo</a></div><div class="ttdeci">HookInfo hookInfo()</div><div class="ttdoc">Access function. Returns object, containing latest information about UAV's hook.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_a753c6b36c29fd060007f3dcdd80d6ba0"><div class="ttname"><a href="classUPLS__Controller.html#a753c6b36c29fd060007f3dcdd80d6ba0">UPLS_Controller::clearAllErrors</a></div><div class="ttdeci">void clearAllErrors()</div><div class="ttdoc">Clears error queue. Deletes all errors from the queue.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_a8c665ba42db17939492572e403d2a8b5"><div class="ttname"><a href="classUPLS__Controller.html#a8c665ba42db17939492572e403d2a8b5">UPLS_Controller::~UPLS_Controller</a></div><div class="ttdeci">~UPLS_Controller()</div><div class="ttdoc">Deconstructor for the UPLS_Controller object.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_a8e46bd6e0b8c7ded61214f0add701f03"><div class="ttname"><a href="classUPLS__Controller.html#a8e46bd6e0b8c7ded61214f0add701f03">UPLS_Controller::error</a></div><div class="ttdeci">void error(const char *error_msg)</div><div class="ttdoc">Formats and prints string as an error. Formats and prints string as an error in to stdout.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_a9db49cac9715820f1a41c50acf02f749"><div class="ttname"><a href="classUPLS__Controller.html#a9db49cac9715820f1a41c50acf02f749">UPLS_Controller::landingGearInfoUpdateFrequency</a></div><div class="ttdeci">float landingGearInfoUpdateFrequency()</div><div class="ttdoc">Utility function. Returns current information about landing gear update frequency.</div></div>
-<div class="ttc" id="aclassUPLS__Controller_html_a9f48d1cf0400149fbb573f42eaf39361"><div class="ttname"><a href="classUPLS__Controller.html#a9f48d1cf0400149fbb573f42eaf39361">UPLS_Controller::ledOff</a></div><div class="ttdeci">void ledOff()</div><div class="ttdoc">Test function.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_aa71a23b8716536b12df1321d264e1cae"><div class="ttname"><a href="classUPLS__Controller.html#aa71a23b8716536b12df1321d264e1cae">UPLS_Controller::hookInfoUpdateFrequency</a></div><div class="ttdeci">float hookInfoUpdateFrequency()</div><div class="ttdoc">Utility function. Returns current information about hook update frequency.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_aa7274380d08224cf9597b17e23e09d62"><div class="ttname"><a href="classUPLS__Controller.html#aa7274380d08224cf9597b17e23e09d62">UPLS_Controller::ledInfoUpdateFrequency</a></div><div class="ttdeci">float ledInfoUpdateFrequency()</div><div class="ttdoc">Utility function. Returns current information about LEDs update frequency.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_aa8ddec7ecd2bb4636658766be9317257"><div class="ttname"><a href="classUPLS__Controller.html#aa8ddec7ecd2bb4636658766be9317257">UPLS_Controller::listAvailablePorts</a></div><div class="ttdeci">std::list&lt; std::string &gt; listAvailablePorts()</div><div class="ttdoc">Utility function for listing available serial ports.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_aa8e13309e72df33e07a00ff128b8cb9e"><div class="ttname"><a href="classUPLS__Controller.html#aa8e13309e72df33e07a00ff128b8cb9e">UPLS_Controller::clearAllWarnings</a></div><div class="ttdeci">void clearAllWarnings()</div><div class="ttdoc">Clears warning queue. Deletes all warnings from the queue.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_ab6f96642a00c37c490ec24fb9dfdc632"><div class="ttname"><a href="classUPLS__Controller.html#ab6f96642a00c37c490ec24fb9dfdc632">UPLS_Controller::message</a></div><div class="ttdeci">void message(const char *message)</div><div class="ttdoc">Formats and prints string as an message. Formats and prints string as an error in to stdout.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_abd52345eea8d1598655f0c427bd7d416"><div class="ttname"><a href="classUPLS__Controller.html#abd52345eea8d1598655f0c427bd7d416">UPLS_Controller::landingGearInfo</a></div><div class="ttdeci">LandingGearInfo landingGearInfo()</div><div class="ttdoc">Access function. Returns object, containing latest information about UAV's landing gear.</div></div>
-<div class="ttc" id="aclassUPLS__Controller_html_ac7b90a3f611c93d7337f0eda92355821"><div class="ttname"><a href="classUPLS__Controller.html#ac7b90a3f611c93d7337f0eda92355821">UPLS_Controller::ledOn</a></div><div class="ttdeci">void ledOn()</div><div class="ttdoc">Test function.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_acdfb82e7fd8e564fbf63cdd250c7e54a"><div class="ttname"><a href="classUPLS__Controller.html#acdfb82e7fd8e564fbf63cdd250c7e54a">UPLS_Controller::messagesReceived</a></div><div class="ttdeci">bool messagesReceived()</div><div class="ttdoc">Checks if any messages available.</div></div>
+<div class="ttc" id="aclassUPLS__Controller_html_ad116bd26ef5a88230a6cb8a49e9600bb"><div class="ttname"><a href="classUPLS__Controller.html#ad116bd26ef5a88230a6cb8a49e9600bb">UPLS_Controller::enableReceivedPacketLogging</a></div><div class="ttdeci">void enableReceivedPacketLogging(bool enable)</div><div class="ttdoc">Utility function enabling packet logging.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_ad2759f9accbc87c617fe4352bac088b6"><div class="ttname"><a href="classUPLS__Controller.html#ad2759f9accbc87c617fe4352bac088b6">UPLS_Controller::printError</a></div><div class="ttdeci">void printError()</div><div class="ttdoc">Prints error that occured. Prints oldest error that occured and deletes it from the queue.</div></div>
+<div class="ttc" id="aclassUPLS__Controller_html_ad4a1723c9ad49f5dbd25f8ae4a31b80a"><div class="ttname"><a href="classUPLS__Controller.html#ad4a1723c9ad49f5dbd25f8ae4a31b80a">UPLS_Controller::mainControllerInfo</a></div><div class="ttdeci">MainControllerInfo mainControllerInfo()</div><div class="ttdoc">Access function. Returns object, containing latest information about UAV's UPLS controller.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_ad7c6ad2440ff24f525ad669f52319c5c"><div class="ttname"><a href="classUPLS__Controller.html#ad7c6ad2440ff24f525ad669f52319c5c">UPLS_Controller::winchInfoUpdateFrequency</a></div><div class="ttdeci">float winchInfoUpdateFrequency()</div><div class="ttdoc">Utility function. Returns current information about winch update frequency.</div></div>
+<div class="ttc" id="aclassUPLS__Controller_html_addefc69062a2f6f77ae9dfeadc3cfc67"><div class="ttname"><a href="classUPLS__Controller.html#addefc69062a2f6f77ae9dfeadc3cfc67">UPLS_Controller::mainControllerInfoUpdateFrequency</a></div><div class="ttdeci">float mainControllerInfoUpdateFrequency()</div><div class="ttdoc">Utility function. Returns current information about UAV's UPLS controller update frequency.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_aec34003d0ab8799b9c01b23959898a96"><div class="ttname"><a href="classUPLS__Controller.html#aec34003d0ab8799b9c01b23959898a96">UPLS_Controller::printAllWarnings</a></div><div class="ttdeci">void printAllWarnings()</div><div class="ttdoc">Prints all warnings that occured. Prints all warnings that occured without deleting them from the war...</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_aedc8e6557576ac5e9832bc77d25dfb68"><div class="ttname"><a href="classUPLS__Controller.html#aedc8e6557576ac5e9832bc77d25dfb68">UPLS_Controller::ledInfo</a></div><div class="ttdeci">LedInfo ledInfo()</div><div class="ttdoc">Access function. Returns object, containing latest information about UAV's LEDs.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_aefa62caefd06d1e9657507eae163a672"><div class="ttname"><a href="classUPLS__Controller.html#aefa62caefd06d1e9657507eae163a672">UPLS_Controller::start</a></div><div class="ttdeci">bool start()</div><div class="ttdoc">Starts serial comunication with UPLS.</div></div>
+<div class="ttc" id="aclassUPLS__Controller_html_af4b2d054c81b2f3a6bffef68157a2342"><div class="ttname"><a href="classUPLS__Controller.html#af4b2d054c81b2f3a6bffef68157a2342">UPLS_Controller::receivedPacketLoggingEnabled</a></div><div class="ttdeci">bool receivedPacketLoggingEnabled()</div><div class="ttdoc">Utility function for checking if packet logging is enabled.</div></div>
 <div class="ttc" id="aclassUPLS__Controller_html_afa5f914e13808dd37452006d06a5fc0d"><div class="ttname"><a href="classUPLS__Controller.html#afa5f914e13808dd37452006d06a5fc0d">UPLS_Controller::winchInfo</a></div><div class="ttdeci">WinchInfo winchInfo()</div><div class="ttdoc">Access function. Returns object, containing latest information about UAV's winch.</div></div>
-<div class="ttc" id="astructHookInfo_html"><div class="ttname"><a href="structHookInfo.html">HookInfo</a></div><div class="ttdoc">Structure that holds information about UAV UPLS hook.</div><div class="ttdef"><b>Definition:</b> packet.h:84</div></div>
-<div class="ttc" id="astructLandingGearInfo_html"><div class="ttname"><a href="structLandingGearInfo.html">LandingGearInfo</a></div><div class="ttdef"><b>Definition:</b> packet.h:231</div></div>
-<div class="ttc" id="astructLedInfo_html"><div class="ttname"><a href="structLedInfo.html">LedInfo</a></div><div class="ttdef"><b>Definition:</b> packet.h:163</div></div>
-<div class="ttc" id="astructWinchInfo_html"><div class="ttname"><a href="structWinchInfo.html">WinchInfo</a></div><div class="ttdef"><b>Definition:</b> packet.h:270</div></div>
+<div class="ttc" id="astructHookInfo_html"><div class="ttname"><a href="structHookInfo.html">HookInfo</a></div><div class="ttdoc">Structure that holds information about UAV UPLS hook.</div><div class="ttdef"><b>Definition:</b> packet.h:39</div></div>
+<div class="ttc" id="astructLandingGearInfo_html"><div class="ttname"><a href="structLandingGearInfo.html">LandingGearInfo</a></div><div class="ttdef"><b>Definition:</b> packet.h:193</div></div>
+<div class="ttc" id="astructLedInfo_html"><div class="ttname"><a href="structLedInfo.html">LedInfo</a></div><div class="ttdef"><b>Definition:</b> packet.h:125</div></div>
+<div class="ttc" id="astructMainControllerInfo_html"><div class="ttname"><a href="structMainControllerInfo.html">MainControllerInfo</a></div><div class="ttdef"><b>Definition:</b> packet.h:260</div></div>
+<div class="ttc" id="astructWinchInfo_html"><div class="ttname"><a href="structWinchInfo.html">WinchInfo</a></div><div class="ttdef"><b>Definition:</b> packet.h:232</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

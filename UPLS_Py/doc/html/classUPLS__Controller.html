@@ -101,6 +101,13 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUPLS__Controller.html#a5f7876c7655d3e49f681a49780ff919e">stop</a> ()</td></tr>
 <tr class="memdesc:a5f7876c7655d3e49f681a49780ff919e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops serial comunication with UPLS. <br /></td></tr>
 <tr class="separator:a5f7876c7655d3e49f681a49780ff919e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4b2d054c81b2f3a6bffef68157a2342"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUPLS__Controller.html#af4b2d054c81b2f3a6bffef68157a2342">receivedPacketLoggingEnabled</a> ()</td></tr>
+<tr class="memdesc:af4b2d054c81b2f3a6bffef68157a2342"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility function for checking if packet logging is enabled.  <a href="classUPLS__Controller.html#af4b2d054c81b2f3a6bffef68157a2342">More...</a><br /></td></tr>
+<tr class="separator:af4b2d054c81b2f3a6bffef68157a2342"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad116bd26ef5a88230a6cb8a49e9600bb"><td class="memItemLeft" align="right" valign="top"><a id="ad116bd26ef5a88230a6cb8a49e9600bb"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUPLS__Controller.html#ad116bd26ef5a88230a6cb8a49e9600bb">enableReceivedPacketLogging</a> (bool enable)</td></tr>
+<tr class="memdesc:ad116bd26ef5a88230a6cb8a49e9600bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility function enabling packet logging. <br /></td></tr>
+<tr class="separator:ad116bd26ef5a88230a6cb8a49e9600bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67105f36af74b9e0420c21fc3130dbb5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUPLS__Controller.html#a67105f36af74b9e0420c21fc3130dbb5">errorsOccured</a> ()</td></tr>
 <tr class="memdesc:a67105f36af74b9e0420c21fc3130dbb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if any errors have been received or occured.  <a href="classUPLS__Controller.html#a67105f36af74b9e0420c21fc3130dbb5">More...</a><br /></td></tr>
 <tr class="separator:a67105f36af74b9e0420c21fc3130dbb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,6 +157,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:afa5f914e13808dd37452006d06a5fc0d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structWinchInfo.html">WinchInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUPLS__Controller.html#afa5f914e13808dd37452006d06a5fc0d">winchInfo</a> ()</td></tr>
 <tr class="memdesc:afa5f914e13808dd37452006d06a5fc0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access function. Returns object, containing latest information about UAV's winch.  <a href="classUPLS__Controller.html#afa5f914e13808dd37452006d06a5fc0d">More...</a><br /></td></tr>
 <tr class="separator:afa5f914e13808dd37452006d06a5fc0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4a1723c9ad49f5dbd25f8ae4a31b80a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMainControllerInfo.html">MainControllerInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUPLS__Controller.html#ad4a1723c9ad49f5dbd25f8ae4a31b80a">mainControllerInfo</a> ()</td></tr>
+<tr class="memdesc:ad4a1723c9ad49f5dbd25f8ae4a31b80a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access function. Returns object, containing latest information about UAV's UPLS controller.  <a href="classUPLS__Controller.html#ad4a1723c9ad49f5dbd25f8ae4a31b80a">More...</a><br /></td></tr>
+<tr class="separator:ad4a1723c9ad49f5dbd25f8ae4a31b80a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa71a23b8716536b12df1321d264e1cae"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUPLS__Controller.html#aa71a23b8716536b12df1321d264e1cae">hookInfoUpdateFrequency</a> ()</td></tr>
 <tr class="memdesc:aa71a23b8716536b12df1321d264e1cae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility function. Returns current information about hook update frequency.  <a href="classUPLS__Controller.html#aa71a23b8716536b12df1321d264e1cae">More...</a><br /></td></tr>
 <tr class="separator:aa71a23b8716536b12df1321d264e1cae"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,14 +172,38 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:ad7c6ad2440ff24f525ad669f52319c5c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUPLS__Controller.html#ad7c6ad2440ff24f525ad669f52319c5c">winchInfoUpdateFrequency</a> ()</td></tr>
 <tr class="memdesc:ad7c6ad2440ff24f525ad669f52319c5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility function. Returns current information about winch update frequency.  <a href="classUPLS__Controller.html#ad7c6ad2440ff24f525ad669f52319c5c">More...</a><br /></td></tr>
 <tr class="separator:ad7c6ad2440ff24f525ad669f52319c5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7b90a3f611c93d7337f0eda92355821"><td class="memItemLeft" align="right" valign="top"><a id="ac7b90a3f611c93d7337f0eda92355821"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUPLS__Controller.html#ac7b90a3f611c93d7337f0eda92355821">ledOn</a> ()</td></tr>
-<tr class="memdesc:ac7b90a3f611c93d7337f0eda92355821"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test function. <br /></td></tr>
-<tr class="separator:ac7b90a3f611c93d7337f0eda92355821"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f48d1cf0400149fbb573f42eaf39361"><td class="memItemLeft" align="right" valign="top"><a id="a9f48d1cf0400149fbb573f42eaf39361"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUPLS__Controller.html#a9f48d1cf0400149fbb573f42eaf39361">ledOff</a> ()</td></tr>
-<tr class="memdesc:a9f48d1cf0400149fbb573f42eaf39361"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test function. <br /></td></tr>
-<tr class="separator:a9f48d1cf0400149fbb573f42eaf39361"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addefc69062a2f6f77ae9dfeadc3cfc67"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUPLS__Controller.html#addefc69062a2f6f77ae9dfeadc3cfc67">mainControllerInfoUpdateFrequency</a> ()</td></tr>
+<tr class="memdesc:addefc69062a2f6f77ae9dfeadc3cfc67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility function. Returns current information about UAV's UPLS controller update frequency.  <a href="classUPLS__Controller.html#addefc69062a2f6f77ae9dfeadc3cfc67">More...</a><br /></td></tr>
+<tr class="separator:addefc69062a2f6f77ae9dfeadc3cfc67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d750312655e5a8e6e81f2e0262be33d"><td class="memItemLeft" align="right" valign="top"><a id="a6d750312655e5a8e6e81f2e0262be33d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUPLS__Controller.html#a6d750312655e5a8e6e81f2e0262be33d">ledsOn</a> ()</td></tr>
+<tr class="memdesc:a6d750312655e5a8e6e81f2e0262be33d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test function. <br /></td></tr>
+<tr class="separator:a6d750312655e5a8e6e81f2e0262be33d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a632beb1cf596401ed59ff0d607947157"><td class="memItemLeft" align="right" valign="top"><a id="a632beb1cf596401ed59ff0d607947157"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUPLS__Controller.html#a632beb1cf596401ed59ff0d607947157">ledsOff</a> ()</td></tr>
+<tr class="memdesc:a632beb1cf596401ed59ff0d607947157"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test function. <br /></td></tr>
+<tr class="separator:a632beb1cf596401ed59ff0d607947157"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f5373db3fb1ee6de9dc09563235f3d7"><td class="memItemLeft" align="right" valign="top"><a id="a0f5373db3fb1ee6de9dc09563235f3d7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>latchOpen</b> ()</td></tr>
+<tr class="separator:a0f5373db3fb1ee6de9dc09563235f3d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d7e2bd4a01fb996a2d1cf7992323b38"><td class="memItemLeft" align="right" valign="top"><a id="a0d7e2bd4a01fb996a2d1cf7992323b38"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>latchClose</b> ()</td></tr>
+<tr class="separator:a0d7e2bd4a01fb996a2d1cf7992323b38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af482933f8822a035cddc9263db51fc72"><td class="memItemLeft" align="right" valign="top"><a id="af482933f8822a035cddc9263db51fc72"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>latchSetOpenPulseDuration</b> (int pulse_duration)</td></tr>
+<tr class="separator:af482933f8822a035cddc9263db51fc72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af25c1180f8e8bc0f58c21c0c8ad56b71"><td class="memItemLeft" align="right" valign="top"><a id="af25c1180f8e8bc0f58c21c0c8ad56b71"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>latchSetClosePulseDuration</b> (int pulse_duration)</td></tr>
+<tr class="separator:af25c1180f8e8bc0f58c21c0c8ad56b71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d6336efe8bff46aa4d365048b0b667f"><td class="memItemLeft" align="right" valign="top"><a id="a2d6336efe8bff46aa4d365048b0b667f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>hookShutdown</b> ()</td></tr>
+<tr class="separator:a2d6336efe8bff46aa4d365048b0b667f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd37adba02008c37ed2d80438b9582a5"><td class="memItemLeft" align="right" valign="top"><a id="acd37adba02008c37ed2d80438b9582a5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>landingGearExtract</b> ()</td></tr>
+<tr class="separator:acd37adba02008c37ed2d80438b9582a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a817f10d45373c90221cf897ba09119c2"><td class="memItemLeft" align="right" valign="top"><a id="a817f10d45373c90221cf897ba09119c2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>landingGearRetract</b> ()</td></tr>
+<tr class="separator:a817f10d45373c90221cf897ba09119c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e46bd6e0b8c7ded61214f0add701f03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUPLS__Controller.html#a8e46bd6e0b8c7ded61214f0add701f03">error</a> (const char *error_msg)</td></tr>
 <tr class="memdesc:a8e46bd6e0b8c7ded61214f0add701f03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats and prints string as an error. Formats and prints string as an error in to stdout.  <a href="classUPLS__Controller.html#a8e46bd6e0b8c7ded61214f0add701f03">More...</a><br /></td></tr>
 <tr class="separator:a8e46bd6e0b8c7ded61214f0add701f03"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -370,6 +404,46 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
+<a id="ad4a1723c9ad49f5dbd25f8ae4a31b80a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4a1723c9ad49f5dbd25f8ae4a31b80a">&#9670;&nbsp;</a></span>mainControllerInfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structMainControllerInfo.html">MainControllerInfo</a> UPLS_Controller::mainControllerInfo </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Access function. Returns object, containing latest information about UAV's UPLS controller. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns latest UPLS's main controller information. </dd></dl>
+
+</div>
+</div>
+<a id="addefc69062a2f6f77ae9dfeadc3cfc67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#addefc69062a2f6f77ae9dfeadc3cfc67">&#9670;&nbsp;</a></span>mainControllerInfoUpdateFrequency()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float UPLS_Controller::mainControllerInfoUpdateFrequency </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Utility function. Returns current information about UAV's UPLS controller update frequency. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns update frequeny in hertz. </dd></dl>
+
+</div>
+</div>
 <a id="ab6f96642a00c37c490ec24fb9dfdc632"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab6f96642a00c37c490ec24fb9dfdc632">&#9670;&nbsp;</a></span>message()</h2>
 
@@ -433,6 +507,26 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 <p>Utility function to check for available serial ports. </p>
 <p>Prints asout available serial ports if any. </p>
+
+</div>
+</div>
+<a id="af4b2d054c81b2f3a6bffef68157a2342"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4b2d054c81b2f3a6bffef68157a2342">&#9670;&nbsp;</a></span>receivedPacketLoggingEnabled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool UPLS_Controller::receivedPacketLoggingEnabled </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Utility function for checking if packet logging is enabled. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns true if enabled, flase if disabled. </dd></dl>
 
 </div>
 </div>

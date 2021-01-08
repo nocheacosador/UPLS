@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['upls_5fcontroller_56',['UPLS_Controller',['../classUPLS__Controller.html',1,'']]]
+  ['warning_56',['Warning',['../structWarning.html',1,'']]],
+  ['winchinfo_57',['WinchInfo',['../structWinchInfo.html',1,'']]]
 ];

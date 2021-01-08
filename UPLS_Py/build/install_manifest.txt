@@ -1,2 +1,0 @@
-/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/lib/UPLS.so
-/media/lukas/Data/IONX/Software/UPLS/UPLS_Py/../UPLS_PyDemoApp/UPLS.so

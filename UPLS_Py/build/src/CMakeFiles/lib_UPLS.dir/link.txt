@@ -1,2 +1,0 @@
-/usr/bin/ar qc lib_UPLS.a  CMakeFiles/lib_UPLS.dir/packet.cpp.o CMakeFiles/lib_UPLS.dir/serialport.cpp.o CMakeFiles/lib_UPLS.dir/upls_controller.cpp.o
-/usr/bin/ranlib lib_UPLS.a

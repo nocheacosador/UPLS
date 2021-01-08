@@ -41,6 +41,7 @@
 	<primitive-type name="int32_t"/>
 	<primitive-type name="int64_t"/>
 	<primitive-type name="float"/>
+	<primitive-type name="int"/>
 
 	<enum-type name="Device"/>
 	
@@ -75,6 +76,8 @@
 	<value-type name="WinchInfo">
 		<enum-type name="Status"/>
 	</value-type>
+
+	<value-type name="MainControllerInfo"/>
 
 	<value-type name="Error">
 		<enum-type name="Code"/>

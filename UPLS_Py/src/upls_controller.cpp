@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <chrono>
+#include <exception>
 #include "console_formating.h"
 
 char const hex_chars[16] = { '0', '1', '2', '3', 
@@ -11,8 +12,10 @@ char const hex_chars[16] = { '0', '1', '2', '3',
 							 'C', 'D', 'E', 'F' };
 
 
-UPLS_Controller::UPLS_Controller() : m_receiverThread(nullptr), m_receiverRunning(false), m_hookInfoUpdateFrequency(0.f),
-	m_landingGearInfoUpdateFrequency(0.f), m_ledInfoUpdateFrequency(0.f), m_winchInfoUpdateFrequency(0.f) { ; }
+UPLS_Controller::UPLS_Controller() : m_receiverThread(nullptr), m_receiverRunning(false), 
+	m_hookInfoUpdateFrequency(0.f), m_landingGearInfoUpdateFrequency(0.f), 
+	m_ledInfoUpdateFrequency(0.f), m_winchInfoUpdateFrequency(0.f),
+	m_mainControllerInfoUpdateFrequency(0.f), m_logReceivedPackets(false) { ; }
 
 UPLS_Controller::~UPLS_Controller()
 {
@@ -53,7 +56,7 @@ void UPLS_Controller::setSerialPort(const char* portName)
 
 bool UPLS_Controller::start()
 {
-	m_serial.setBaudRate(SerialPort::BaudRate::Baud38400);
+	m_serial.setBaudRate(SerialPort::BaudRate::Baud115200);
 	m_serial.setDataBits(SerialPort::DataBits::Eight);
 	m_serial.setFlowControl(SerialPort::FlowControl::Disabled);
 	m_serial.setParity(SerialPort::Parity::Disabled);
@@ -85,6 +88,7 @@ bool UPLS_Controller::start()
 void UPLS_Controller::stop()
 {
 	m_receiverRunning = false;
+	
 	if (m_receiverThread)
 	{
 		m_receiverThread->join();
@@ -105,9 +109,24 @@ void UPLS_Controller::stop()
 	m_winchInfo = WinchInfo();
 }
 
+bool UPLS_Controller::receivedPacketLoggingEnabled()
+{
+	return m_logReceivedPackets;
+}
+
+void UPLS_Controller::enableReceivedPacketLogging(bool enable)
+{
+	m_logReceivedPackets = enable;
+}
+
 bool UPLS_Controller::errorsOccured()
 {
 	return !m_errorQueue.empty();
+}
+
+Error UPLS_Controller::getError()
+{
+	return m_errorQueue.pop().error;
 }
 
 void UPLS_Controller::printError()
@@ -131,11 +150,6 @@ void UPLS_Controller::clearAllErrors()
 {
 	m_errorQueue.clear();
 }
-
-/*int UPLS_Controller::popError()
-{
-	return 0; //error code
-}*/
 
 bool UPLS_Controller::warningsReceived()
 {
@@ -182,84 +196,294 @@ void UPLS_Controller::printAllMessages()
 
 HookInfo UPLS_Controller::hookInfo()
 {
-	std::scoped_lock lock(muxHookinfo);
+	std::shared_lock<std::shared_mutex> lock(muxHookInfo);
 	return m_hookInfo;
 }
 
 LandingGearInfo UPLS_Controller::landingGearInfo()
 {
-	std::scoped_lock lock(muxLandingGearInfo);
+	std::shared_lock<std::shared_mutex> lock(muxLandingGearInfo);
 	return m_landingGearInfo;
 }
 	
 LedInfo UPLS_Controller::ledInfo()
 {
-	std::scoped_lock lock(muxLedInfo);
+	std::shared_lock<std::shared_mutex> lock(muxLedInfo);
 	return m_ledInfo;
 }
 	
 WinchInfo UPLS_Controller::winchInfo()
 {
-	std::scoped_lock lock(muxWinchInfo);
+	std::shared_lock<std::shared_mutex> lock(muxWinchInfo);
 	return m_winchInfo;
 }
 
+MainControllerInfo UPLS_Controller::mainControllerInfo()
+{
+	std::shared_lock<std::shared_mutex> lock(muxMainControllerInfo);
+	return m_mainControllerInfo;
+}
 
 float UPLS_Controller::hookInfoUpdateFrequency()
 {
+	std::chrono::duration<int64_t, std::nano> delta_time;
+	std::chrono::time_point<std::chrono::steady_clock> now = std::chrono::steady_clock::now();
+	
+	{
+		std::shared_lock<std::shared_mutex> lock(muxHookInfo);
+		delta_time = now - m_lastHookInfoUpdateTimePoint;
+	}
+	
+	float period_ms = 1000.f / m_hookInfoUpdateFrequency;
+	if (float(std::chrono::duration_cast<std::chrono::milliseconds>(delta_time).count()) > period_ms * 1.4f)
+	{
+		m_hookInfoUpdateFrequency = 0.f;
+		std::unique_lock<std::shared_mutex> lock(muxHookInfo);
+		m_hookInfo = HookInfo();
+	}
+
 	return m_hookInfoUpdateFrequency;
 }
 
 float UPLS_Controller::landingGearInfoUpdateFrequency()
 {
+	std::chrono::duration<int64_t, std::nano> delta_time;
+	std::chrono::time_point<std::chrono::steady_clock> now = std::chrono::steady_clock::now();
+	
+	{
+		std::shared_lock<std::shared_mutex> lock(muxLandingGearInfo);
+		delta_time = now - m_lastLandingGearInfoUpdateTimePoint;
+	}
+	
+	float period_ms = 1000.f / m_landingGearInfoUpdateFrequency;
+	if (float(std::chrono::duration_cast<std::chrono::milliseconds>(delta_time).count()) > period_ms * 1.4f)
+	{
+		m_landingGearInfoUpdateFrequency = 0.f;
+		std::unique_lock<std::shared_mutex> lock(muxLandingGearInfo);
+		m_landingGearInfo = LandingGearInfo();
+	}
+
 	return m_landingGearInfoUpdateFrequency;
 }
 
 float UPLS_Controller::ledInfoUpdateFrequency()
 {
+	std::chrono::duration<int64_t, std::nano> delta_time;
+	std::chrono::time_point<std::chrono::steady_clock> now = std::chrono::steady_clock::now();
+	
+	{
+		std::shared_lock<std::shared_mutex> lock(muxLedInfo);
+		delta_time = now - m_lastLedInfoUpdateTimePoint;
+	}
+	
+	float period_ms = 1000.f / m_ledInfoUpdateFrequency;
+	if (float(std::chrono::duration_cast<std::chrono::milliseconds>(delta_time).count()) > period_ms * 1.4f)
+	{
+		m_ledInfoUpdateFrequency = 0.f;
+		std::unique_lock<std::shared_mutex> lock(muxLedInfo);
+		m_ledInfo = LedInfo();
+	}
+
 	return m_ledInfoUpdateFrequency;
 }
 
 float UPLS_Controller::winchInfoUpdateFrequency()
 {
+	std::chrono::duration<int64_t, std::nano> delta_time;
+	std::chrono::time_point<std::chrono::steady_clock> now = std::chrono::steady_clock::now();
+	
+	{
+		std::shared_lock<std::shared_mutex> lock(muxWinchInfo);
+		delta_time = now - m_lastWinchInfoUpdateTimePoint;
+	}
+	
+	float period_ms = 1000.f / m_winchInfoUpdateFrequency;
+	if (float(std::chrono::duration_cast<std::chrono::milliseconds>(delta_time).count()) > period_ms * 1.4f)
+	{
+		m_winchInfoUpdateFrequency = 0.f;
+		std::unique_lock<std::shared_mutex> lock(muxWinchInfo);
+		m_winchInfo = WinchInfo();
+	}
+
 	return m_winchInfoUpdateFrequency;
 }
 
-void UPLS_Controller::ledOn()
+float UPLS_Controller::mainControllerInfoUpdateFrequency()
+{
+	std::chrono::duration<int64_t, std::nano> delta_time;
+	std::chrono::time_point<std::chrono::steady_clock> now = std::chrono::steady_clock::now();
+	
+	{
+		std::shared_lock<std::shared_mutex> lock(muxMainControllerInfo);
+		delta_time = now - m_lastMainControllerInfoUpdateTimePoint;
+	}
+	
+	float period_ms = 1000.f / m_mainControllerInfoUpdateFrequency;
+	if (float(std::chrono::duration_cast<std::chrono::milliseconds>(delta_time).count()) > period_ms * 1.4f)
+	{
+		m_mainControllerInfoUpdateFrequency = 0.f;
+		std::unique_lock<std::shared_mutex> lock(muxMainControllerInfo);
+		m_mainControllerInfo = MainControllerInfo();
+	}
+
+	return m_mainControllerInfoUpdateFrequency;
+}
+
+void UPLS_Controller::ledsOn()
 {
 	Packet packet;
-	packet = PacketHandler::createCommand(Command(Command::Code::LedsOn));
+	packet = PacketHandler::createCommand(Command(Command::LedsOn));
 	m_serial.write(&packet, sizeof(Packet));
 }
 
-void UPLS_Controller::ledOff()
+void UPLS_Controller::ledsOff()
 {
 	Packet packet;
-	packet = PacketHandler::createCommand(Command(Command::Code::LedsOff));
+	packet = PacketHandler::createCommand(Command(Command::LedsOff));
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::latchOpen()
+{
+	Packet packet;
+	packet = PacketHandler::createCommand(Command(Command::LatchOpen), Device::Hook);
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::latchClose()
+{
+	Packet packet;
+	packet = PacketHandler::createCommand(Command(Command::LatchClose), Device::Hook);
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::latchSetOpenPulseDuration(int pulse_duration)
+{
+	Packet packet;
+	packet = PacketHandler::createCommand(Command(Command::SetLatchOpenPulseDuration).setPulseLength(pulse_duration), Device::Hook);
+	m_serial.write(&packet, sizeof(Packet));
+
+	std::cout << "[Message] void UPLS_Controller::latchSetOpenPulseDuration(int pulse_duration) called. Argument was: " << pulse_duration << '\n';
+}
+
+void UPLS_Controller::latchSetClosePulseDuration(int pulse_duration)
+{
+	Packet packet;
+	packet = PacketHandler::createCommand(Command(Command::SetLatchClosePulseDuration).setPulseLength(pulse_duration), Device::Hook);
+	m_serial.write(&packet, sizeof(Packet));
+
+	std::cout << "[Message] void UPLS_Controller::latchSetClosePulseDuration(int pulse_duration) called. Argument was: " << pulse_duration << '\n';
+}
+
+void UPLS_Controller::hookShutdown()
+{
+	Packet packet;
+	packet = PacketHandler::createCommand(Command(Command::HookShutdown), Device::Hook);
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::landingGearExtract()
+{
+	Packet packet;
+	packet = PacketHandler::createCommand(Command(Command::Code::LandingGearExtract));
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::landingGearRetract()
+{
+	Packet packet;
+	packet = PacketHandler::createCommand(Command(Command::Code::LandingGearRetract));
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::winchManualUp(float speed, float duration)
+{
+	Packet packet;
+	packet = PacketHandler::createCommand(
+		Command(Command::Code::WinchManualUp).setWinchManualSpeedAndDuration(speed, duration));
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::winchManualDown(float speed, float duration)
+{
+	Packet packet;
+	packet = PacketHandler::createCommand(
+		Command(Command::Code::WinchManualDown).setWinchManualSpeedAndDuration(speed, duration));
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::winchLower(float distance)
+{
+	Packet packet;
+	packet = PacketHandler::createCommand(
+		Command(Command::Code::WinchLower).setWinchLowerDistance(distance));
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::winchHome()
+{
+	Packet packet;
+	packet = PacketHandler::createCommand(
+		Command(Command::Code::WinchHome));
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::winchHalt()
+{
+	Packet packet;
+	packet = PacketHandler::createCommand(
+		Command(Command::Code::WinchHalt));
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::winchResume()
+{
+	Packet packet;
+	packet = PacketHandler::createCommand(
+		Command(Command::Code::WinchResume));
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::winchManualModeEnable()
+{
+	Packet packet;
+	packet = PacketHandler::createCommand(
+		Command(Command::Code::WinchManualModeEnable));
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::winchManualModeDisable()
+{
+	Packet packet;
+	packet = PacketHandler::createCommand(
+		Command(Command::Code::WinchManualModeDisable));
 	m_serial.write(&packet, sizeof(Packet));
 }
 
 void UPLS_Controller::error(const char* error_msg)
 {
-	std::cout << '[' << Format().bold().color(Format::Color::BrightRed).text("ERROR") << "] " << error_msg << '\n'; 
+	std::cout << '[' << Format().bold().color(Color::BrightRed).text("ERROR") << "] " << error_msg << '\n'; 
 }
 
 void UPLS_Controller::warning(const char* warning_msg)
 {
-	std::cout << '[' << Format().bold().color(Format::Color::BrightYellow).text("WARNING") << "] " << warning_msg << '\n'; 
+	std::cout << '[' << Format().bold().color(Color::BrightYellow).text("WARNING") << "] " << warning_msg << '\n'; 
 }
 
 void UPLS_Controller::message(const char* msg)
 {
-	std::cout << '[' << Format().bold().color(Format::Color::BrightGreen).text("MESSAGE") << "] " << msg << '\n'; 
+	std::cout << '[' << Format().bold().color(Color::BrightGreen).text("MESSAGE") << "] " << msg << '\n'; 
 }
 
 /************************* PRIVATE MEMBER FUNCTIONS ***************************/
 
 void UPLS_Controller::m_receivedPacketHandler()
 {
-	info("Packet handler thread started.");
-	
+	std::stringstream ss;
+	ss << "Packet handler thread started. Thread ID: " << Format().color(Color::Yellow) 
+		<< std::hex << std::this_thread::get_id() << std::dec << Format();
+	info(ss.str().c_str());
+
 	PacketHandler handler;
 	
 	while (m_receiverRunning)
@@ -269,7 +493,8 @@ void UPLS_Controller::m_receivedPacketHandler()
 
 		while (handler.packetAvailable())
 		{
-			auto packet = handler.getPacket();
+			Packet packet;
+			packet = handler.getPacket();
 
 			std::stringstream ss;
 			ss << "Packet received. Type: ";
@@ -296,6 +521,11 @@ void UPLS_Controller::m_receivedPacketHandler()
 				ss << Format("WinchInfo").color(Color::Green);
 				break;
 
+			case Packet::Type::MainControllerInfo:
+				m_updateMainControllerInfo(packet.mainController);
+				ss << Format("MainControllerInfo").color(Color::Green);
+				break;
+
 			case Packet::Type::Error:
 				m_errorQueue.push(packet);
 				ss << Format("Error").color(Color::Green);
@@ -316,67 +546,95 @@ void UPLS_Controller::m_receivedPacketHandler()
 				break;
 			}
 
-			info(ss.str().c_str());
+			if (m_logReceivedPackets) info(ss.str().c_str());
 		}
 	}
-
+	
+	ss.clear();
 	info("Packet handler thread exiting...");
+	ss << "Packet handler thread exiting... Thread ID: " << Format().color(Color::Yellow) 
+		<< std::hex << std::this_thread::get_id() << std::dec << Format();
+
+	info(ss.str().c_str());
 }
 
 void UPLS_Controller::m_updateHookInfo(HookInfo& info)
 {
 	auto newTimePoint = std::chrono::steady_clock::now();
+
+	std::unique_lock<std::shared_mutex> lock(muxHookInfo);
+
 	auto delta_time = newTimePoint - m_lastHookInfoUpdateTimePoint;
 	m_lastHookInfoUpdateTimePoint = newTimePoint;
 
 	float f = 1000000.f / float(std::chrono::duration_cast<std::chrono::microseconds>(delta_time).count());
 	m_hookInfoUpdateFrequency = f > 0.0001f ? f : 0.f;
-
-	std::scoped_lock lock(muxHookinfo);
 	m_hookInfo = info;
 }
 
 void UPLS_Controller::m_updateLandingGearInfo(LandingGearInfo& info)
 {
 	auto newTimePoint = std::chrono::steady_clock::now();
+
+	std::unique_lock<std::shared_mutex> lock(muxLandingGearInfo);
+
 	auto delta_time = newTimePoint - m_lastLandingGearInfoUpdateTimePoint;
 	m_lastLandingGearInfoUpdateTimePoint = newTimePoint;
 
 	float f = 1000000.f / float(std::chrono::duration_cast<std::chrono::microseconds>(delta_time).count());
 	m_landingGearInfoUpdateFrequency = f > 0.0001f ? f : 0.f;
 	
-	std::scoped_lock lock(muxLandingGearInfo);
 	m_landingGearInfo = info;
 }
 
 void UPLS_Controller::m_updateLedInfo(LedInfo& info)
 {
 	auto newTimePoint = std::chrono::steady_clock::now();
+
+	std::unique_lock<std::shared_mutex> lock(muxLedInfo);
+
 	auto delta_time = newTimePoint - m_lastLedInfoUpdateTimePoint;
 	m_lastLedInfoUpdateTimePoint = newTimePoint;
 
 	float f = 1000000.f / float(std::chrono::duration_cast<std::chrono::microseconds>(delta_time).count());
 	m_ledInfoUpdateFrequency = f > 0.0001f ? f : 0.f;
 	
-	std::scoped_lock lock(muxLedInfo);
 	m_ledInfo = info;
 }
 
 void UPLS_Controller::m_updateWinchInfo(WinchInfo& info)
 {
 	auto newTimePoint = std::chrono::steady_clock::now();
+	
+	std::unique_lock<std::shared_mutex> lock(muxWinchInfo);
+	
 	auto delta_time = newTimePoint - m_lastWinchInfoUpdateTimePoint;
 	m_lastWinchInfoUpdateTimePoint = newTimePoint;
 
 	float f = 1000000.f / float(std::chrono::duration_cast<std::chrono::microseconds>(delta_time).count());
 	m_winchInfoUpdateFrequency = f > 0.0001f ? f : 0.f;
 	
-	std::scoped_lock lock(muxWinchInfo);
 	m_winchInfo = info;
 }
+
+void UPLS_Controller::m_updateMainControllerInfo(MainControllerInfo& info)
+{
+	auto newTimePoint = std::chrono::steady_clock::now();
+
+	std::unique_lock<std::shared_mutex> lock(muxMainControllerInfo);
+	
+	auto delta_time = newTimePoint - m_lastMainControllerInfoUpdateTimePoint;
+	m_lastMainControllerInfoUpdateTimePoint = newTimePoint;
+
+	float f = 1000000.f / float(std::chrono::duration_cast<std::chrono::microseconds>(delta_time).count());
+	m_mainControllerInfoUpdateFrequency = f > 0.0001f ? f : 0.f;
+	
+	m_mainControllerInfo = info;
+}
+
 
 void UPLS_Controller::info(const char* info_msg)
 {
 	std::scoped_lock<std::mutex> lock(muxInfoStream);
-	std::cout << '[' << Format().bold().color(Format::Color::BrightCyan).text("UPLS_Controller") << "] " << info_msg << '\n'; 
+	std::cout << '[' << Format("UPLS_Controller").bold().color(Color::BrightCyan) << "] " << info_msg << std::endl; 
 }

@@ -7,7 +7,7 @@
 
 
 #include "ADC.h"
-#include "../../include/definitions.h"
+#include "../../include/global_macros.h"
 
 static bool adc_initialized = false;
 

@@ -32,7 +32,7 @@ SerialPort::SerialPort() : m_serialPort(0), m_portName(nullptr), m_isOpen(false)
 	m_baudRate(BaudRate::Unknown), m_dataBits(DataBits::Unknown),
 	m_stopBits(StopBits::Unknown), m_parity(Parity::Unknown),
 	m_flowControl(FlowControl::Unknown),
-	m_receiverThread(nullptr), m_buffer(1024)
+	m_receiverThread(nullptr)
 {
 
 }
@@ -41,7 +41,7 @@ SerialPort::SerialPort(const char* portName) : m_serialPort(0), m_portName(nullp
 	m_baudRate(BaudRate::Unknown), m_dataBits(DataBits::Eight),
 	m_stopBits(StopBits::Unknown), m_parity(Parity::Unknown),
 	m_flowControl(FlowControl::Unknown),
-	m_receiverThread(nullptr), m_buffer(1024)
+	m_receiverThread(nullptr)
 {
 	std::string temp(portName);
 	setPort(temp);
@@ -138,7 +138,7 @@ bool SerialPort::open()
 				return false;
 			}
 
-			usleep(2000);
+			usleep(5000);
 
 			if (tcsetattr(m_serialPort, TCSAFLUSH, &tty) < 0) 
 			{
@@ -595,7 +595,7 @@ char SerialPort::getChar()
 void SerialPort::m_receiver()
 {
 	std::cout << '[' << Format("SerialPort").color(Color::Magenta).bold() << "] " 
-		<< "Receiver thread started.\n";
+		<< "Receiver thread started. Thread ID: " << std::hex << std::this_thread::get_id() << std::dec << std::endl;
 
 	char buffer[256];
 	int bytes_read;
@@ -616,5 +616,5 @@ void SerialPort::m_receiver()
 		usleep(100);
 	}
 	std::cout << '[' << Format("SerialPort").color(Color::Magenta).bold() << "] " 
-		<< "Receiver thread exiting...\n";
+		<< "Receiver thread exiting... Thread ID: " << std::hex << std::this_thread::get_id() << std::dec << std::endl;
 }

@@ -1,2 +1,5 @@
-build
-doc/latex
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+build/
+doc/latex/
+lib/

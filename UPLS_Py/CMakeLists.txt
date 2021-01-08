@@ -8,11 +8,26 @@ endif()
 project(UPLS)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if(NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE Release)
+endif()
+
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC")
+set(CMAKE_CXX_FLAGS_DEBUG "-g -D_DEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 set(sample_library "lib_UPLS")
-set(bindings_library "UPLS")
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+	set(bindings_library "UPLS-dbg")
+	message(STATUS "Debug name set.")
+else()
+	set(bindings_library "UPLS")
+	message(STATUS "Release name set.")
+endif()
 
 set(typesystem_file ${CMAKE_SOURCE_DIR}/bindings/bindings.xml)
 set(wrapped_header	${CMAKE_SOURCE_DIR}/bindings/bindings.h)
@@ -21,20 +36,21 @@ set(shared_includes ${CMAKE_SOURCE_DIR}/../shared)
 include_directories(${shared_includes})
 
 set(generated_sources
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/command_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/hookinfo_latch_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/landinggearinfo_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/ledinfo_led_settings_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/ledinfo_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/warning_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/error_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/hookinfo_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/upls_controller_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/winchinfo_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/hookinfo_battery_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/landinggearinfo_leg_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/ledinfo_led_wrapper.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/${bindings_library}/upls_module_wrapper.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/UPLS/command_wrapper.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/UPLS/hookinfo_latch_wrapper.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/UPLS/landinggearinfo_wrapper.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/UPLS/ledinfo_led_settings_wrapper.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/UPLS/ledinfo_wrapper.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/UPLS/warning_wrapper.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/UPLS/error_wrapper.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/UPLS/hookinfo_wrapper.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/UPLS/upls_controller_wrapper.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/UPLS/winchinfo_wrapper.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/UPLS/hookinfo_battery_wrapper.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/UPLS/landinggearinfo_leg_wrapper.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/UPLS/ledinfo_led_wrapper.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/UPLS/upls_module_wrapper.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/UPLS/maincontrollerinfo_wrapper.cpp
 	)
 
 if(NOT python_interpreter)
@@ -123,6 +139,7 @@ add_custom_command( OUTPUT ${generated_sources}
 set(${bindings_library}_sources ${generated_sources})
 
 # Define and build the bindings library.
+
 add_library(${bindings_library} MODULE ${${bindings_library}_sources})
 
 # Apply relevant include and link flags.
@@ -197,13 +214,13 @@ endif()
 # =============================================================================================
 # Install the library and the bindings module into the source folder near the main.py file, so
 # that the Python interpeter successfully imports the used module.
-install(TARGETS ${bindings_library} #${sample_library}
+install(TARGETS ${bindings_library} # ${sample_library}
         LIBRARY DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/lib
         RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/lib
         )
 install(FILES ${windows_shiboken_shared_libraries} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
-install(TARGETS ${bindings_library} #${sample_library}
+install(TARGETS ${bindings_library} # ${sample_library}
         LIBRARY DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../UPLS_PyDemoApp
         RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../UPLS_PyDemoApp
         )

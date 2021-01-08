@@ -1,5 +1,9 @@
 #include "packet.h"
 
+#if !defined(__HOOK)
+	#include "../Buffer/MyBuffer.cpp"
+#endif
+
 Command::Command() : code(Command::Code::Unknown), pulseLength(0) { ; }
 Command::Command(Command::Code _code) : code(_code), pulseLength(0) { ; }
 
@@ -20,6 +24,13 @@ LedInfo::LedInfo() { memset(this, 0, sizeof(LedInfo)); }
 LandingGearInfo::LandingGearInfo() { memset(this, 0, sizeof(LandingGearInfo)); } 
 
 WinchInfo::WinchInfo() : current(0), position(0), status(WinchInfo::Status::Unknown) { ; }
+
+#if defined(__XAVIER)
+MainControllerInfo::MainControllerInfo() : utilization(0.f) { ; }
+
+float MainControllerInfo::getUtilization() const { return utilization; }
+#endif // __XAVIER
+
 #endif // !__HOOK
 
 Error::Error() : code(Error::Code::Other), message("") { ; }
@@ -54,8 +65,14 @@ LatencyCheck::LatencyCheck(LatencyCheck::Code _code) : code(_code) { ; }
 Packet::Packet() : startByte(PACKET_START_BYTE), endByte(PACKET_END_BYTE), sender(THIS_DEVICE), 
 	receiver(DEFAULT_RECEIVER_DEVICE), type(Packet::Type::Unknown) 
 { 
+	static_assert(sizeof(Packet) == 32, "Packet is too big (bigger than 32 bytes).");
 	memset(message, 0, 27); 
 }
+
+#if !defined(__HOOK)
+	#if defined(__XAVIER)
+		#include <iostream>
+	#endif // __XAVIIER
 
 PacketHandler::PacketHandler() : m_startByteDetected(true), m_bufferIndex(0) { ; }
 
@@ -66,13 +83,17 @@ void PacketHandler::parseChar(char ch)
 		m_buffer[m_bufferIndex] = ch;
 		m_bufferIndex++;
 		
-		if (ch == PACKET_END_BYTE && m_bufferIndex == 32)
+		if (m_bufferIndex == 32)
 		{
 			m_startByteDetected = false;
-			Packet packet;
-			auto size = sizeof (Packet);
-			memcpy(&packet, m_buffer, 32);
-			m_packets.push_back(packet);
+
+			if (ch == PACKET_END_BYTE)
+			{
+				Packet packet;
+				auto size = sizeof(Packet);
+				memcpy(&packet, m_buffer, 32);
+				pushPacket(packet);
+			}
 		}
 	}
 	else
@@ -90,17 +111,21 @@ void PacketHandler::parseChar(char ch)
 
 bool PacketHandler::packetAvailable()
 {
-	return !m_packets.empty();
+	return m_packets.available();
+}
+
+void PacketHandler::pushPacket(const Packet& packet)
+{
+	m_packets.put(packet);
 }
 
 Packet PacketHandler::getPacket()
 {
 	Packet result;
 	
-	if (!m_packets.empty())
+	if (m_packets.available())
 	{
-		result = m_packets.front();
-		m_packets.pop_front();
+		result = m_packets.get();
 	}
 	return result;
 }
@@ -207,5 +232,5 @@ std::string device(Device device)
 	else
 		return result->second;
 }
-
 #endif // __XAVIER
+#endif // __HOOK

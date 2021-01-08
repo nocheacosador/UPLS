@@ -7,8 +7,6 @@
 
 
 #include "SoftPWM.h"
-#include <avr/io.h>
-#include <avr/interrupt.h>
 
 #define PORTA_ADR		0x1B
 #define PORTB_ADR		0x18
@@ -33,26 +31,11 @@ Servo& Servo::assignPin(PinName pin)
 	TIMSK1 |= (1 << OCIE1B) | (1 << OCIE1A);
 	
 	OCR1A = 20000;
-	OCR1B = PULSE_MIN;
+	OCR1B = LATCH_PULSE_MIN;
 
 	sei();
 
 	return *this;
-}
-
-void Servo::enable(bool enable)
-{
-	if (enable)
-	{
-		TCCR1B = m_TCCR1B_val;
-		TCNT1 = 0;
-		sei();
-	}
-	else
-	{
-		TCCR1B = 0;
-		REGISTER(m_port) |= (1 << m_pinNumber);	
-	}
 }
 
 ISR (TIM1_COMPA_vect)

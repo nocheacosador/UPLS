@@ -5,15 +5,14 @@
 #include <iostream>
 #include "console_formating.h"
 
-#define RING_BUFFER_DEFAULT_SIZE 	50
 
 // Thread-safe ring buffer
-template<class T>
+template<class T, size_t buffer_size = 30>
 class RingBuffer
 {
 public:
 	// Constructor
-	RingBuffer(size_t size = RING_BUFFER_DEFAULT_SIZE);
+	RingBuffer();
 	
 	// Destructor
 	~RingBuffer();
@@ -24,8 +23,8 @@ public:
 	// Access function. Pops item from the queue.
 	T pop();
 	
-	// Access function. Pops item from the queue.
-	T peek();
+	// Access function. Peeks to the item in the queue.
+	T& peek();
 	
 	// Utility function. Checks if buffer is empty.
 	bool empty() const;
@@ -43,7 +42,7 @@ public:
 	void clear();
 
 private:
-	T* m_data;
+	T m_data[buffer_size];
 	size_t m_itemCount;
 	size_t m_size;
 	size_t m_head;
@@ -55,20 +54,15 @@ protected:
 
 
 
-template<class T>
-RingBuffer<T>::RingBuffer(size_t size) : m_size(size), m_head(0), m_tail(0), m_itemCount(0)
-{
-	m_data = new T[m_size];
-}
+template<class T, size_t buffer_size>
+RingBuffer<T, buffer_size>::RingBuffer() : m_size(buffer_size), m_head(0), m_tail(0), m_itemCount(0)
+{ ; }
 
-template<class T>
-RingBuffer<T>::~RingBuffer()
-{
-	if (m_data) delete[] m_data;
-}
+template<class T, size_t buffer_size>
+RingBuffer<T, buffer_size>::~RingBuffer() { ; }
 
-template<class T>
-void RingBuffer<T>::push(T& item)
+template<class T, size_t buffer_size>
+void RingBuffer<T, buffer_size>::push(T& item)
 {
 	if (!full())
 	{
@@ -83,8 +77,8 @@ void RingBuffer<T>::push(T& item)
 			"Increase buffer size.\n";
 }
 
-template<class T>
-T RingBuffer<T>::pop()
+template<class T, size_t buffer_size>
+T RingBuffer<T, buffer_size>::pop()
 {
 	T result = 0;
 	if (!empty())
@@ -98,8 +92,8 @@ T RingBuffer<T>::pop()
 	return result;
 }
 
-template<class T>
-T RingBuffer<T>::peek()
+template<class T, size_t buffer_size>
+T& RingBuffer<T, buffer_size>::peek()
 {
 	char result = 0;
 	if (!empty())
@@ -110,36 +104,36 @@ T RingBuffer<T>::peek()
 	return result;
 }
 
-template<class T>
-inline bool RingBuffer<T>::empty() const
+template<class T, size_t buffer_size>
+inline bool RingBuffer<T, buffer_size>::empty() const
 {
 	std::scoped_lock lock(m_mux);
 	return m_tail == m_head;
 }
 
-template<class T>
-inline bool RingBuffer<T>::full() const
+template<class T, size_t buffer_size>
+inline bool RingBuffer<T, buffer_size>::full() const
 {
 	std::scoped_lock lock(m_mux);
 	return m_itemCount == m_size;
 }
 
-template<class T>
-inline size_t RingBuffer<T>::size() const
+template<class T, size_t buffer_size>
+inline size_t RingBuffer<T, buffer_size>::size() const
 {
 	std::scoped_lock lock(m_mux);
 	return m_size;
 }
 
-template<class T>
-inline size_t RingBuffer<T>::count() const
+template<class T, size_t buffer_size>
+inline size_t RingBuffer<T, buffer_size>::count() const
 {
 	std::scoped_lock lock(m_mux);
 	return m_itemCount;
 }
 
-template<class T>
-void RingBuffer<T>::clear()
+template<class T, size_t buffer_size>
+void RingBuffer<T, buffer_size>::clear()
 {
 	std::scoped_lock lock(m_mux);
 	memset(m_data, 0, m_size * sizeof(T));

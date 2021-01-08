@@ -1,6 +1,8 @@
 #ifndef GLOBAL_MACROS_H
 #define GLOBAL_MACROS_H
 
+#pragma GCC diagnostic ignored "-Wreorder"
+
 // Define this device for package configuration
 // THIS_DEFINE values:
 //		1 - xavier
@@ -16,6 +18,21 @@
 # define	__MAIN_CONTROLLER
 #endif
 
+#ifdef _MSC_VER
+    #define forceinline __forceinline
+#elif defined(__GNUC__)
+    #define forceinline inline __attribute__((__always_inline__))
+#elif defined(__CLANG__)
+    #if __has_attribute(__always_inline__)
+        #define forceinline inline __attribute__((__always_inline__))
+    #else
+        #define forceinline inline
+    #endif
+#else
+    #define forceinline inline
+#endif
+
+
 const char sun[9][19] = {
 	"        '        \n",
     "     \\  ,  /     \n",
@@ -28,8 +45,8 @@ const char sun[9][19] = {
     "        .        \n"
 };
 
-#define PI 		3.14159265359
-#define TWO_PI	6.28318530718
+#define PI 		3.14159265359f
+#define TWO_PI	6.28318530718f
 
 /////////////////////// Pin definitions //////////////////////////
 
@@ -52,14 +69,14 @@ const char sun[9][19] = {
 #define LEG_MOT_FRONT_IN1     		PA_11	
 #define LEG_MOT_FRONT_IN2           PA_12
 #define LEG_MOT_FRONT_SLP           PB_0	// PWM
-#define LEG_MOT_FRONT_POS_SWITCH	PA_4
+#define LEG_MOT_FRONT_POS_SWITCH	PA_4	// unused
 
 // Rear leg motor driver pins
 #define LEG_MOT_REAR_ADC     		PA_7
 #define LEG_MOT_REAR_IN1     		PA_8
 #define LEG_MOT_REAR_IN2     		PA_9
 #define LEG_MOT_REAR_SLP     		PA_10	// PWM
-#define LEG_MOT_REAR_POS_SWITCH		PA_5
+#define LEG_MOT_REAR_POS_SWITCH		PA_5	// unused
 
 // UART
 #define UART_TX		PA_2
@@ -79,10 +96,31 @@ const char sun[9][19] = {
 
 ////////////////////// Other definitions /////////////////////////
 
-#define WINCH_MOTOR_ENCODER_SPR		276
-#define WINCH_MOTOR_R_IPROPI		2200.f
-#define DRV8874_PWM_PERIOD_US		20000
-#define UART_BAUD_RATE				38400
-#define ADC_V_REF					3.3f
+#define WINCH_MOTOR_ENCODER_SPR			134
+#define WINCH_PULLEY_DIAMETER			0.0235f		// meters
+#define WINCH_LOWERING_GROUND_SPEED		0.1f		// m/s
+#define WINCH_SPEED_GROUND_DISTANCE		1.f			// meters
+#define WINCH_MAX_LOWERING_ACCELERATION	100.f		// RPM/s
+#define WINCH_MAX_SPEED					250.f		// RPM
+#define WINCH_HOME_SEARCHING_SPEED		100.f		// RPM
+#define WINCH_HOME_SEARCHING_CUR_TRESH	800			// milliamperes
+#define WINCH_MOTOR_R_IPROPI			2200.f		// ohms
+#define LEG_MOT_FRONT_R_IPROPI			2200.f		// ohms
+#define LEG_MOT_REAR_R_IPROPI			2200.f		// ohms
+#define DRV8874_PWM_PERIOD_US			20000		// microseconds
+#define DRV8874_PROPER_PWM_PERIOD_US	200			// microseconds
+#define UART_BAUD_RATE					38400
+#define ADC_V_REF						3.3f		// volts
+
+#define METERS_PER_SEC_TO_RPM(x)		( x / WINCH_PULLEY_DIAMETER / PI * 60.f )
+#define RPM_TO_METERS_PER_SEC(x)		( x * WINCH_PULLEY_DIAMETER * PI / 60.f )
+
+#define MOTOR_UPDATE_PERIOD			0.02f		// seconds
+
+// 		PID Parameters
+// Fixed point with precision of 6 digits
+#define PID_KP		 0.0001f
+#define PID_KI		 0.009f
+#define PID_KD		 0.00005f
 
 #endif // GLOBAL_MACROS_H

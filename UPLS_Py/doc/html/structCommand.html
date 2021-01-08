@@ -63,6 +63,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="structCommand-members.html">List of all members</a>  </div>
@@ -78,18 +79,25 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a5a7fbfabf174e959518c897593a929d7"><td class="memItemLeft" align="right" valign="top"><a id="a5a7fbfabf174e959518c897593a929d7"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCommand.html#a5a7fbfabf174e959518c897593a929d7">Code</a> : uint8_t { <br />
+<tr class="memitem:a5a7fbfabf174e959518c897593a929d7"><td class="memItemLeft" align="right" valign="top"><a id="a5a7fbfabf174e959518c897593a929d7"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCommand.html#a5a7fbfabf174e959518c897593a929d7">Code</a> : uint8_t { <br />
 &#160;&#160;<b>Unknown</b> = 0
-, <b>OpenLatch</b>
-, <b>CloseLatch</b>
+, <b>LatchClose</b>
+, <b>LatchOpen</b>
 , <b>SetLatchClosePulseDuration</b>
 , <br />
 &#160;&#160;<b>SetLatchOpenPulseDuration</b>
+, <b>SetLedMode</b>
+, <b>SetLedSettings</b>
 , <b>StatusRequest</b>
-, <b>LedsOn</b>
-, <b>LedsOff</b>
 , <br />
-&#160;&#160;<b>LatchShutdown</b>
+&#160;&#160;<b>LedsOn</b>
+, <b>LedsOff</b>
+, <b>LandingGearExtract</b>
+, <b>LandingGearRetract</b>
+, <br />
+&#160;&#160;<b>HookShutdown</b>
+, <b>WinchLower</b>
+, <b>WinchHome</b>
 <br />
  }</td></tr>
 <tr class="memdesc:a5a7fbfabf174e959518c897593a929d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum type containing command codes. <br /></td></tr>
@@ -100,6 +108,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a312746721cce18beeaa978013f1337f0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structCommand.html#a5a7fbfabf174e959518c897593a929d7">Code</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCommand.html#a312746721cce18beeaa978013f1337f0">getCode</a> ()</td></tr>
 <tr class="memdesc:a312746721cce18beeaa978013f1337f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility function for reading command code.  <a href="structCommand.html#a312746721cce18beeaa978013f1337f0">More...</a><br /></td></tr>
 <tr class="separator:a312746721cce18beeaa978013f1337f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7665bede1c157bd91959e45a598d0711"><td class="memItemLeft" align="right" valign="top"><a id="a7665bede1c157bd91959e45a598d0711"></a>
+uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getPulseLength</b> ()</td></tr>
+<tr class="separator:a7665bede1c157bd91959e45a598d0711"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60cd054ab7534376d53ca0fba6955ddf"><td class="memItemLeft" align="right" valign="top"><a id="a60cd054ab7534376d53ca0fba6955ddf"></a>
+<a class="el" href="structCommand.html">Command</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>setPulseLength</b> (uint16_t value)</td></tr>
+<tr class="separator:a60cd054ab7534376d53ca0fba6955ddf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba9db7ce0b626aaed9a1005a6596e361"><td class="memItemLeft" align="right" valign="top"><a id="aba9db7ce0b626aaed9a1005a6596e361"></a>
+<a class="el" href="structCommand.html">Command</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>setLedMode</b> (LedInfo::Led::Mode mode)</td></tr>
+<tr class="separator:aba9db7ce0b626aaed9a1005a6596e361"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5d381c0d91e915dd306615ec22fe49e"><td class="memItemLeft" align="right" valign="top"><a id="ac5d381c0d91e915dd306615ec22fe49e"></a>
+<a class="el" href="structCommand.html">Command</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>setLedSettings</b> (<a class="el" href="structLedInfo_1_1Led_1_1Settings.html">LedInfo::Led::Settings</a> settings)</td></tr>
+<tr class="separator:ac5d381c0d91e915dd306615ec22fe49e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18df2d81039392daeb0b78c346a70537"><td class="memItemLeft" align="right" valign="top"><a id="a18df2d81039392daeb0b78c346a70537"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCommand.html#a18df2d81039392daeb0b78c346a70537">Command</a> ()</td></tr>
 <tr class="memdesc:a18df2d81039392daeb0b78c346a70537"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>

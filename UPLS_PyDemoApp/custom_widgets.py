@@ -1,5 +1,26 @@
 from UPLS import HookInfo, LandingGearInfo, WinchInfo, LedInfo
-from tkinter import Frame, Label, Entry, StringVar
+from tkinter import Frame, Label, Entry, StringVar, Spinbox, Button, simpledialog
+
+class SetNumericParameterWidget(Frame):
+	def __init__(self, parent, name="Param", onsetaction=0, minvalue=0, maxvalue=1):
+		Frame.__init__(self, parent, relief="ridge", borderwidth=2)
+		self.label = Label(self, text=name)
+		self.spinbox = Spinbox(self, from_=minvalue, to=maxvalue, state="disabled")
+		self.button = Button(self, text="Set", state="disabled")
+		
+		if onsetaction:
+			self.button["commnad"] = onsetaction
+
+		self.label.grid(column=0, row=0, sticky="e")
+		self.spinbox.grid(column=1, row=0)
+		self.button.grid(column=2, row=0)
+
+	def state(self, state="disabled"):
+		self.button["state"] = state
+		self.spinbox["state"] = state
+
+	def getValue(self):
+		return self.spinbox.get()
 
 
 class UpdateFrequencyWidget(Frame):
@@ -75,13 +96,27 @@ class LatchWidget(Frame):
 		self.lbl_state = Label(self, text="State:")
 		self.ent_state_val = StringVar()
 		self.ent_state = Entry(self, state="disabled", textvariable=self.ent_state_val, width=10)
+		self.lbl_open = Label(self, text="Open pulse duration:")
+		self.var_open = StringVar()
+		self.ent_open = Entry(self, state="disabled", textvariable=self.var_open, width=8)
+		self.lbl_sopen = Label(self, text="s")
+		self.lbl_close = Label(self, text="Close pulse duration:")
+		self.var_close = StringVar()
+		self.ent_close = Entry(self, state="disabled", textvariable=self.var_close, width=8)
+		self.lbl_sclose = Label(self, text="s")
 		# Set position
-		self.lbl_title.grid(column=0, row=0, columnspan=3)
+		self.lbl_title.grid(column=0, row=0, columnspan=5)
 		self.lbl_current.grid(column=0, row=1, sticky="e")
 		self.ent_current.grid(column=1, row=1, sticky="e")
-		self.lbl_a.grid(column=2, row=1, sticky="W")
+		self.lbl_a.grid(column=2, row=1, sticky="w")
 		self.lbl_state.grid(column=0, row=2, sticky="e")
 		self.ent_state.grid(column=1, row=2, sticky="e")
+		self.lbl_open.grid(column=2, row=1, sticky="e")
+		self.ent_open.grid(column=3, row=1)
+		self.lbl_sopen.grid(column=4, row=1, sticky="w")
+		self.lbl_close.grid(column=2, row=2, sticky="e")
+		self.ent_close.grid(column=3, row=2)
+		self.lbl_sclose.grid(column=4, row=2, sticky="w")
 		# Set default values
 		self.updateVal()
 
@@ -98,10 +133,14 @@ class LatchWidget(Frame):
 	def updateVal(self, latch=HookInfo.Latch()):
 		self.__setCurrent(latch.getCurrent())
 		self.__setState(latch.getState())
+		self.var_close.set(str(latch.getClosePulseDuration())) 
+		self.var_open.set(str(latch.getOpenPulseDuration()))
 
 	def state(self, state = "disabled"):
 		self.ent_current["state"] = state
 		self.ent_state["state"] = state
+		self.ent_close["state"] = state
+		self.ent_open["state"] = state
 
 
 class HookInfoWidget(Frame):
@@ -212,10 +251,10 @@ class LegWidget(Frame):
 		self.var_value.set(str(value))
 
 	def __setStatus(self, status = LandingGearInfo.Leg.Status.Unknown):
-		switcher = { LandingGearInfo.Leg.Status.Open: 		"open",
-					 LandingGearInfo.Leg.Status.Closed: 	"closed",
-					 LandingGearInfo.Leg.Status.Opening: 	"opening",
-					 LandingGearInfo.Leg.Status.Closing: 	"closing", }
+		switcher = { LandingGearInfo.Leg.Status.Up: 			"retracted",
+					 LandingGearInfo.Leg.Status.Down: 			"extracted",
+					 LandingGearInfo.Leg.Status.InUpTransit: 	"retracting",
+					 LandingGearInfo.Leg.Status.InDownTransit: 	"extracting", }
 		self.var_status.set(switcher.get(status, "unknown"))
 
 	def updateVal(self, leg = LandingGearInfo.Leg()):
@@ -267,6 +306,10 @@ class WinchInfoWidget(Frame):
 		self.var_position = StringVar()
 		self.ent_position = Entry(self, state="disabled", textvariable=self.var_position, width=8)
 		self.lbl_m		  = Label(self, text="m")
+		self.lbl_target   = Label(self, text="Target:")
+		self.var_target   = StringVar()
+		self.ent_target   = Entry(self, state="disabled", textvariable=self.var_target, width=8)
+		self.lbl_mt		  = Label(self, text="m")
 		self.lbl_current  = Label(self, text="Current:")
 		self.var_current  = StringVar()
 		self.ent_current  = Entry(self, state="disabled", textvariable=self.var_current, width=8)
@@ -281,12 +324,16 @@ class WinchInfoWidget(Frame):
 		self.lbl_position.grid(column=0, row=2, sticky="e")
 		self.ent_position.grid(column=1, row=2)
 		self.lbl_m.grid(column=2, row=2, sticky="w")
+
+		self.lbl_target.grid(column=0, row=3, sticky="e")
+		self.ent_target.grid(column=1, row=3)
+		self.lbl_mt.grid(column=2, row=3, sticky="w")
 		
-		self.lbl_current.grid(column=0, row=3, sticky="e")
-		self.ent_current.grid(column=1, row=3)
-		self.lbl_A.grid(column=2, row=3, sticky="w")
+		self.lbl_current.grid(column=0, row=4, sticky="e")
+		self.ent_current.grid(column=1, row=4)
+		self.lbl_A.grid(column=2, row=4, sticky="w")
 		
-		self.ufr_frequency.grid(column=0, row=4, columnspan=3, sticky="e")
+		self.ufr_frequency.grid(column=0, row=5, columnspan=3, sticky="e")
 
 		self.updateVal()
 
@@ -297,107 +344,195 @@ class WinchInfoWidget(Frame):
 	def __setPosition(self, position = 0.0):
 		self.var_position.set(f'{position:.2f}')
 
+	def __setTarget(self, target = 0.0):
+		self.var_target.set(f'{target:.2f}')
+
 	def __setStatus(self, status = WinchInfo.Status.Unknown):
-		switcher = { WinchInfo.Status.Lowering: "lowered",
-					 WinchInfo.Status.Lifting: 	"lifting",
-					 WinchInfo.Status.Halted: 	"halted",
-					 WinchInfo.Status.Lowered: 	"lowered",
-					 WinchInfo.Status.Home:		"home", }
+		switcher = { WinchInfo.Status.Lowering: 			"lowering",
+					 WinchInfo.Status.GoingHome: 			"lifting",
+					 WinchInfo.Status.Halted: 				"halted",
+					 WinchInfo.Status.Lowered: 				"lowered",
+					 WinchInfo.Status.Home:					"home",
+					 WinchInfo.Status.Manual:				"manual" }
 		self.var_status.set(switcher.get(status, "unknown"))
 
 	def updateVal(self, winch = WinchInfo(), frequency = 0.0):
 		self.__setCurrent(winch.getCurrent())
 		self.__setStatus(winch.getStatus())
 		self.__setPosition(winch.getPosition())
+		self.__setTarget(winch.getTarget())
 		self.ufr_frequency.updateVal(frequency)
 
 	def state(self, state = "disabled"):
 		self.ent_status["state"] = state
 		self.ent_position["state"] = state
+		self.ent_target["state"] = state
 		self.ent_current["state"] = state
 		self.ufr_frequency.state(state)
 
 
-#class NormalLedModeWidget(Frame):
-#	def __inti__(self, parent):
-#		Frame.__init__(self, parent, relief="ridge", borderwidth=2)
-#		self.lbl_title = Label(self, text="Winch", font="bold")
-#		self.lbl_brightness = Label(self, text="Brightness:")
-#		self.var_brightness = StringVar()
-#		self.ent_brightness = Entry(self, state="disabled", textvariable=self.var_brightness, width=5)
-#		
-#		self.lbl_title.grid(column=0, row=0, columnspan=2)
-#		
-#		self.lbl_brightness.grid(column=0, row=1, sticky="e")
-#		self.ent_brightness.grid(column=1, row=1)
-#
-#		self.updateVal()
-#
-#	def updateVal(self, blinking = LedInfo.Led.Normal()):
-#		self.var_brightness.set(blinking.getBrightness())
-#
-#	def state(self, state = "disabled"):
-#		self.ent_brightness["state"] = state
-#
-#
-#class BlinkingLedModeWidget(Frame):
-#	def __inti__(self, parent):
-#		Frame.__init__(self, parent, relief="ridge", borderwidth=2)
-#		self.lbl_title = Label(self, text="Winch", font="bold")
-#		self.lbl_onDuration = Label(self, text="On time:")
-#		self.var_onDuration = StringVar()
-#		self.ent_onDuration = Entry(self, state="disabled", textvariable=self.var_onDuration, width=5)
-#		self.lbl_on_ms		= Label(self, text="ms")
-#
-#		self.lbl_offDuration = Label(self, text="Off time:")
-#		self.var_offDuration = StringVar()
-#		self.ent_offDuration = Entry(self, state="disabled", textvariable=self.var_offDuration, width=5)
-#		self.lbl_off_ms		= Label(self, text="ms")
-#
-#		self.lbl_title.grid(column=0, row=0, columnspan=3)
-#		
-#		self.lbl_onDuration.grid(column=0, row=1, sticky="e")
-#		self.ent_onDuration.grid(column=1, row=1)
-#		self.lbl_on_ms.grid(column=2, row=1, sticky="w")
-#
-#		self.lbl_offDuration.grid(column=0, row=1, sticky="e")
-#		self.ent_offDuration.grid(column=1, row=1)
-#		self.lbl_off_ms.grid(column=2, row=1, sticky="w")
-#
-#		self.updateVal()
-#
-#	def updateVal(self, blinking = LedInfo.Led.Normal()):
-#		self.var_onDuration.set(normal.getBrightness())
-#		self.var_offDuration.set(normal.getBrightness())
-#
-#	def state(self, state = "disabled"):
-#		self.ent_brightness["state"] = state
+class CPUUtilizationWidget(Frame):
+	def __init__(self, parent):
+		Frame.__init__(self, parent, relief="ridge", borderwidth=2)
+		self.lbl_label = Label(self, text="CPU Utilization:")
+		self.var_util = StringVar()
+		self.ent_util = Entry(self, state="disabled", textvariable=self.var_util, width=5)
+		self.lbl_prc = Label(self, text="%")
+
+		self.lbl_label.grid(column=0, row=0, sticky="e")
+		self.ent_util.grid(column=1, row=0)
+		self.lbl_prc.grid(column=2, row=0, sticky="w")
+
+	def updateVal(self, utilization=0.0):
+		self.var_util.set(f'{utilization:.1f}')
+
+	def state(self, state = "disabled"):
+		self.ent_util["state"] = state
+
 
 class LedWidget(Frame):
 	def __init__(self, parent, name = "<Name>"):
 		Frame.__init__(self, parent, relief="ridge", borderwidth=2)
 		self.lbl_title = Label(self, text=name, font="bold")
+		
 		self.lbl_mode = Label(self, text="Mode:")
-		self.var_mode = StringVar()
-		self.ent_mode = Entry(self, state="disabled", textvariable = self.var_mode, width=8)
+		self.lbl_enbl = Label(self, text="Enabled:")
+		self.lbl_valu = Label(self, text="Value:")
 
+		self.var_mode = StringVar()
+		self.var_valu = StringVar()
+		self.var_enbl = StringVar()
+
+		self.ent_mode = Entry(self, state="disabled", textvariable = self.var_mode, width=8)
+		self.ent_valu = Entry(self, state="disabled", textvariable = self.var_valu, width=8)
+		self.ent_enbl = Entry(self, state="disabled", textvariable = self.var_enbl, width=8)
+
+		int_frame = Frame(self, relief="ridge", borderwidth=2)
+		lbl_a = Label(int_frame, text="On value:")
+		lbl_b = Label(int_frame, text="Off value:")
+		lbl_c = Label(int_frame, text="On duration:")
+		lbl_d = Label(int_frame, text="Off duration:")
+		lbl_e = Label(int_frame, text="ms")
+		lbl_f = Label(int_frame, text="ms")
+		lbl_g = Label(int_frame, text="Fade-in duration:")
+		lbl_h = Label(int_frame, text="Fade-out duration:")
+		lbl_i = Label(int_frame, text="ms")
+		lbl_j = Label(int_frame, text="ms")
+
+		self.var_onval = StringVar()
+		self.var_ofval = StringVar()
+		self.var_ondur = StringVar()
+		self.var_ofdur = StringVar()
+		self.var_fival = StringVar()
+		self.var_foval = StringVar()
+
+		self.ent_onval = Entry(int_frame, state="disabled", textvariable=self.var_onval, width=6)
+		self.ent_ofval = Entry(int_frame, state="disabled", textvariable=self.var_ofval, width=6)
+		self.ent_ondur = Entry(int_frame, state="disabled", textvariable=self.var_ondur, width=6)
+		self.ent_ofdur = Entry(int_frame, state="disabled", textvariable=self.var_ofdur, width=6)
+		self.ent_fival = Entry(int_frame, state="disabled", textvariable=self.var_fival, width=6)
+		self.ent_foval = Entry(int_frame, state="disabled", textvariable=self.var_foval, width=6)
+
+		self.lbl_title.grid(column=0, row=0, columnspan=6)
+		self.lbl_mode.grid(column=0, row=1, sticky="e")
+		self.ent_mode.grid(column=1, row=1)
+		self.lbl_enbl.grid(column=2, row=1, sticky="e")
+		self.ent_enbl.grid(column=3, row=1)
+		self.lbl_valu.grid(column=4, row=1, sticky="e")
+		self.ent_valu.grid(column=5, row=1)
+		int_frame.grid(column=0, row=2, columnspan=6, padx=3, pady=3)
+
+		lbl_a.grid(column=0, row=0, sticky="e")
+		self.ent_onval.grid(column=1, row=0)
+		lbl_c.grid(column=2, row=0, sticky="e")
+		self.ent_ondur.grid(column=3, row=0)
+		lbl_e.grid(column=4, row=0, sticky="w")
+		lbl_g.grid(column=5, row=0, sticky="e")
+		self.ent_fival.grid(column=6, row=0)
+		lbl_i.grid(column=7, row=0, sticky="w")
+		
+		lbl_b.grid(column=0, row=1, sticky="e")
+		self.ent_ofval.grid(column=1, row=1)
+		lbl_d.grid(column=2, row=1, sticky="e")
+		self.ent_ofdur.grid(column=3, row=1)
+		lbl_f.grid(column=4, row=1, sticky="w")
+		lbl_h.grid(column=5, row=1, sticky="e")
+		self.ent_foval.grid(column=6, row=1)
+		lbl_j.grid(column=7, row=1, sticky="w")
+
+		self.updateVal()
 	
 	def __setMode(self, mode = LedInfo.Led.Mode.Unknown):
 		switcher = { LedInfo.Led.Mode.Normal: "normal",
 					 LedInfo.Led.Mode.Pulsing: "pulsing",
-					 LedInfo.Led.Mode.FadeInOut: "fade in out",
-					 LedInfo.Led.Mode.Blinking: "blinking", }
+					 LedInfo.Led.Mode.Soft: "soft" }
 		self.var_mode.set(switcher.get(mode, "unknown"))
-
 
 	def updateVal(self, led = LedInfo.Led()):
 		self.__setMode(led.getMode())
+		self.var_valu.set(str(led.getCurrentValue())) 
+		
+		val = "false"
+		if led.getEnabled():
+			val = "true"
+		self.var_enbl.set(val) 
+		
+		settings = led.getSettings()
+		self.var_onval.set(str(settings.getOnValue()))
+		self.var_ofval.set(str(settings.getOffValue()))
+		self.var_ondur.set(str(settings.getOnDuration()))
+		self.var_ofdur.set(str(settings.getOffDuration()))
+		self.var_fival.set(str(settings.getFadeInDuration()))
+		self.var_foval.set(str(settings.getFadeOutDuration()))
 
-
-
+	def state(self, state="disabled"):
+		self.ent_onval["state"] = state
+		self.ent_ofval["state"] = state	
+		self.ent_ondur["state"] = state	
+		self.ent_ofdur["state"] = state	
+		self.ent_fival["state"] = state	
+		self.ent_foval["state"] = state
+		self.ent_mode["state"] = state
+		self.ent_valu["state"] = state
+		self.ent_enbl["state"] = state
 
 class LedInfoWidget(Frame):
 	def __init__(self, parent):
 		Frame.__init__(self, parent, relief="ridge", borderwidth=2)
 		self.lbl_title = Label(self, text="Led", font="bold 14")
+		self.led_front = LedWidget(self, name="Front")
+		self.led_rear = LedWidget(self, name="Rear")
+
+		self.ufr_frequency = UpdateFrequencyWidget(self)
+
+		self.lbl_title.grid(column=0, row=0, columnspan=2)
+		self.led_front.grid(column=0, row=1)
+		self.led_rear.grid(column=1, row=1)
+		self.ufr_frequency.grid(column=0, row=2, columnspan=2, sticky="e")
+
+		self.updateVal()
+
+	def updateVal(self, info = LedInfo(), frequency=0.0):
+		self.led_front.updateVal(info.frontInfo())
+		self.led_rear.updateVal(info.rearInfo())
+		self.ufr_frequency.updateVal(frequency)
+
+	def state(self, state="disabled"):
+		self.led_front.state(state)
+		self.led_rear.state(state)
+		self.ufr_frequency.state(state)
+
+'''
+class KeyBoundButton(Button):
+	def __init__(self, master=None, cnf={}, **kw, key=None, root=None):
+		Button.__init__(self, master, cnf, kw)
+
+		if key and root:
+			bindKey(key, root)
 		
+
+			
+
+	def bindKey(self, key, root):
+		root
+'''

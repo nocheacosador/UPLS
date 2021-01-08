@@ -44,7 +44,7 @@ typedef uint8_t	byte;
 
 // Config
 
-#define STATUS_REPORT_PERIOD		1000
+#define STATUS_REPORT_PERIOD		200
 #define RETRY_BUFFER_SIZE			6
 
 // Hardware parameters
@@ -66,13 +66,15 @@ typedef uint8_t	byte;
 #define BATTERY_CHECK_PERIOD			100		// ms
 #define BATTERY_EMPTY_TRESHOLD_COUNTER	10
 
-#define PULSE_MIN		700
-#define PULSE_MAX		2500
+#define LATCH_PULSE_MIN		800
+#define LATCH_PULSE_MAX		2200
 
-#define LATCH_CHECK_DELAY				400		// ms
-#define LATCH_RETRY_DELAY				1500	// ms
-#define LATCH_CHECK_TRESHOLD_CURRENT	0.03f	// A
-#define LATCH_MAX_RETRIES				5
+#define LATCH_OVERCOMPENSATED_PULSE_DIF		100		// us
+#define LATCH_OVERCOMPENSATED_PULSE_DUR		500		// ms
+#define LATCH_NORMAL_PULSE_CHECK_DELAY_DUR	500		// ms
+#define LATCH_RETRY_DELAY_DUR				1000	// ms
+#define LATCH_CHECK_TRESHOLD_CURRENT		0.04f	// A
+#define LATCH_MAX_RETRIES					5
 
 const byte addresses[2][6] = { "10000", "20000" };
 

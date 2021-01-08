@@ -3,79 +3,34 @@
 
 #if defined(__GNUC__) && !defined(__BINDINGS)
 	#include <stdint-gcc.h>
+	#define __NO_PADDING__  __attribute__((__packed__))
 #else
 	#include <stdint.h>
+	#define __NO_PADDING__
+	#if !defined(__BINDINGS)
+		#warning There might be problems with padding.
+	#endif	
 #endif
 
-#if defined(__AVR)
-	#define __NO_PADDING__ 
-#else 
-	#define __NO_PADDING__ __attribute__((__packed__))
-#endif
+//#if defined(__AVR)
+//	#define __NO_PADDING__ 
+//#else 
+//	#define __NO_PADDING__ __attribute__((__packed__))
+//#endif
 
 #ifndef BINDINGS_API
 	#define BINDINGS_API
 #endif
 
-#include <list>
-#include <cstring>
+#if !defined(__HOOK)
+	#include "../Buffer/MyBuffer.h"
+	#include <cstring>
+#else
+	#include <string.h>
+#endif // !__HOOK
 
 #define PACKET_START_BYTE '<'
 #define PACKET_END_BYTE   '>'
-
-/**
- * \brief Struct that is used to pass various commands and their parameters between devices.
- */
-struct BINDINGS_API __NO_PADDING__ Command
-{
-	/**
-	 * \brief Enum type containing command codes.
-	 */
-	enum class Code : uint8_t
-	{
-		Unknown = 0,
-		OpenLatch,
-		CloseLatch,
-		SetLatchClosePulseDuration,
-		SetLatchOpenPulseDuration,
-		StatusRequest,
-		LedsOn,
-		LedsOff,
-		LatchShutdown
-	};
-
-#if defined(__XAVIER)
-	
-	/**
-	 * \brief Utility function for reading command code.
-	 * \return Returns command code enum.
-	 */
-	Code getCode() { return code; }
-	
-# if !defined(DOXYGEN_ONLY)
-	uint16_t getPulseLength() { return pulseLength; }
-	void setPulseLength(uint16_t value) { pulseLength = value; };
-# endif // !DOXYGEN_ONLY
-
-private:
-#endif // __XAVIER
-
-	Code code;
-	uint16_t pulseLength;
-
-public:
-	/**  
-	 * \brief Default constructor.
-	 */
-	Command();
-	
-	/**  
-	 * \brief Overloaded constructor.
-	 * Overloaded constructor for specifying command code.
-	 * \param code Command code.
- 	 */
-	Command(Code code);
-};
 
 /**
  * \brief Structure that holds information about UAV UPLS hook.
@@ -122,12 +77,19 @@ struct BINDINGS_API __NO_PADDING__ HookInfo
 		void  setState(State _state) { state = _state; }
 		State getState() const { return state; }
 
-		Latch(State _state = State::Unknown, uint16_t _current = 0) : state(_state), current(_current) { ; }
+		uint16_t getOpenPulseDuration() { return openPulseDuration; }
+		uint16_t getClosePulseDuration() { return closePulseDuration; }
+
+		Latch(State _state = State::Unknown, uint16_t _current = 0) 
+			: state(_state), current(_current), closePulseDuration(0),
+			openPulseDuration(0) { ; }
 
 	private:
 #endif // __XAVIER
 		State state;
 		uint16_t current;
+		uint16_t closePulseDuration;
+		uint16_t openPulseDuration;
 	};
 
 #if defined(__XAVIER)
@@ -137,7 +99,7 @@ struct BINDINGS_API __NO_PADDING__ HookInfo
 	float getMCURuntime() const { return mcuRuntime; }
 	//void  setMCURuntime(float _mcuRuntime) { mcuRuntime = _mcuRuntime; }
 
-	uint16_t getlostMessages() const { return mcuRuntime; }
+	uint16_t getlostMessages() const { return lostMessages; }
 
 	float getTemperature() const { return float(temperature) / 10.f; }
 
@@ -173,7 +135,7 @@ struct BINDINGS_API __NO_PADDING__ LedInfo
 
 		struct __NO_PADDING__ Settings
 		{
-#if defined(__XAVIER)
+# if defined(__XAVIER)
 			Settings(uint8_t onValue = 255, uint8_t offValue = 0, uint16_t fadeInDuration = 500, 
 				uint16_t fadeOutDuration = 500, uint16_t onDuration = 1000, 
 				uint16_t offDuration = 1000) 
@@ -188,15 +150,15 @@ struct BINDINGS_API __NO_PADDING__ LedInfo
 			uint8_t getOnValue() const { return on_value; }
 			uint8_t getOffValue() const { return off_value; }
 		private:
-#endif // __XAVIER
+# endif // __XAVIER
 			uint8_t on_value;
 			uint8_t off_value;
 			uint16_t on_duration;
 			uint16_t off_duration;
-			uint8_t fade_in_duration;
-			uint8_t fade_out_duration;
+			uint16_t fade_in_duration;
+			uint16_t fade_out_duration;
 		};
-#if defined(__XAVIER)		
+# if defined(__XAVIER)		
 		Led() { memset(this, 0, sizeof(Led)); } 
 
 		bool getEnabled() const { return enabled; }
@@ -205,18 +167,18 @@ struct BINDINGS_API __NO_PADDING__ LedInfo
 		Settings getSettings() const { return settings; }
 
 	private:
-#endif // __XAVIER
+# endif // __XAVIER
 		bool     enabled;
 		uint8_t  current_value;
 		Mode	 mode;
 		Settings settings;
 	};
 
-#if defined(__XAVIER)
+# if defined(__XAVIER)
 	Led frontInfo() const { return front; }
 	Led rearInfo() const  { return rear; }
 private:
-#endif // __XAVIER
+# endif // __XAVIER
 
 	Led front;
 	Led rear;
@@ -234,12 +196,12 @@ struct BINDINGS_API __NO_PADDING__ LandingGearInfo
 		enum class Status : uint8_t
 		{
 			Unknown = 0,
-			Open,
-			Closed,
-			Closing,
-			Opening
+			Down,
+			Up,
+			InDownTransit,
+			InUpTransit
 		};
-#if defined(__XAVIER)
+# if defined(__XAVIER)
 		Leg() { memset(this, 0, sizeof(Leg)); }
 
 		Status getStatus() const { return status; }
@@ -247,17 +209,17 @@ struct BINDINGS_API __NO_PADDING__ LandingGearInfo
 		uint16_t getCurrent() const { return current; }
 
 	private:
-#endif // __XAVIER
+# endif // __XAVIER
 		Status	 status;
 		uint8_t  value;
 		uint16_t current;
 	};
 
-#if defined(__XAVIER)
+# if defined(__XAVIER)
 	Leg frontInfo() const { return front; }
 	Leg rearInfo() const { return rear; }
 private:
-#endif // __XAVIER
+# endif // __XAVIER
 
 	Leg front;
 	Leg rear;
@@ -272,36 +234,53 @@ struct BINDINGS_API __NO_PADDING__ WinchInfo
 	{
 		Unknown = 0,
 		Lowering,
-		Lifting,
+		GoingHome,
 		Halted,
 		Lowered,
-		Home
+		Home,
+		Manual
 	};
 
-#if defined(__XAVIER)
+# if defined(__XAVIER)
 	Status	 getStatus() const { return status; }
 	float	 getPosition() const { return position; }
+	float	 getTarget() const { return target; }
 	uint16_t getCurrent() const { return current; }
 private:
-#endif // __XAVIER
+# endif // __XAVIER
 	uint16_t current;
-	float  position;
+	float    position;
+	float    target;
 	Status 	 status;
 
 public:
 	WinchInfo();
 };
+
+struct BINDINGS_API __NO_PADDING__ MainControllerInfo
+{
+#if defined(__XAVIER)
+	MainControllerInfo();
+
+	float getUtilization() const;
+	
+private:
+#endif // __XAVIER
+	float utilization;
+};
+
 #endif // !__HOOK
 
 struct BINDINGS_API __NO_PADDING__ Error
 {
-	enum class Code : uint8_t
+	enum Code : uint8_t
 	{
 		Other = 0,
 		LatchFailedToClose,
 		LatchFailedToOpen,
 		LatchBatteryEmpty,
-		UnknownPacket
+		UnknownPacket,
+		UnknownReceiverDevice
 	};
 
 #if defined(__XAVIER)
@@ -380,12 +359,12 @@ enum class Device : uint8_t
 		#undef THIS_DEVICE
 		#define THIS_DEVICE		Device::MainController
 	#else
-		#warning THIS_DEVICE macro has invalid value. Valid values are: 1 - Xavier; 2 - Hook; 3 - Main Controller.
+		#error THIS_DEVICE macro has invalid value. Valid values are: 1 - Xavier; 2 - Hook; 3 - Main Controller.
 		#undef THIS_DEVICE
 		#define THIS_DEVICE Device::Unknown
 	#endif
 #else
-	#warning THIS_DEVICE macro is not defined.
+	#error THIS_DEVICE macro is not defined.
 	#undef THIS_DEVICE
 	#define THIS_DEVICE Device::Unknown
 #endif // THIS_DEVICE
@@ -402,14 +381,107 @@ enum class Device : uint8_t
 		#define DEFAULT_RECEIVER_DEVICE		Device::MainController
 	#else
 		#undef DEFAULT_RECEIVER_DEVICE
-		#warning DEFAULT_RECEIVER_DEVICE macro has invalid value. Valid values are: 1 - Xavier; 2 - Hook; 3 - Main Controller.
+		#error DEFAULT_RECEIVER_DEVICE macro has invalid value. Valid values are: 1 - Xavier; 2 - Hook; 3 - Main Controller.
 		#define DEFAULT_RECEIVER_DEVICE Device::Unknown
 	#endif
 #else
 	#undef DEFAULT_RECEIVER_DEVICE
-	#warning DEFAULT_RECEIVER_DEVICE macro is not defined.
+	#error DEFAULT_RECEIVER_DEVICE macro is not defined.
 	#define DEFAULT_RECEIVER_DEVICE Device::Unknown
 #endif // THIS_DEVICE
+
+/**
+ * \brief Struct that is used to pass various commands and their parameters between devices.
+ */
+struct BINDINGS_API __NO_PADDING__ Command
+{
+	/**
+	 * \brief Enum type containing command codes.
+	 */
+#if defined(__cpp_using_enum)
+	enum class Code : uint8_t
+#else
+	enum Code : uint8_t
+#endif
+	{
+		Unknown = 0,
+		LatchClose,
+		LatchOpen,
+		SetLatchClosePulseDuration,
+		SetLatchOpenPulseDuration,
+		SetLedMode,
+		SetLedSettings,
+		StatusRequest,
+		LedsOn,
+		LedsOff,
+		LandingGearExtract,
+		LandingGearRetract,
+		HookShutdown,
+		WinchManualUp,
+		WinchManualDown,
+		WinchLower,
+		WinchHome,
+		WinchHalt,
+		WinchResume,
+		WinchManualModeEnable,
+		WinchManualModeDisable
+	};
+
+#if defined(__cpp_using_enum)
+	using enum Code;
+#endif
+
+#if defined(__XAVIER)
+	
+	/**
+	 * \brief Utility function for reading command code.
+	 * \return Returns command code enum.
+	 */
+	Code getCode() { return code; }
+	
+	uint16_t getPulseLength() { return pulseLength; }
+
+	Command& setCode(Code c) { code = c; return *this; }
+	Command& setPulseLength(uint16_t value) { pulseLength = value; return *this; }
+	Command& setLedMode(LedInfo::Led::Mode mode) { ledMode = mode; return *this; }
+	Command& setLedSettings(LedInfo::Led::Settings settings) { ledSettings = settings; return *this; } 
+	Command& setWinchManualSpeedAndDuration(float speed, float duration) { winch.speed = speed; winch.duration = duration; return *this;}
+	Command& setWinchLowerDistance(float distance) { winch.lower_distance = distance; return *this; }
+private:
+#endif // __XAVIER
+
+	Code code;
+
+	union __NO_PADDING__
+	{
+		uint16_t pulseLength;
+#if !defined(__HOOK)
+		LedInfo::Led::Mode ledMode;
+		LedInfo::Led::Settings ledSettings;
+		struct {
+			union {
+				float duration;
+				float lower_distance;
+			};
+			float speed;
+		} winch;
+#endif // __XAVIER
+	};
+
+public:
+	/**  
+	 * \brief Default constructor.
+	 */
+	Command();
+	
+	/**  
+	 * \brief Overloaded constructor.
+	 * Overloaded constructor for specifying command code.
+	 * \param code Command code.
+ 	 */
+	Command(Code code);
+};
+
 
 #if !defined(DOXYGEN_ONLY)
 struct __NO_PADDING__ Packet
@@ -425,7 +497,8 @@ struct __NO_PADDING__ Packet
 		WinchInfo,
 		LandingGearInfo,
 		LedInfo,
-		LatencyCheck
+		LatencyCheck,
+		MainControllerInfo
 	};
 	
 	char 	startByte;
@@ -438,10 +511,11 @@ struct __NO_PADDING__ Packet
 		Command  	 	command;
 		HookInfo 	 	hook;
 #if !defined(__HOOK)
-		LandingGearInfo	landingGear;
-		LedInfo	 		led;
-		WinchInfo  		winch;
-#endif
+		LandingGearInfo		landingGear;
+		LedInfo	 			led;
+		WinchInfo  			winch;
+		MainControllerInfo 	mainController;
+#endif // !__HOOK
 		Error		 	error;
 		Warning		 	warning;
 		LatencyCheck 	latencyCheck;
@@ -452,12 +526,12 @@ struct __NO_PADDING__ Packet
 	Packet();
 };
 
+#if !defined(__HOOK)
 typedef HookInfo::Battery	Battery;
 typedef HookInfo::Latch		Latch;
-#if !defined(__HOOK)
 typedef LedInfo::Led			Led;
 typedef LandingGearInfo::Leg	Leg;
-#endif
+
 
 class PacketHandler
 {
@@ -467,6 +541,8 @@ public:
 	void parseChar(char ch);
 
 	bool packetAvailable();
+
+	void pushPacket(const Packet& packet);
 
 	Packet getPacket();
 
@@ -483,9 +559,9 @@ private:
 	uint8_t m_bufferIndex;
 	bool 	m_startByteDetected;
 
-	std::list<Packet> m_packets;
+	MyBuffer<Packet, 5> m_packets;
 };
-
+#endif // !__HOOK
 #endif // DOXYGEN_ONLY
 
 #if defined(__XAVIER)

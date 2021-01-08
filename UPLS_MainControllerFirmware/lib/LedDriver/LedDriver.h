@@ -5,57 +5,58 @@
 #include <PwmOut.h>
 #include <Ticker.h>
 #include <Timer.h>
+#include <UARTSerial.h>
+#include "packet.h"
 
 class LedDriver
 {
 public:
-	enum class Mode
+	typedef typename LedInfo::Led::Mode Mode;
+	typedef typename LedInfo::Led::Settings Settings;
+	
+	/*struct Settings
 	{
-		Normal = 1,
-		Soft,
-		Pulsing
-	};
+		uint8_t on_value;
+		uint8_t off_value;
+		uint16_t on_duration;
+		uint16_t off_duration;
+		uint16_t fade_in_duration;
+		uint16_t fade_out_duration;
 
-	struct Settings
-	{
-		uint8_t on_value = 255.f;
-		uint8_t off_value = 0.f;
-		uint16_t on_duration = 1000.f;
-		uint16_t off_duration = 1000.f;
-		uint16_t fade_in_duration = 1000.f;
-		uint16_t fade_out_duration = 1000.f;
-
-		Settings() { ; }
-	};
+		Settings(uint8_t onValue = 255, uint8_t offValue = 0, uint16_t onDuration = 1000,
+			uint16_t offDuration = 1000, uint16_t fadeInDuration = 1000,
+			uint16_t fadeOutDuration = 1000) 
+			: on_value(onValue), off_value(offValue), on_duration(onDuration), off_duration(offDuration),
+			  fade_in_duration(fadeInDuration), fade_out_duration(fadeOutDuration) { ; }
+	};*/
 
 	LedDriver(PinName pin, float update_rate = 50.0);
 
 	void enable(bool enable = true);
 
-	bool enable();
+	bool isEnabled() { return _en; }
 
 	void mode(Mode mode);
 
-	Mode mode();
+	Mode getMode() { return _mode; }
 
 	void turnOn();
 
 	void turnOff();
 
-	void settings(Settings settings);
+	void settings(const Settings& settings);
 
 	Settings settings();
 
 	uint8_t value();
 
 private:
-	bool _en;
-	bool _on;
-	bool _fadingIn;
-	Mode _mode;
+	volatile bool _en;
+	volatile bool _on;
+	volatile Mode _mode;
 	float _period;
-	uint8_t _value;
-	int _last_timepoint;
+	volatile uint8_t _value;
+	volatile int _last_timepoint;
 
 	mbed::PwmOut _pwm_out;
 	mbed::Ticker _tick;
@@ -65,7 +66,6 @@ private:
 	void _handler();
 	void _pwm(uint8_t val);
 
-
 	enum class InternalState
 	{
 		ON_VALUE,
@@ -74,7 +74,7 @@ private:
 		FADING_OUT
 	};
 
-	InternalState _state;
+	volatile InternalState _state;
 };
 
 #endif
