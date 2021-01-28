@@ -54,26 +54,26 @@ python_include_error = 'Unable to locate the Python include headers directory.'
 options = []
 
 # option, function, error, description
-options.append(("--shiboken6-module-path",
+options.append(("--shiboken-module-path",
                 lambda: find_shiboken6_module(),
                 shiboken6_module_error,
                 "Print shiboken6 module location"))
-options.append(("--shiboken6-generator-path",
+options.append(("--shiboken-generator-path",
                 lambda: find_shiboken6_generator(),
                 shiboken6_generator_error,
                 "Print shiboken6 generator location"))
-options.append(("--pyside6-path", lambda: find_pyside6(), pyside6_error,
+options.append(("--pyside-path", lambda: find_pyside6(), pyside6_error,
                 "Print PySide6 location"))
 
 options.append(("--python-include-path",
                 lambda: get_python_include_path(),
                 python_include_error,
                 "Print Python include path"))
-options.append(("--shiboken6-generator-include-path",
+options.append(("--shiboken-generator-include-path",
                 lambda: get_package_include_path(Package.shiboken6_generator),
                 pyside6_error,
                 "Print shiboken6 generator include paths"))
-options.append(("--pyside6-include-path",
+options.append(("--pyside-include-path",
                 lambda: get_package_include_path(Package.pyside6),
                 pyside6_error,
                 "Print PySide6 include paths"))
@@ -83,24 +83,24 @@ options.append(("--python-link-flags-qmake", lambda: python_link_flags_qmake(), 
 options.append(("--python-link-flags-cmake", lambda: python_link_flags_cmake(), python_link_error,
                 "Print python link flags for cmake"))
 
-options.append(("--shiboken6-module-qmake-lflags",
+options.append(("--shiboken-module-qmake-lflags",
                 lambda: get_package_qmake_lflags(Package.shiboken6_module), pyside6_error,
                 "Print shiboken6 shared library link flags for qmake"))
-options.append(("--pyside6-qmake-lflags",
+options.append(("--pyside-qmake-lflags",
                 lambda: get_package_qmake_lflags(Package.pyside6), pyside6_error,
                 "Print PySide6 shared library link flags for qmake"))
 
-options.append(("--shiboken6-module-shared-libraries-qmake",
+options.append(("--shiboken-module-shared-libraries-qmake",
                 lambda: get_shared_libraries_qmake(Package.shiboken6_module), pyside6_libs_error,
                 "Print paths of shiboken6 shared libraries (.so's, .dylib's, .dll's) for qmake"))
-options.append(("--shiboken6-module-shared-libraries-cmake",
+options.append(("--shiboken-module-shared-libraries-cmake",
                 lambda: get_shared_libraries_cmake(Package.shiboken6_module), pyside6_libs_error,
                 "Print paths of shiboken6 shared libraries (.so's, .dylib's, .dll's) for cmake"))
 
-options.append(("--pyside6-shared-libraries-qmake",
+options.append(("--pyside-shared-libraries-qmake",
                 lambda: get_shared_libraries_qmake(Package.pyside6), pyside6_libs_error,
                 "Print paths of PySide6 shared libraries (.so's, .dylib's, .dll's) for qmake"))
-options.append(("--pyside6-shared-libraries-cmake",
+options.append(("--pyside-shared-libraries-cmake",
                 lambda: get_shared_libraries_cmake(Package.pyside6), pyside6_libs_error,
                 "Print paths of PySide6 shared libraries (.so's, .dylib's, .dll's) for cmake"))
 

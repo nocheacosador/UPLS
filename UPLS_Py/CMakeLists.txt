@@ -58,7 +58,21 @@ if(NOT python_interpreter)
 endif()
 message(STATUS "Using python interpreter: ${python_interpreter}")
 
-macro(pyside6_config option output_var)
+# determine whether to use shiboken2 or shiboken6
+execute_process(
+      COMMAND ${python_interpreter} "${CMAKE_SOURCE_DIR}/utils/determine_shiboken_version.py"
+      OUTPUT_VARIABLE shiboken_generator_name
+      OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+if("${shiboken_generator_name}" STREQUAL "shiboken6")
+	set(pyside_config_script_path "${CMAKE_SOURCE_DIR}/utils/pyside6_config.py")
+elseif("${shiboken_generator_name}" STREQUAL "shiboken2")
+	set(pyside_config_script_path "${CMAKE_SOURCE_DIR}/utils/pyside2_config.py")
+else()
+	message(FATAL_ERROR "No shiboken module found. Determine_shiboken_version returned: ${shiboken_generator_name}")
+endif()
+
+macro(pyside_config option output_var)
     if(${ARGC} GREATER 2)
         set(is_list ${ARGV2})
     else()
@@ -66,13 +80,13 @@ macro(pyside6_config option output_var)
     endif()
 
     execute_process(
-      COMMAND ${python_interpreter} "${CMAKE_SOURCE_DIR}/utils/pyside6_config.py"
+      COMMAND ${python_interpreter} "${pyside_config_script_path}"
               ${option}
       OUTPUT_VARIABLE ${output_var}
       OUTPUT_STRIP_TRAILING_WHITESPACE)
 
     if ("${${output_var}}" STREQUAL "")
-        message(FATAL_ERROR "Error: Calling pyside6_config.py ${option} returned no output.")
+        message(FATAL_ERROR "Error: Calling ${pyside_config_script_path} ${option} returned no output.")
     endif()
     if(is_list)
         string (REPLACE " " ";" ${output_var} "${${output_var}}")
@@ -80,14 +94,14 @@ macro(pyside6_config option output_var)
 endmacro()
 
 # Query for the shiboken generator path, Python path, include paths and linker flags.
-pyside6_config(--shiboken6-module-path shiboken6_module_path)
-pyside6_config(--shiboken6-generator-path shiboken6_generator_path)
-pyside6_config(--python-include-path python_include_dir)
-pyside6_config(--shiboken6-generator-include-path shiboken_include_dir 1)
-pyside6_config(--shiboken6-module-shared-libraries-cmake shiboken_shared_libraries 0)
-pyside6_config(--python-link-flags-cmake python_linking_data 0)
+pyside_config(--shiboken-module-path shiboken_module_path)
+pyside_config(--shiboken-generator-path shiboken_generator_path)
+pyside_config(--python-include-path python_include_dir)
+pyside_config(--shiboken-generator-include-path shiboken_include_dir 1)
+pyside_config(--shiboken-module-shared-libraries-cmake shiboken_shared_libraries 0)
+pyside_config(--python-link-flags-cmake python_linking_data 0)
 
-set(shiboken_path "${shiboken6_generator_path}/shiboken6${CMAKE_EXECUTABLE_SUFFIX}")
+set(shiboken_path "${shiboken_generator_path}/${shiboken_generator_name}${CMAKE_EXECUTABLE_SUFFIX}")
 if(NOT EXISTS ${shiboken_path})
     message(FATAL_ERROR "Shiboken executable not found at path: ${shiboken_path}")
 endif()

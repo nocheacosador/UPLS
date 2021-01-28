@@ -7,7 +7,7 @@ from custom_widgets import HookInfoWidget, LandingGearInfoWidget, WinchInfoWidge
 from custom_widgets import CPUUtilizationWidget, LedInfoWidget, SetNumericParameterWidget
 from PIL import Image, ImageTk
 
-hardware_serial_ports = ['/dev/ttyTHS0', '/dev/ttyTHS2']
+hardware_serial_ports = ['/dev/ttyTHS0', '/dev/ttyTHS2', '/dev/ttyV0']
 
 class ChooseSerialBox:
 	def __init__(self, parent = 0, title="", on_destruction = 0):
@@ -39,7 +39,6 @@ class ChooseSerialBox:
 	def __updatePortSelection(self):
 		self.lst_AvailablePorts = UPLS_Controller().listAvailablePorts()
 		self.lst_AvailablePorts.extend(hardware_serial_ports)
-		self.lst_AvailablePorts.append('/dev/ttyV0')
 		self.cmb_PortSelection["values"] = self.lst_AvailablePorts
 		if self.lst_AvailablePorts:
 			self.cmb_PortSelection.current(0)
