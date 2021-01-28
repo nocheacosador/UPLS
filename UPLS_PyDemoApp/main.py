@@ -2,9 +2,10 @@
 import sys
 
 from UPLS import *
-from tkinter import simpledialog, ttk, Button, Toplevel, Label, Frame, Tk, Menu, Entry, Event, EventType
+from tkinter import simpledialog, ttk, Button, Toplevel, Label, Frame, Tk, Menu, Entry, Event, EventType, PhotoImage
 from custom_widgets import HookInfoWidget, LandingGearInfoWidget, WinchInfoWidget
 from custom_widgets import CPUUtilizationWidget, LedInfoWidget, SetNumericParameterWidget
+from PIL import Image, ImageTk
 
 hardware_serial_ports = ['/dev/ttyTHS0', '/dev/ttyTHS2']
 
@@ -38,6 +39,7 @@ class ChooseSerialBox:
 	def __updatePortSelection(self):
 		self.lst_AvailablePorts = UPLS_Controller().listAvailablePorts()
 		self.lst_AvailablePorts.extend(hardware_serial_ports)
+		self.lst_AvailablePorts.append('/dev/ttyV0')
 		self.cmb_PortSelection["values"] = self.lst_AvailablePorts
 		if self.lst_AvailablePorts:
 			self.cmb_PortSelection.current(0)
@@ -88,6 +90,14 @@ class MainApp:
 		self.win_Info = Toplevel()
 		self.win_Info.title(title + ": Info")
 		#self.win_Info.geometry("400x300+300+300")
+
+		# setup background
+		load = Image.open('/home/lukas/Desktop/domicele.png')
+		background_image = ImageTk.PhotoImage(load)
+		background_label = Label(self.win_Info, image=background_image)
+		background_label.image = background_image
+		background_label.place(x=0, y=0)
+
 		self.win_Info.resizable(False, False)
 		self.win_Info.protocol("WM_DELETE_WINDOW", self.__onClosing)
 		self.mnb_MenuBar = Menu(self.win_Info)
@@ -223,6 +233,7 @@ class MainApp:
 		self.buttons[-1].grid(row=2, column=0, columnspan=2, padx=2, pady=2)
 		self.manual_button = self.buttons[-1]
 
+
 	# button callbacks
 	def __upButtonCallback(self, event):
 		if event.type == EventType.KeyPress or event.type == EventType.ButtonPress:
@@ -279,12 +290,12 @@ class MainApp:
 	def __recurentWinchUp(self, speed):
 		if self.up_button_pressed:
 			self.upls.winchManualUp(speed, 0.2)
-			self.win_Command.after(120, self.__recurentWinchUp, speed)
+			self.win_Command.after(180, self.__recurentWinchUp, speed)
 
 	def __recurentWinchDown(self, speed):
 		if self.down_button_pressed:
 			self.upls.winchManualDown(speed, 0.2)
-			self.win_Command.after(120, self.__recurentWinchDown, speed)
+			self.win_Command.after(180, self.__recurentWinchDown, speed)
 
 	# text entry validation. Only digits in range from 0 to 100
 	def __entryValidate(self, value):

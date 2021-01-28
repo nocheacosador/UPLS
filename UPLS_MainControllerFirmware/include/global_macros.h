@@ -32,7 +32,7 @@
     #define forceinline inline
 #endif
 
-
+/*
 const char sun[9][19] = {
 	"        '        \n",
     "     \\  ,  /     \n",
@@ -44,6 +44,7 @@ const char sun[9][19] = {
     "     /  `  \\     \n",
     "        .        \n"
 };
+*/
 
 #define PI 		3.14159265359f
 #define TWO_PI	6.28318530718f
@@ -78,13 +79,18 @@ const char sun[9][19] = {
 #define LEG_MOT_REAR_SLP     		PA_10	// PWM
 #define LEG_MOT_REAR_POS_SWITCH		PA_5	// unused
 
-// UART
-#define UART_TX		PA_2
-#define UART_RX		PA_3
 
-// I2C
-#define I2C_SDA		PB_11
-#define I2C_SCL		PB_10
+// Old pinout UART
+// #define UART_TX		PA_2
+// #define UART_RX		PA_3
+
+// new UART
+#define UART_TX		PB_10
+#define UART_RX		PB_11
+
+// Extruder control pins
+#define EXTRUDER_IN1	PA_2
+#define EXTRUDER_IN2	PA_3
 
 // nRF24L01+
 #define RF24_MISO		PB_14

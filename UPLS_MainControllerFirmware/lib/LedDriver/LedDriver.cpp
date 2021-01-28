@@ -7,7 +7,7 @@ LedDriver::LedDriver(PinName pin, float update_rate)
 	 _mode(LedDriver::Mode::Normal), _value(0), _state(InternalState::OFF_VALUE),
 	 _last_timepoint(0)
 {
-	_pwm_out.period_us(100);
+	_pwm_out.period_us(20000);
 	_pwm(_value);
 }
 

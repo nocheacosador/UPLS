@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-Winch::Winch() : _en(false), _manual_duration(0.f), 
+Winch::Winch() : _en(false), _manual_duration(0.f), _extruder(EXTRUDER_IN1, EXTRUDER_IN2), 
 	_target(0), _position(0), _status(Status::Unknown), _status_before_halt(Status::Unknown)
 { 
 	memset(_prev_currents, 0, W_CURRENT_BUFFER_SIZE * sizeof(uint16_t));
@@ -35,6 +35,7 @@ void Winch::enable(bool enable)
 		_status = Status::Unknown;
 		_position = 0;
 		_target = 0;
+		_extruder.stop();
 	}
 }
 
@@ -65,6 +66,8 @@ void Winch::enableManual(bool en)
 void Winch::m_motorPositionController()
 {
 	_position = m_getPositionMeters();
+	
+	_motor.getSpeed();
 
 	float pos_err = _target - _position;
 

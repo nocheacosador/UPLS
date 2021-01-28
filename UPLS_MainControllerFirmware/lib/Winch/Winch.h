@@ -4,6 +4,7 @@
 
 #include "../../include/global_macros.h"
 #include "../MotorSpeedControl/MotorSpeedControl.h"
+#include "../Extruder/Extruder.h"
 #include <Timer.h>
 #include <Ticker.h>
 #include "../Packet/packet.h"
@@ -60,7 +61,7 @@ public:
 		_position = 0;
 	}
 
-	void halt() 
+	void halt()
 	{ 
 		if (_status != Status::Halted && _status != Status::Manual) 
 		{
@@ -70,7 +71,7 @@ public:
 	}
 
 	void resume() 
-	{ 
+	{
 		if (_status == Status::Halted)
 			_status = _status_before_halt;
 	}
@@ -113,7 +114,8 @@ private:
 	volatile float _value = 0.f;
 
 	MotorSpeedControl _motor;
-	
+	Extruder _extruder;
+
 	mbed::Ticker _cur_ticker;
 	mbed::Ticker _pos_ticker;
 	mbed::Timer _timer;
@@ -124,6 +126,11 @@ private:
 	float m_getPositionMeters()
 	{
 		return _motor.encoder().getTurnsFloat() * WINCH_PULLEY_DIAMETER * PI;
+	}
+
+	float m_extruderTransferFunction(float winch_speed)
+	{
+		return K* winch_speed
 	}
 };
 

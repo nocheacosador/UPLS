@@ -32,6 +32,8 @@ void led_init();
 void radio_init();
 void landing_gear_init();
 
+void wait_for_connection();
+
 // handle functions
 void handleReceivedPacket(const Packet& packet);
 void handleReceivedCommand(const Command& command);
@@ -40,8 +42,6 @@ void sendWinchInfo();
 void sendLandingGearInfo();
 void sendLedInfo();
 void sendMainControllerInfo();
-
-void sendSun();
 
 void sendInfoPackets();
 
@@ -70,7 +70,9 @@ int main()
 	radio_init();
 	landing_gear_init();
 	winch.enable(true);
-	//winch.enableManual(true);
+	winch.enableManual(true);
+
+	//wait_for_connection();
 
 	while (1) 
 	{
@@ -151,6 +153,32 @@ void landing_gear_init()
 {
 	landing_gear.front.enable(true);
 	landing_gear.rear.enable(false);
+}
+
+void wait_for_connection()
+{
+	while (1)
+	{
+		while (serial.readable())
+		{
+			char ch;
+			serial.read(&ch, 1);	
+			packetHandler.parseChar(ch);
+		}
+
+		if (packetHandler.packetAvailable())
+		{
+			auto packet = packetHandler.getPacket();
+
+			if (packet.type == Packet::Type::Command && packet.sender == Device::Xavier 
+				&& packet.command.code == Command::StartCommunication)
+			{
+				auto msg = PacketHandler::createMessage("StartCom command received", Device::Xavier);
+				sendToXavier(msg);
+				break;
+			}
+		}
+	}
 }
 
 void handleReceivedPacket(const Packet& packet)
