@@ -424,7 +424,9 @@ struct BINDINGS_API __NO_PADDING__ Command
 		WinchHalt,
 		WinchResume,
 		WinchManualModeEnable,
-		WinchManualModeDisable
+		WinchManualModeDisable,
+		StartCommunication,
+		EndCommunication
 	};
 
 #if defined(__cpp_using_enum)

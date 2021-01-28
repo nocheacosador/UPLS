@@ -33,7 +33,7 @@ set(typesystem_file ${CMAKE_SOURCE_DIR}/bindings/bindings.xml)
 set(wrapped_header	${CMAKE_SOURCE_DIR}/bindings/bindings.h)
 
 set(shared_includes ${CMAKE_SOURCE_DIR}/../shared)
-include_directories(${shared_includes})
+#include_directories(${shared_includes})
 
 set(generated_sources
 	${CMAKE_CURRENT_BINARY_DIR}/UPLS/command_wrapper.cpp
@@ -58,7 +58,7 @@ if(NOT python_interpreter)
 endif()
 message(STATUS "Using python interpreter: ${python_interpreter}")
 
-macro(pyside2_config option output_var)
+macro(pyside6_config option output_var)
     if(${ARGC} GREATER 2)
         set(is_list ${ARGV2})
     else()
@@ -66,13 +66,13 @@ macro(pyside2_config option output_var)
     endif()
 
     execute_process(
-      COMMAND ${python_interpreter} "${CMAKE_SOURCE_DIR}/utils/pyside2_config.py"
+      COMMAND ${python_interpreter} "${CMAKE_SOURCE_DIR}/utils/pyside6_config.py"
               ${option}
       OUTPUT_VARIABLE ${output_var}
       OUTPUT_STRIP_TRAILING_WHITESPACE)
 
     if ("${${output_var}}" STREQUAL "")
-        message(FATAL_ERROR "Error: Calling pyside2_config.py ${option} returned no output.")
+        message(FATAL_ERROR "Error: Calling pyside6_config.py ${option} returned no output.")
     endif()
     if(is_list)
         string (REPLACE " " ";" ${output_var} "${${output_var}}")
@@ -80,14 +80,14 @@ macro(pyside2_config option output_var)
 endmacro()
 
 # Query for the shiboken generator path, Python path, include paths and linker flags.
-pyside2_config(--shiboken2-module-path shiboken2_module_path)
-pyside2_config(--shiboken2-generator-path shiboken2_generator_path)
-pyside2_config(--python-include-path python_include_dir)
-pyside2_config(--shiboken2-generator-include-path shiboken_include_dir 1)
-pyside2_config(--shiboken2-module-shared-libraries-cmake shiboken_shared_libraries 0)
-pyside2_config(--python-link-flags-cmake python_linking_data 0)
+pyside6_config(--shiboken6-module-path shiboken6_module_path)
+pyside6_config(--shiboken6-generator-path shiboken6_generator_path)
+pyside6_config(--python-include-path python_include_dir)
+pyside6_config(--shiboken6-generator-include-path shiboken_include_dir 1)
+pyside6_config(--shiboken6-module-shared-libraries-cmake shiboken_shared_libraries 0)
+pyside6_config(--python-link-flags-cmake python_linking_data 0)
 
-set(shiboken_path "${shiboken2_generator_path}/shiboken2${CMAKE_EXECUTABLE_SUFFIX}")
+set(shiboken_path "${shiboken6_generator_path}/shiboken6${CMAKE_EXECUTABLE_SUFFIX}")
 if(NOT EXISTS ${shiboken_path})
     message(FATAL_ERROR "Shiboken executable not found at path: ${shiboken_path}")
 endif()
@@ -103,7 +103,7 @@ endif()
 # Enable rpaths so that the built shared libraries find their dependencies.
 set(CMAKE_SKIP_BUILD_RPATH FALSE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-set(CMAKE_INSTALL_RPATH ${shiboken2_module_path} ${CMAKE_CURRENT_SOURCE_DIR})
+set(CMAKE_INSTALL_RPATH ${shiboken6_module_path} ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # =============================== CMake target - sample_library ===============================
@@ -116,7 +116,7 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 set(shiboken_options --generator-set=shiboken --enable-parent-ctor-heuristic
     --enable-return-value-heuristic --use-isnull-as-nb_nonzero
     --avoid-protected-hack -std=c++17
-    -I${CMAKE_SOURCE_DIR}/bindings -I${CMAKE_SOURCE_DIR}/src -I${shared_includes}
+    -I${CMAKE_SOURCE_DIR}/bindings -I${CMAKE_SOURCE_DIR}/src #-I${shared_includes}
     -T${CMAKE_SOURCE_DIR}/bindings
     --output-directory=${CMAKE_BINARY_DIR}
 	)
@@ -146,6 +146,8 @@ add_library(${bindings_library} MODULE ${${bindings_library}_sources})
 target_include_directories(${bindings_library} PRIVATE ${python_include_dir})
 target_include_directories(${bindings_library} PRIVATE ${shiboken_include_dir})
 target_include_directories(${bindings_library} PRIVATE ${CMAKE_SOURCE_DIR}/src)
+
+target_compile_definitions(${bindings_library} PUBLIC __XAVIER)
 
 target_link_libraries(${bindings_library} PRIVATE ${shiboken_shared_libraries})
 target_link_libraries(${bindings_library} PRIVATE ${sample_library})
@@ -200,7 +202,7 @@ if(WIN32)
                            PROPERTIES LINK_FLAGS "${python_additional_link_flags}")
 
     # Compile a list of shiboken shared libraries to be installed, so that
-    # the user doesn't have to set the PATH manually to point to the PySide2 package.
+    # the user doesn't have to set the PATH manually to point to the PySide6 package.
     foreach(library_path ${shiboken_shared_libraries})
         string(REGEX REPLACE ".lib$" ".dll" library_path ${library_path})
         file(TO_CMAKE_PATH ${library_path} library_path)

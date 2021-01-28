@@ -6,6 +6,8 @@ from tkinter import simpledialog, ttk, Button, Toplevel, Label, Frame, Tk, Menu,
 from custom_widgets import HookInfoWidget, LandingGearInfoWidget, WinchInfoWidget
 from custom_widgets import CPUUtilizationWidget, LedInfoWidget, SetNumericParameterWidget
 
+hardware_serial_ports = ['/dev/ttyTHS0', '/dev/ttyTHS2']
+
 class ChooseSerialBox:
 	def __init__(self, parent = 0, title="", on_destruction = 0):
 		self.running = False
@@ -35,6 +37,7 @@ class ChooseSerialBox:
 
 	def __updatePortSelection(self):
 		self.lst_AvailablePorts = UPLS_Controller().listAvailablePorts()
+		self.lst_AvailablePorts.extend(hardware_serial_ports)
 		self.cmb_PortSelection["values"] = self.lst_AvailablePorts
 		if self.lst_AvailablePorts:
 			self.cmb_PortSelection.current(0)

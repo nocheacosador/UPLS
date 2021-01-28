@@ -76,6 +76,9 @@ bool UPLS_Controller::start()
 		info("Launching packet handler thread...");
 		m_receiverRunning = true;
 		m_receiverThread = new std::thread(&UPLS_Controller::m_receivedPacketHandler, this);
+
+		Packet packet = PacketHandler::createCommand(Command(Command::StartCommunication), Device::MainController);
+		m_serial.write(&packet, sizeof(Packet));
 	}
 	else
 	{
