@@ -33,7 +33,7 @@ set(typesystem_file ${CMAKE_SOURCE_DIR}/bindings/bindings.xml)
 set(wrapped_header	${CMAKE_SOURCE_DIR}/bindings/bindings.h)
 
 set(shared_includes ${CMAKE_SOURCE_DIR}/../shared)
-include_directories(${shared_includes})
+#include_directories(${shared_includes})
 
 set(generated_sources
 	${CMAKE_CURRENT_BINARY_DIR}/UPLS/command_wrapper.cpp

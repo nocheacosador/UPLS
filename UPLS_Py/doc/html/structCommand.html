@@ -96,8 +96,16 @@ Public Types</h2></td></tr>
 , <b>LandingGearRetract</b>
 , <br />
 &#160;&#160;<b>HookShutdown</b>
+, <b>WinchManualUp</b>
+, <b>WinchManualDown</b>
 , <b>WinchLower</b>
-, <b>WinchHome</b>
+, <br />
+&#160;&#160;<b>WinchHome</b>
+, <b>WinchHalt</b>
+, <b>WinchResume</b>
+, <b>WinchManualModeEnable</b>
+, <br />
+&#160;&#160;<b>WinchManualModeDisable</b>
 <br />
  }</td></tr>
 <tr class="memdesc:a5a7fbfabf174e959518c897593a929d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum type containing command codes. <br /></td></tr>
@@ -111,6 +119,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7665bede1c157bd91959e45a598d0711"><td class="memItemLeft" align="right" valign="top"><a id="a7665bede1c157bd91959e45a598d0711"></a>
 uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getPulseLength</b> ()</td></tr>
 <tr class="separator:a7665bede1c157bd91959e45a598d0711"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af61dc08fb4be7a81c03c54b25d6bec87"><td class="memItemLeft" align="right" valign="top"><a id="af61dc08fb4be7a81c03c54b25d6bec87"></a>
+<a class="el" href="structCommand.html">Command</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>setCode</b> (<a class="el" href="structCommand.html#a5a7fbfabf174e959518c897593a929d7">Code</a> c)</td></tr>
+<tr class="separator:af61dc08fb4be7a81c03c54b25d6bec87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60cd054ab7534376d53ca0fba6955ddf"><td class="memItemLeft" align="right" valign="top"><a id="a60cd054ab7534376d53ca0fba6955ddf"></a>
 <a class="el" href="structCommand.html">Command</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>setPulseLength</b> (uint16_t value)</td></tr>
 <tr class="separator:a60cd054ab7534376d53ca0fba6955ddf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -120,6 +131,12 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getPulseLength</b
 <tr class="memitem:ac5d381c0d91e915dd306615ec22fe49e"><td class="memItemLeft" align="right" valign="top"><a id="ac5d381c0d91e915dd306615ec22fe49e"></a>
 <a class="el" href="structCommand.html">Command</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>setLedSettings</b> (<a class="el" href="structLedInfo_1_1Led_1_1Settings.html">LedInfo::Led::Settings</a> settings)</td></tr>
 <tr class="separator:ac5d381c0d91e915dd306615ec22fe49e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a31ff9850f701075865a96fa0d0816f"><td class="memItemLeft" align="right" valign="top"><a id="a2a31ff9850f701075865a96fa0d0816f"></a>
+<a class="el" href="structCommand.html">Command</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>setWinchManualSpeedAndDuration</b> (float speed, float duration)</td></tr>
+<tr class="separator:a2a31ff9850f701075865a96fa0d0816f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf709ba5aa8c1759c8ae7545ed7d259c"><td class="memItemLeft" align="right" valign="top"><a id="acf709ba5aa8c1759c8ae7545ed7d259c"></a>
+<a class="el" href="structCommand.html">Command</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>setWinchLowerDistance</b> (float distance)</td></tr>
+<tr class="separator:acf709ba5aa8c1759c8ae7545ed7d259c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18df2d81039392daeb0b78c346a70537"><td class="memItemLeft" align="right" valign="top"><a id="a18df2d81039392daeb0b78c346a70537"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCommand.html#a18df2d81039392daeb0b78c346a70537">Command</a> ()</td></tr>
 <tr class="memdesc:a18df2d81039392daeb0b78c346a70537"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>

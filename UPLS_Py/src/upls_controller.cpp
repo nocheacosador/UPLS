@@ -82,6 +82,9 @@ bool UPLS_Controller::start()
 		error("Failed to open serial port.");
 	}
 
+	auto packet = PacketHandler::createCommand(Command::StartCommunication, Device::MainController);
+	m_serial.write(&packet, sizeof(Packet));
+
 	return ok;
 }
 
