@@ -89,8 +89,8 @@ const char sun[9][19] = {
 #define UART_RX		PB_11
 
 // Extruder control pins
-#define EXTRUDER_IN1	PA_2
-#define EXTRUDER_IN2	PA_3
+#define EXTRUDER_PWM	PA_2
+#define EXTRUDER_DIR	PA_3
 
 // nRF24L01+
 #define RF24_MISO		PB_14

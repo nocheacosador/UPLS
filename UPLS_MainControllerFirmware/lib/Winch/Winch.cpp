@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-Winch::Winch() : _en(false), _manual_duration(0.f), _extruder(EXTRUDER_IN1, EXTRUDER_IN2), 
+Winch::Winch() : _en(false), _manual_duration(0.f), _extruder(EXTRUDER_DIR, EXTRUDER_PWM), 
 	_target(0), _position(0), _status(Status::Unknown), _status_before_halt(Status::Unknown)
 { 
 	memset(_prev_currents, 0, W_CURRENT_BUFFER_SIZE * sizeof(uint16_t));

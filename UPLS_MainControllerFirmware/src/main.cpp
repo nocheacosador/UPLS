@@ -2,8 +2,8 @@
 
 #include <mbed.h>
 
-//#define TEST
-#if !defined(TEST)
+#define TEST_SPACE
+#if !defined(TEST_SPACE)
 
 #include "global_macros.h"
 #include "packet.h"
@@ -439,48 +439,85 @@ void sendInfoPackets()
 #else
 // TEST SPACE
 
+#include "global_macros.h"
 
 #include <Serial.h>
-#include <Ticker.h>
+#include "Extruder.h"
+
+#include <string>
 
 using namespace mbed;
 
-Serial 	serial(UART_TX, UART_RX, 115200);
+Serial serial(UART_TX, UART_RX, 115200);
+Extruder extruder(EXTRUDER_DIR, EXTRUDER_PWM);
 
-
-
-
-
-const float speeds[] = {
-	0, 0, 0, 0, 50, 100, 150, 200, 300, 300, 100, 100, 100,
-	0, 0, 0, 0, 100, 100, 100, 100, 100, 0, 0, 0, 0, 300, 300, 300, 300
-};
-
-
-Ticker set_ticker;
-MotorSpeedControl motor;
-
-void set()
-{
-	static int count;
-
-	motor.speed(speeds[count]);
-	
-	count++;
-	count %= 30;
-}
+char buf[100];
+int buf_index = 0;
 
 int main()
 {	
-	serial.printf("Winch motor speed test.\n");
+	serial.printf("Extruder test.\n");
 
-	motor.enable(true);
-	set_ticker.attach(set, 1.f);
-	
 	while (1)
 	{
-		
+		buf_index = 0;
+		while (true)
+		{
+			if (serial.readable())
+			{
+				char c = serial.getc();
+				if (c == '\n' || c == '\r') break;
+				buf[buf_index++] = c;
+			}
+		}
+		buf[buf_index++] = '\0';
+
+		char c_str[50];
+		float speed = 1.f;
+
+		auto args_read = sscanf(buf, "%s %f", c_str, &speed);
+
+		if (args_read == 0)
+		{
+			extruder.stop();
+			serial.printf("No args read.\n");
+			continue;
+		}
+
+		std::string str(c_str);
+
+		if (str == "extrude")
+		{
+			if (args_read == 2)
+			{
+				if (speed > 1.f) speed = 1.f;
+				else if (speed < 0.f) speed = 0.f;
+			}
+
+			extruder.extrude(speed);
+			serial.printf("Extruding... speed = %f\n", speed);
+		}
+		else if (str == "retract")
+		{
+			if (args_read == 2)
+			{
+				if (speed > 1.f) speed = 1.f;
+				else if (speed < 0.f) speed = 0.f;
+			}
+			extruder.retract(speed);
+			serial.printf("Retracting... speed = %f\n", speed);
+		}
+		else if (str == "stop")
+		{
+			extruder.stop();
+			serial.printf("Stopped.\n");
+		}
+		else
+		{
+			extruder.stop();
+			serial.printf("Unknown command: \"%s\"\n", str.c_str());
+		}
 	}
 }
 
-#endif
+#endif // TEST_SPACE
