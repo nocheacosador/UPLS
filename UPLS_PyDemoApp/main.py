@@ -91,11 +91,11 @@ class MainApp:
 		#self.win_Info.geometry("400x300+300+300")
 
 		# setup background
-		load = Image.open('/home/lukas/Desktop/domicele.png')
-		background_image = ImageTk.PhotoImage(load)
-		background_label = Label(self.win_Info, image=background_image)
-		background_label.image = background_image
-		background_label.place(x=0, y=0)
+		# load = Image.open('/home/lukas/Desktop/domicele.png')
+		# background_image = ImageTk.PhotoImage(load)
+		# background_label = Label(self.win_Info, image=background_image)
+		# background_label.image = background_image
+		# background_label.place(x=0, y=0)
 
 		self.win_Info.resizable(False, False)
 		self.win_Info.protocol("WM_DELETE_WINDOW", self.__onClosing)
