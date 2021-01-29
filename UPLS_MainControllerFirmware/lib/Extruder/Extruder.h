@@ -3,6 +3,7 @@
 
 #include "../../include/global_macros.h"
 #include <PwmOut.h>
+#include <DigitalOut.h>
 
 class Extruder
 {
@@ -13,14 +14,42 @@ public:
 	 * Negative values - retract
 	 * Zero - stop()
 	*/
-	void turn(float speed);
-	void extrude(float speed = 1.f);
-	void retract(float speed = 1.f);
-	void stop();
+	void turn(float speed)
+	{
+		if (speed > 0.f)
+		{
+			extrude(speed);
+		}
+		else if (speed < 0.f)
+		{
+			retract(speed * -1.f);
+		}
+		else
+		{
+			stop();
+		}
+	}
+	
+	void extrude(float speed = 1.f)
+	{
+		m_pwm = speed;
+		m_dir = 0;
+	}
+	
+	void retract(float speed = 1.f)
+	{
+		m_pwm = speed;
+		m_dir = 1;
+	}
+	
+	void stop()
+	{
+		m_pwm = 0;
+	}
 
 private:
-	mbed::PwmOut m_in1;
-	mbed::PwmOut m_in2;
+	mbed::PwmOut m_pwm;
+	mbed::DigitalOut m_dir;
 };
 
 #endif // EXTRUDER_H_

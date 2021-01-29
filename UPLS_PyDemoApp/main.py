@@ -142,6 +142,18 @@ class MainApp:
 		self.buttons.append(Button(self.frames[-1], state="disabled", text="Leds Off", command=self.upls.ledsOff))
 		self.buttons[-1].pack(side='top', padx=2, pady=2)
 
+		values_list = []
+		for value in LedInfo.Led.Mode.values:
+			values_list.append(value)
+
+		cmb = ttk.Combobox(self.frames[-1], values=values_list, state='readonly')
+		cmb.current(0)
+		cmb.pack(side='top', padx=2, pady=2)
+
+		self.buttons.append(Button(self.frames[-1], state="disabled", text="Set Mode", 
+							command=lambda : self.upls.ledsSetMode(LedInfo.Led.Mode.values[cmb.get()])))
+		self.buttons[-1].pack(side='top', padx=2, pady=2)
+
 		self.frames.append(Frame(self.win_Command, relief="ridge", borderwidth=2))
 		self.frames[-1].pack(side="left", padx=3, pady=3)
 
