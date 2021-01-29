@@ -130,7 +130,11 @@ private:
 
 	float m_extruderTransferFunction(float winch_speed)
 	{
-		return K* winch_speed
+		const float SLOPE = 1.f;
+		const float OFFSET = 1.f;
+		const float REVERSE_OFFSET = 0.5f;
+
+		return winch_speed;
 	}
 };
 

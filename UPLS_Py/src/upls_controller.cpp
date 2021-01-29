@@ -338,14 +338,40 @@ float UPLS_Controller::mainControllerInfoUpdateFrequency()
 void UPLS_Controller::ledsOn()
 {
 	Packet packet;
-	packet = PacketHandler::createCommand(Command(Command::LedsOn));
+	packet = PacketHandler::createCommand(Command(Command::LedsOnAll));
 	m_serial.write(&packet, sizeof(Packet));
 }
 
 void UPLS_Controller::ledsOff()
 {
 	Packet packet;
-	packet = PacketHandler::createCommand(Command(Command::LedsOff));
+	packet = PacketHandler::createCommand(Command(Command::LedsOffAll));
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::ledsEnable()
+{
+	Packet packet = PacketHandler::createCommand(Command(Command::LedsEnableAll));
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::ledsDisable()
+{
+	Packet packet = PacketHandler::createCommand(Command(Command::LedsDisableAll));
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::ledsSetMode(LedInfo::Led::Mode mode)
+{
+	Packet packet = PacketHandler::createCommand(
+		Command(Command::LedsSetModeAll).setLedMode(mode) );
+	m_serial.write(&packet, sizeof(Packet));
+}
+
+void UPLS_Controller::ledsSetSettings(LedInfo::Led::Settings settings)
+{
+	Packet packet = PacketHandler::createCommand(
+		Command(Command::LedsSetSettingsAll).setLedSettings(settings) );
 	m_serial.write(&packet, sizeof(Packet));
 }
 

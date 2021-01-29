@@ -212,11 +212,11 @@ public:
 	 * \brief Test function.
 	 */
 	void ledsOn();
-	
-	/**
-	 * \brief Test function.
-	 */
 	void ledsOff();
+	void ledsEnable();
+	void ledsDisable();
+	void ledsSetMode(LedInfo::Led::Mode mode);
+	void ledsSetSettings(LedInfo::Led::Settings settings);
 
 	void latchOpen();
 

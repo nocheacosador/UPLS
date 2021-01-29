@@ -7,8 +7,7 @@ var searchData=
   ['led_15',['Led',['../structLedInfo_1_1Led.html',1,'LedInfo']]],
   ['ledinfo_16',['LedInfo',['../structLedInfo.html',1,'LedInfo'],['../classUPLS__Controller.html#aedc8e6557576ac5e9832bc77d25dfb68',1,'UPLS_Controller::ledInfo()']]],
   ['ledinfoupdatefrequency_17',['ledInfoUpdateFrequency',['../classUPLS__Controller.html#aa7274380d08224cf9597b17e23e09d62',1,'UPLS_Controller']]],
-  ['ledsoff_18',['ledsOff',['../classUPLS__Controller.html#a632beb1cf596401ed59ff0d607947157',1,'UPLS_Controller']]],
-  ['ledson_19',['ledsOn',['../classUPLS__Controller.html#a6d750312655e5a8e6e81f2e0262be33d',1,'UPLS_Controller']]],
-  ['leg_20',['Leg',['../structLandingGearInfo_1_1Leg.html',1,'LandingGearInfo']]],
-  ['listavailableports_21',['listAvailablePorts',['../classUPLS__Controller.html#aa8ddec7ecd2bb4636658766be9317257',1,'UPLS_Controller']]]
+  ['ledson_18',['ledsOn',['../classUPLS__Controller.html#a6d750312655e5a8e6e81f2e0262be33d',1,'UPLS_Controller']]],
+  ['leg_19',['Leg',['../structLandingGearInfo_1_1Leg.html',1,'LandingGearInfo']]],
+  ['listavailableports_20',['listAvailablePorts',['../classUPLS__Controller.html#aa8ddec7ecd2bb4636658766be9317257',1,'UPLS_Controller']]]
 ];

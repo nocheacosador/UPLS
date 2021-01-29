@@ -202,24 +202,82 @@ void handleReceivedCommand(const Command& command)
 
 	switch (command.code)
 	{
-	case Command::LedsOn:
+	case Command::LedsEnableAll:
+		led_front.enable(true);
+		led_rear.enable(true);
+		break;
+
+	case Command::LedsEnableFront:
+		led_front.enable(true);
+		break;
+
+	case Command::LedsEnableRear:
+		led_rear.enable(true);
+		break;
+
+	case Command::LedsDisableAll:
+		led_front.enable(false);
+		led_rear.enable(false);
+		break;
+
+	case Command::LedsDisableFront:
+		led_front.enable(false);
+		break;
+
+	case Command::LedsDisableRear:
+		led_rear.enable(false);
+		break;
+
+	case Command::LedsOnAll:
 		led_front.turnOn();
 		led_rear.turnOn();
 		break;
-	
-	case Command::LedsOff:
+
+	case Command::LedsOffAll:
 		led_front.turnOff();
 		led_rear.turnOff();
 		break;
 
-	case Command::SetLedMode:
+	case Command::LedsOnRear:
+		led_rear.turnOn();
+		break;
+
+	case Command::LedsOffRear:
+		led_rear.turnOff();
+		break;
+
+	case Command::LedsOnFront:
+		led_front.turnOn();
+		break;
+
+	case Command::LedsOffFront:
+		led_front.turnOff();
+		break;
+
+	case Command::LedsSetSettingsAll:
+		led_front.settings(command.ledSettings);
+		led_rear.settings(command.ledSettings);
+		break;
+
+	case Command::LedsSetSettingsRear:
+		led_rear.settings(command.ledSettings);
+		break;
+
+	case Command::LedsSetSettingsFront:
+		led_front.settings(command.ledSettings);
+		break;
+
+	case Command::LedsSetModeAll:
 		led_front.mode(command.ledMode);
 		led_rear.mode(command.ledMode);
 		break;
 	
-	case Command::SetLedSettings:
-		led_front.settings(command.ledSettings);
-		led_rear.settings(command.ledSettings);
+	case Command::LedsSetModeFront:
+		led_front.mode(command.ledMode);
+		break;
+
+	case Command::LedsSetModeRear:
+		led_rear.mode(command.ledMode);
 		break;
 
 	case Command::LandingGearExtract:
