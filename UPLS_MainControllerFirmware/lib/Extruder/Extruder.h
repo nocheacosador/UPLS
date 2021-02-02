@@ -32,19 +32,19 @@ public:
 	
 	void extrude(float speed = 1.f)
 	{
-		m_pwm = speed;
+		m_pwm = 1.f - speed;
 		m_dir = 0;
 	}
 	
 	void retract(float speed = 1.f)
 	{
-		m_pwm = speed;
+		m_pwm = 1.f - speed;
 		m_dir = 1;
 	}
 	
 	void stop()
 	{
-		m_pwm = 0;
+		m_pwm = 1.f;
 	}
 
 private:

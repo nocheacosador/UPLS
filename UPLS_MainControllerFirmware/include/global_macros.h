@@ -54,14 +54,14 @@ const char sun[9][19] = {
 #include <PinNames.h>
 
 // Led driver pins
-#define LEDS_REAR   PA_0	// PWM
-#define LEDS_FRONT  PB_1	// PWM
+#define LEDS_REAR   PA_0	// PWM_2
+#define LEDS_FRONT  PB_1	// PWM_1
 
 // Winch motor driver pins
 #define WINCH_MOTOR_ADC     	PA_1
-#define WINCH_MOTOR_SLP     	PB_5	// PWM
-#define WINCH_MOTOR_IN2      	PB_6
-#define WINCH_MOTOR_IN1     	PB_7
+#define WINCH_MOTOR_SLP     	PB_5	
+#define WINCH_MOTOR_IN2      	PB_6	// PWM_4
+#define WINCH_MOTOR_IN1     	PB_7	// PWM_4
 #define WINCH_MOTOR_ENCODER_A   PB_3
 #define WINCH_MOTOR_ENCODER_B	PB_4
 
@@ -69,14 +69,14 @@ const char sun[9][19] = {
 #define LEG_MOT_FRONT_ADC     		PA_6
 #define LEG_MOT_FRONT_IN1     		PA_11	
 #define LEG_MOT_FRONT_IN2           PA_12
-#define LEG_MOT_FRONT_SLP           PB_0	// PWM
+#define LEG_MOT_FRONT_SLP           PB_0	// PWM_1
 #define LEG_MOT_FRONT_POS_SWITCH	PA_4	// unused
 
 // Rear leg motor driver pins
 #define LEG_MOT_REAR_ADC     		PA_7
 #define LEG_MOT_REAR_IN1     		PA_8
 #define LEG_MOT_REAR_IN2     		PA_9
-#define LEG_MOT_REAR_SLP     		PA_10	// PWM
+#define LEG_MOT_REAR_SLP     		PA_10	// PWM_1
 #define LEG_MOT_REAR_POS_SWITCH		PA_5	// unused
 
 
@@ -89,7 +89,7 @@ const char sun[9][19] = {
 #define UART_RX		PB_11
 
 // Extruder control pins
-#define EXTRUDER_PWM	PA_2
+#define EXTRUDER_PWM	PA_2	// PWM_2
 #define EXTRUDER_DIR	PA_3
 
 // nRF24L01+

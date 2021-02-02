@@ -66,8 +66,6 @@ void Winch::enableManual(bool en)
 void Winch::m_motorPositionController()
 {
 	_position = m_getPositionMeters();
-	
-	_motor.getSpeed();
 
 	float pos_err = _target - _position;
 
@@ -132,6 +130,7 @@ void Winch::m_motorPositionController()
 		break;
 	}
 
+	_extruder.turn(m_extruderTransferFunction(_motor.getSpeed()));
 	_motor.speed(_value);
 }
 

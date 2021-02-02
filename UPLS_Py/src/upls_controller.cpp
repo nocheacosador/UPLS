@@ -93,6 +93,9 @@ bool UPLS_Controller::start()
 
 void UPLS_Controller::stop()
 {
+	auto packet = PacketHandler::createCommand(Command::EndCommunication, Device::MainController);
+	m_serial.write(&packet, sizeof(Packet));
+	
 	m_receiverRunning = false;
 	
 	if (m_receiverThread)

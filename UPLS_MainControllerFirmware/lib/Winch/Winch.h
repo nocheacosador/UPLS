@@ -8,7 +8,7 @@
 #include <Timer.h>
 #include <Ticker.h>
 #include "../Packet/packet.h"
-
+#include <cmath>
 
 #define W_MOTOR_SPEED_CONTROL
 #define W_POSITION_PID_DT		0.2f
@@ -130,12 +130,14 @@ private:
 
 	float m_extruderTransferFunction(float winch_speed)
 	{
-		const float SLOPE = 1.f;
-		const float OFFSET = 1.f;
-		const float REVERSE_OFFSET = 0.5f;
+		static constexpr float LOG2 = std::log(2.f);
 
-		return winch_speed;
+		if (winch_speed == 0.f)
+			return 0.f;
+		else if (winch_speed > 0.f)
+			return std::log(winch_speed) / LOG2 / 7.f;
+		else if (winch_speed < 0.f)
+			return std::log(winch_speed * -1.f) / LOG2 / -20.f;
 	}
 };
-
 #endif // WINCH_H_

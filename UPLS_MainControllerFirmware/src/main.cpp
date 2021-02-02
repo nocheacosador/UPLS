@@ -2,9 +2,6 @@
 
 #include <mbed.h>
 
-#define TEST_SPACE
-#if !defined(TEST_SPACE)
-
 #include "global_macros.h"
 #include "packet.h"
 #include "LoopController.h"
@@ -33,7 +30,6 @@ void radio_init();
 void landing_gear_init();
 
 void wait_for_connection();
-
 // handle functions
 void handleReceivedPacket(const Packet& packet);
 void handleReceivedCommand(const Command& command);
@@ -71,9 +67,7 @@ int main()
 	landing_gear_init();
 	winch.enable(true);
 	winch.enableManual(true);
-
 	//wait_for_connection();
-
 	while (1) 
 	{
 		while (serial.readable())
@@ -320,6 +314,13 @@ void handleReceivedCommand(const Command& command)
 		winch.enableManual(false);
 		break;
 
+	case Command::StartCommunication:
+		break;
+	
+	case Command::EndCommunication:
+		wait_for_connection();
+		break;
+
 	default:
 		packet = PacketHandler::createError(Error(Error::Code::UnknownPacket, "Unknown command received."), Device::Xavier);
 		sendToXavier(packet);
@@ -436,88 +437,3 @@ void sendInfoPackets()
 		lastMainController = now;
 	}
 }
-#else
-// TEST SPACE
-
-#include "global_macros.h"
-
-#include <Serial.h>
-#include "Extruder.h"
-
-#include <string>
-
-using namespace mbed;
-
-Serial serial(UART_TX, UART_RX, 115200);
-Extruder extruder(EXTRUDER_DIR, EXTRUDER_PWM);
-
-char buf[100];
-int buf_index = 0;
-
-int main()
-{	
-	serial.printf("Extruder test.\n");
-
-	while (1)
-	{
-		buf_index = 0;
-		while (true)
-		{
-			if (serial.readable())
-			{
-				char c = serial.getc();
-				if (c == '\n' || c == '\r') break;
-				buf[buf_index++] = c;
-			}
-		}
-		buf[buf_index++] = '\0';
-
-		char c_str[50];
-		float speed = 1.f;
-
-		auto args_read = sscanf(buf, "%s %f", c_str, &speed);
-
-		if (args_read == 0)
-		{
-			extruder.stop();
-			serial.printf("No args read.\n");
-			continue;
-		}
-
-		std::string str(c_str);
-
-		if (str == "extrude")
-		{
-			if (args_read == 2)
-			{
-				if (speed > 1.f) speed = 1.f;
-				else if (speed < 0.f) speed = 0.f;
-			}
-
-			extruder.extrude(speed);
-			serial.printf("Extruding... speed = %f\n", speed);
-		}
-		else if (str == "retract")
-		{
-			if (args_read == 2)
-			{
-				if (speed > 1.f) speed = 1.f;
-				else if (speed < 0.f) speed = 0.f;
-			}
-			extruder.retract(speed);
-			serial.printf("Retracting... speed = %f\n", speed);
-		}
-		else if (str == "stop")
-		{
-			extruder.stop();
-			serial.printf("Stopped.\n");
-		}
-		else
-		{
-			extruder.stop();
-			serial.printf("Unknown command: \"%s\"\n", str.c_str());
-		}
-	}
-}
-
-#endif // TEST_SPACE
