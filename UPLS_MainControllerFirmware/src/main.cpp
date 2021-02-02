@@ -67,7 +67,8 @@ int main()
 	landing_gear_init();
 	winch.enable(true);
 	winch.enableManual(true);
-	//wait_for_connection();
+	wait_for_connection();
+	
 	while (1) 
 	{
 		while (serial.readable())

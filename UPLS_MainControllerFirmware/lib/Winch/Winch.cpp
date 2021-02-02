@@ -80,7 +80,7 @@ void Winch::m_motorPositionController()
 			_target = 0.f;
 		}
 		else if (_position > 1.0f)
-			_value = WINCH_MAX_SPEED * -1.f;
+			_value = WINCH_MAX_RETURN_SPEED * -1.f;
 		else
 			_value = WINCH_HOME_SEARCHING_SPEED * -1.f;
 		break;

@@ -107,7 +107,8 @@ const char sun[9][19] = {
 #define WINCH_LOWERING_GROUND_SPEED		0.1f		// m/s
 #define WINCH_SPEED_GROUND_DISTANCE		1.f			// meters
 #define WINCH_MAX_LOWERING_ACCELERATION	100.f		// RPM/s
-#define WINCH_MAX_SPEED					250.f		// RPM
+#define WINCH_MAX_RETURN_SPEED			270.f
+#define WINCH_MAX_SPEED					200.f		// RPM
 #define WINCH_HOME_SEARCHING_SPEED		100.f		// RPM
 #define WINCH_HOME_SEARCHING_CUR_TRESH	800			// milliamperes
 #define WINCH_MOTOR_R_IPROPI			2200.f		// ohms
