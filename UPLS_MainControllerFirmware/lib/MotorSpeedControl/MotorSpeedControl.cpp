@@ -27,10 +27,15 @@ void MotorSpeedControl::pid()
 	if (_value > 1.f) _value = 1.f;
 	else if (_value < -1.f) _value = -1.f;
 
-	if (_target_speed == 0.0f && abs(_actual_speed) < 1.0f)
-		_mot.brake();
-	else
-		_mot.turn(_value);
+	if (_target_speed == 0.0f && (abs(_actual_speed) < 0.5f))
+	{
+		//_value = 0.f;
+		if (_integral_term > 0.1f) _integral_term -= 0.1f;
+		else if (_integral_term < -0.1f) _integral_term += 0.1f;
+		else _integral_term = 0.f;
+	}
 	
+	_mot.turn(_value);
+
 	_prev_err = _error;
 }

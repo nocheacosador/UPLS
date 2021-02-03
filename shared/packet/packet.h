@@ -238,7 +238,8 @@ struct BINDINGS_API __NO_PADDING__ WinchInfo
 		Halted,
 		Lowered,
 		Home,
-		Manual
+		Manual,
+		Docking
 	};
 
 # if defined(__XAVIER)
@@ -404,12 +405,13 @@ struct BINDINGS_API __NO_PADDING__ Command
 	enum Code : uint8_t
 #endif
 	{
-		Unknown = 0,
-		LatchClose,
-		LatchOpen,
-		SetLatchClosePulseDuration,
-		SetLatchOpenPulseDuration,
-		StatusRequest,
+		Unknown = 0,  					// do not change
+		LatchClose = 1,					// do not change
+		LatchOpen = 2,					// do not change
+		SetLatchClosePulseDuration = 3,	// do not change
+		SetLatchOpenPulseDuration = 4,	// do not change
+		StatusRequest = 7,				// do not change
+		HookShutdown = 12,				// do not change
 		LedsEnableAll,
 		LedsEnableFront,
 		LedsEnableRear,
@@ -430,7 +432,6 @@ struct BINDINGS_API __NO_PADDING__ Command
 		LedsSetModeFront,
 		LandingGearExtract,
 		LandingGearRetract,
-		HookShutdown,
 		WinchManualUp,
 		WinchManualDown,
 		WinchLower,

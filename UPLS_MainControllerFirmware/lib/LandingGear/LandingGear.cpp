@@ -1,11 +1,10 @@
 #include "LandingGear.h"
 
 LandingGear::Leg::Leg(PinName inputPin1, PinName inputPin2, PinName sleepPin, PinName adcPin, float Ripropi)
-	: _en(false), _buf_index(0), _current_sum(0), _value(0.f),
+	: _en(false), _value(0.f),
 	 _status(Status::Unknown),
 	 _motor(inputPin1, inputPin2, sleepPin, adcPin, Ripropi)
 {
-	memset(_prev_currents, 0, LG_CURRENT_BUFFER_SIZE * sizeof(uint16_t));
 }
 
 void LandingGear::Leg::enable(bool en)
@@ -15,27 +14,15 @@ void LandingGear::Leg::enable(bool en)
 		_en = true;
 		_status = Status::InDownTransit;
 		_ticker.attach(this, &LandingGear::Leg::_handler, 0.1f);
-		_current_measure_tick.attach(this, &LandingGear::Leg::_current_monitor, 0.011f);
 	}
 	else if (_en)
 	{
 		_ticker.detach();
 		_motor.stop();
-		memset(_prev_currents, 0, LG_CURRENT_BUFFER_SIZE * sizeof(uint16_t));
 		_value = 0.0;
-		_current_sum = 0;
 		_status = Status::Unknown;
 		_en = false;
 	}
-}
-
-void LandingGear::Leg::_current_monitor()
-{
-	_current_sum -= _prev_currents[_buf_index];
-	_prev_currents[_buf_index] = uint16_t(_motor.getCurrent() * 1000.f);
-	_current_sum += _prev_currents[_buf_index];
-	_buf_index++;
-	_buf_index %= LG_CURRENT_BUFFER_SIZE;
 }
 
 void LandingGear::Leg::_handler()

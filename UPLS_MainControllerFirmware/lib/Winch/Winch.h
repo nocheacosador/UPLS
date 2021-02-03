@@ -5,9 +5,9 @@
 #include "../../include/global_macros.h"
 #include "../MotorSpeedControl/MotorSpeedControl.h"
 #include "../Extruder/Extruder.h"
+#include "../Packet/packet.h"
 #include <Timer.h>
 #include <Ticker.h>
-#include "../Packet/packet.h"
 #include <cmath>
 
 #define W_MOTOR_SPEED_CONTROL
@@ -30,6 +30,11 @@ public:
 	{ 
 		if (_status != Status::Halted && _status != Status::Manual)
 		{
+			if (_status == Status::Docking)
+			{
+				_motor.resetPid();
+				_motor.enable(true);
+			}
 			_status = Status::GoingHome;
 			_target = 0.f;
 			_value = 0.0f;
@@ -39,6 +44,11 @@ public:
 	{
 		if (_status != Status::Halted && _status != Status::Manual)
 		{
+			if (_status == Status::Docking)
+			{
+				_motor.resetPid();
+				_motor.enable(true);
+			}
 			_status = Status::Lowering;
 			_target = value;
 			_value = 0.0f;
@@ -47,7 +57,7 @@ public:
 
 	float getPosition() { return _position; }
 	
-	uint16_t getCurrent() { return _current_sum / W_CURRENT_BUFFER_SIZE; }
+	uint16_t getCurrent() { return uint16_t(_motor.getCurrent() * 1000.f); }
 
 	float getTarget() { return _target; }
 
@@ -65,6 +75,11 @@ public:
 	{ 
 		if (_status != Status::Halted && _status != Status::Manual) 
 		{
+			if (_status == Status::Docking)
+			{
+				_motor.resetPid();
+				_motor.enable(true);
+			}
 			_status_before_halt = _status; 
 			_status = Status::Halted;
 		}
@@ -105,23 +120,19 @@ private:
 	volatile Status _status;
 	Status _status_before_halt;
 
-	uint16_t _prev_currents[W_CURRENT_BUFFER_SIZE];
-	volatile uint32_t _buf_index = 0;
-	volatile uint32_t _current_sum = 0;
-
 	volatile float _target;
 	volatile float _position;
 	volatile float _value = 0.f;
 
+	int _docking_counter = 0;
+
 	MotorSpeedControl _motor;
 	Extruder _extruder;
 
-	mbed::Ticker _cur_ticker;
 	mbed::Ticker _pos_ticker;
 	mbed::Timer _timer;
 
 	void m_motorPositionController();
-	void m_motorCurrentSampler();
 
 	float m_getPositionMeters()
 	{

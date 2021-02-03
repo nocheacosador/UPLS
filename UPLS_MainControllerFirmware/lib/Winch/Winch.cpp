@@ -5,7 +5,7 @@
 Winch::Winch() : _en(false), _manual_duration(0.f), _extruder(EXTRUDER_DIR, EXTRUDER_PWM), 
 	_target(0), _position(0), _status(Status::Unknown), _status_before_halt(Status::Unknown)
 { 
-	memset(_prev_currents, 0, W_CURRENT_BUFFER_SIZE * sizeof(uint16_t));
+	_motor.motor().enableAutomaticBraking(true);
 }
 
 void Winch::enable(bool enable) 
@@ -15,7 +15,6 @@ void Winch::enable(bool enable)
 		_en = true;
 		_motor.enable(true);
 		_pos_ticker.attach(this, &Winch::m_motorPositionController, W_POSITION_PID_DT);
-		_cur_ticker.attach(this, &Winch::m_motorCurrentSampler, 0.09f);
 		_position = m_getPositionMeters();
 		_target = _position;
 		if (_position < 0.01f)
@@ -26,11 +25,9 @@ void Winch::enable(bool enable)
 	else if (_en)
 	{
 		_pos_ticker.detach();
-		_cur_ticker.detach();
 		_motor.enable(false);
-		memset(_prev_currents, 0, W_CURRENT_BUFFER_SIZE * sizeof(uint16_t));
+		_motor.motor().stop();
 		_value = 0.f;
-		_current_sum = 0;
 		_en = false;
 		_status = Status::Unknown;
 		_position = 0;
@@ -43,6 +40,11 @@ void Winch::enableManual(bool en)
 {
 	if (en && _status != Status::Manual)
 	{
+		if (_status == Status::Docking)
+		{
+			_motor.resetPid();
+			_motor.enable(true);
+		}
 		_status = Status::Manual;
 		_timer.start();
 		_manual_duration = 0.f;
@@ -68,26 +70,62 @@ void Winch::m_motorPositionController()
 	_position = m_getPositionMeters();
 
 	float pos_err = _target - _position;
-
+	
 	switch (_status)
 	{
+	case Status::Docking:
+		switch (_docking_counter)
+		{
+		case 0:
+			_motor.enable(false);
+			_motor.motor().turn(0.5f);
+			break;
+
+		case 1:
+			_motor.motor().turn(0.4f);
+			break;
+
+		case 2:
+			_motor.motor().turn(0.3f);
+			break;
+
+		case 3:
+			_motor.motor().turn(0.2f);
+			break;
+
+		case 4:
+			_motor.motor().turn(0.1f);
+			break;
+
+		default:
+			_motor.motor().turn(0.f);
+			_motor.resetPid();
+			_motor.enable(true);
+			_status = Status::Home;
+			break;
+		}
+
+		_docking_counter++;
+		break;
+
 	case Status::GoingHome:
 		if (getCurrent() > WINCH_HOME_SEARCHING_CUR_TRESH)
 		{
 			_value = 0.0f;
-			_status = Status::Home;
+			_docking_counter = 0;
+			_status = Status::Docking;
 			saveHome();
 			_target = 0.f;
 		}
-		else if (_position > 1.0f)
-			_value = WINCH_MAX_SPEED * -1.f;
+		else if (_position > 0.8f)
+			_value = WINCH_MAX_RETURN_SPEED * -1.f;
 		else
 			_value = WINCH_HOME_SEARCHING_SPEED * -1.f;
 		break;
 
 	case Status::Home:
-		//if (abs(_position) > 0.05f)
-		//	_status = Status::GoingHome;
+		if (_position > 0.02f)
+			_status = Status::GoingHome;
 		_value = 0.f;
 		break;
 
@@ -109,7 +147,7 @@ void Winch::m_motorPositionController()
 		break;
 
 	case Status::Lowered:
-		if (abs(pos_err) > 0.05f)
+		if (abs(pos_err) > 0.01f)
 			_status = Status::Lowering;
 		break;
 
@@ -132,13 +170,4 @@ void Winch::m_motorPositionController()
 
 	_extruder.turn(m_extruderTransferFunction(_motor.getSpeed()));
 	_motor.speed(_value);
-}
-
-void Winch::m_motorCurrentSampler()
-{
-	_current_sum -= _prev_currents[_buf_index];
-	_prev_currents[_buf_index] = uint16_t(_motor.getCurrent() * 1000.f);
-	_current_sum += _prev_currents[_buf_index];
-	_buf_index++;
-	_buf_index %= W_CURRENT_BUFFER_SIZE;
 }

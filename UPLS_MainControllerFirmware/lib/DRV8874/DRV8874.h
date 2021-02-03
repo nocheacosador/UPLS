@@ -2,8 +2,8 @@
 #define DRV8874_H_
 
 #include "../../include/global_macros.h"
+#include "../RmsAdc/RmsAdc.h"
 #include <DigitalOut.h>
-#include <AnalogIn.h>
 #include <PwmOut.h>
 
 #define MOTOR_REVERSE
@@ -72,7 +72,7 @@ private:
 	mbed::DigitalOut 	m_in1;
 	mbed::DigitalOut 	m_in2;
 	mbed::PwmOut		m_slp;
-	mbed::AnalogIn		m_adc;
+	DefaultRmsAdc		m_adc;
 	
 	bool 	m_automaticBraking;
 	float 	m_resistor;
@@ -123,7 +123,7 @@ public:
 	mbed::PwmOut	 	m_in1;
 	mbed::PwmOut 		m_in2;
 	mbed::DigitalOut	m_slp;
-	mbed::AnalogIn		m_adc;
+	DefaultRmsAdc		m_adc;
 	
 	bool 	m_automaticBraking;
 	float 	m_resistor;

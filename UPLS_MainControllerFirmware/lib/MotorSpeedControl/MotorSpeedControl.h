@@ -23,7 +23,6 @@ public:
 		{
 			_pid_ticker.detach();
 		}
-		
 	}
 
 	float getSetSpeed()
@@ -46,6 +45,12 @@ public:
 		return _mot.getCurrent();
 	}
 
+	void resetPid()
+	{
+		_prev_err = 0;
+		_integral_term = 0;
+	}
+
 	Encoder& encoder()
 	{
 		return _enc;
@@ -63,9 +68,9 @@ private:
 
 	float _error = 0.0f;
 	float _target_speed = 0.0f;
-	float _actual_speed = 0.0f;
-	float _integral_term = 0.0f;
-	float _prev_err = 0.0f;
+	volatile float _actual_speed = 0.0f;
+	volatile float _integral_term = 0.0f;
+	volatile float _prev_err = 0.0f;
 	float _prev_pos = 0.0f;
 	float _value = 0.f;
 	const float dt = 0.05f;
