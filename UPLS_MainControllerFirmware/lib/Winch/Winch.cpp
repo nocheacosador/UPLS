@@ -6,6 +6,7 @@ Winch::Winch() : _en(false), _manual_duration(0.f), _extruder(EXTRUDER_DIR, EXTR
 	_target(0), _position(0), _status(Status::Unknown), _status_before_halt(Status::Unknown)
 { 
 	memset(_prev_currents, 0, W_CURRENT_BUFFER_SIZE * sizeof(uint16_t));
+	_motor.motor().enableAutomaticBraking(true);
 }
 
 void Winch::enable(bool enable) 
@@ -79,15 +80,15 @@ void Winch::m_motorPositionController()
 			saveHome();
 			_target = 0.f;
 		}
-		else if (_position > 1.0f)
+		else if (_position > 0.8f)
 			_value = WINCH_MAX_RETURN_SPEED * -1.f;
 		else
 			_value = WINCH_HOME_SEARCHING_SPEED * -1.f;
 		break;
 
 	case Status::Home:
-		//if (abs(_position) > 0.05f)
-		//	_status = Status::GoingHome;
+		if (_position > 0.05f)
+			_status = Status::GoingHome;
 		_value = 0.f;
 		break;
 
@@ -109,7 +110,7 @@ void Winch::m_motorPositionController()
 		break;
 
 	case Status::Lowered:
-		if (abs(pos_err) > 0.05f)
+		if (abs(pos_err) > 0.01f)
 			_status = Status::Lowering;
 		break;
 

@@ -52,8 +52,11 @@ forceinline void sendToHook(Packet& packet)
 	radio.openWritingPipe(addresses[0]);
 	
 	if (!radio.write(&packet, sizeof(Packet)))
+	{
 		failed_send_packets++;
-
+		Packet packet = PacketHandler::createError(Error(Error::Other, "Failed to send packet."));
+		sendToXavier(packet);
+	}
 	radio.openReadingPipe(1, addresses[1]);
 	radio.startListening();
 }
