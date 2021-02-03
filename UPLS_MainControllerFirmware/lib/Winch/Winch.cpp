@@ -26,6 +26,7 @@ void Winch::enable(bool enable)
 	{
 		_pos_ticker.detach();
 		_motor.enable(false);
+		_motor.motor().stop();
 		_value = 0.f;
 		_en = false;
 		_status = Status::Unknown;
@@ -39,6 +40,11 @@ void Winch::enableManual(bool en)
 {
 	if (en && _status != Status::Manual)
 	{
+		if (_status == Status::Docking)
+		{
+			_motor.resetPid();
+			_motor.enable(true);
+		}
 		_status = Status::Manual;
 		_timer.start();
 		_manual_duration = 0.f;
@@ -64,14 +70,50 @@ void Winch::m_motorPositionController()
 	_position = m_getPositionMeters();
 
 	float pos_err = _target - _position;
-
+	
 	switch (_status)
 	{
+	case Status::Docking:
+		switch (_docking_counter)
+		{
+		case 0:
+			_motor.enable(false);
+			_motor.motor().turn(0.5f);
+			break;
+
+		case 1:
+			_motor.motor().turn(0.4f);
+			break;
+
+		case 2:
+			_motor.motor().turn(0.3f);
+			break;
+
+		case 3:
+			_motor.motor().turn(0.2f);
+			break;
+
+		case 4:
+			_motor.motor().turn(0.1f);
+			break;
+
+		default:
+			_motor.motor().turn(0.f);
+			_motor.resetPid();
+			_motor.enable(true);
+			_status = Status::Home;
+			break;
+		}
+
+		_docking_counter++;
+		break;
+
 	case Status::GoingHome:
 		if (getCurrent() > WINCH_HOME_SEARCHING_CUR_TRESH)
 		{
 			_value = 0.0f;
-			_status = Status::Home;
+			_docking_counter = 0;
+			_status = Status::Docking;
 			saveHome();
 			_target = 0.f;
 		}
@@ -82,7 +124,7 @@ void Winch::m_motorPositionController()
 		break;
 
 	case Status::Home:
-		if (_position > 0.05f)
+		if (_position > 0.02f)
 			_status = Status::GoingHome;
 		_value = 0.f;
 		break;

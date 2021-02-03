@@ -30,6 +30,11 @@ public:
 	{ 
 		if (_status != Status::Halted && _status != Status::Manual)
 		{
+			if (_status == Status::Docking)
+			{
+				_motor.resetPid();
+				_motor.enable(true);
+			}
 			_status = Status::GoingHome;
 			_target = 0.f;
 			_value = 0.0f;
@@ -39,6 +44,11 @@ public:
 	{
 		if (_status != Status::Halted && _status != Status::Manual)
 		{
+			if (_status == Status::Docking)
+			{
+				_motor.resetPid();
+				_motor.enable(true);
+			}
 			_status = Status::Lowering;
 			_target = value;
 			_value = 0.0f;
@@ -65,6 +75,11 @@ public:
 	{ 
 		if (_status != Status::Halted && _status != Status::Manual) 
 		{
+			if (_status == Status::Docking)
+			{
+				_motor.resetPid();
+				_motor.enable(true);
+			}
 			_status_before_halt = _status; 
 			_status = Status::Halted;
 		}
@@ -108,6 +123,8 @@ private:
 	volatile float _target;
 	volatile float _position;
 	volatile float _value = 0.f;
+
+	int _docking_counter = 0;
 
 	MotorSpeedControl _motor;
 	Extruder _extruder;

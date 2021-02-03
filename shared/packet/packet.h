@@ -238,7 +238,8 @@ struct BINDINGS_API __NO_PADDING__ WinchInfo
 		Halted,
 		Lowered,
 		Home,
-		Manual
+		Manual,
+		Docking
 	};
 
 # if defined(__XAVIER)
