@@ -27,7 +27,7 @@ public:
 		void extract() { if (_en) _status = Status::InDownTransit; }
 		void enable(bool en);
 
-		uint16_t getCurrent() { return _current_sum / LG_CURRENT_BUFFER_SIZE; }
+		uint16_t getCurrent() { return uint16_t(_motor.getCurrent()); }
 		uint8_t getValue() { return uint8_t(abs(_value * 255.f)); }
 		Status getStatus() { return _status; }
 
@@ -37,15 +37,10 @@ public:
 		
 		bool _en;
 
-		uint16_t _prev_currents[LG_CURRENT_BUFFER_SIZE];
-		volatile uint32_t _buf_index;
-		volatile uint32_t _current_sum;
-
 		volatile float _value;
 		volatile Status _status;
 
 		mbed::Ticker _ticker;
-		mbed::Ticker _current_measure_tick;
 		mbed::Timer _timer;
 		DRV8874 _motor;
 	};

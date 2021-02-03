@@ -5,9 +5,9 @@
 #include "../../include/global_macros.h"
 #include "../MotorSpeedControl/MotorSpeedControl.h"
 #include "../Extruder/Extruder.h"
+#include "../Packet/packet.h"
 #include <Timer.h>
 #include <Ticker.h>
-#include "../Packet/packet.h"
 #include <cmath>
 
 #define W_MOTOR_SPEED_CONTROL
@@ -47,7 +47,7 @@ public:
 
 	float getPosition() { return _position; }
 	
-	uint16_t getCurrent() { return _current_sum / W_CURRENT_BUFFER_SIZE; }
+	uint16_t getCurrent() { return uint16_t(_motor.getCurrent() * 1000.f); }
 
 	float getTarget() { return _target; }
 
@@ -105,10 +105,6 @@ private:
 	volatile Status _status;
 	Status _status_before_halt;
 
-	uint16_t _prev_currents[W_CURRENT_BUFFER_SIZE];
-	volatile uint32_t _buf_index = 0;
-	volatile uint32_t _current_sum = 0;
-
 	volatile float _target;
 	volatile float _position;
 	volatile float _value = 0.f;
@@ -116,12 +112,10 @@ private:
 	MotorSpeedControl _motor;
 	Extruder _extruder;
 
-	mbed::Ticker _cur_ticker;
 	mbed::Ticker _pos_ticker;
 	mbed::Timer _timer;
 
 	void m_motorPositionController();
-	void m_motorCurrentSampler();
 
 	float m_getPositionMeters()
 	{

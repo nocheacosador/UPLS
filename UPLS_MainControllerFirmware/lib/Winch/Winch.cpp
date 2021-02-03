@@ -5,7 +5,6 @@
 Winch::Winch() : _en(false), _manual_duration(0.f), _extruder(EXTRUDER_DIR, EXTRUDER_PWM), 
 	_target(0), _position(0), _status(Status::Unknown), _status_before_halt(Status::Unknown)
 { 
-	memset(_prev_currents, 0, W_CURRENT_BUFFER_SIZE * sizeof(uint16_t));
 	_motor.motor().enableAutomaticBraking(true);
 }
 
@@ -16,7 +15,6 @@ void Winch::enable(bool enable)
 		_en = true;
 		_motor.enable(true);
 		_pos_ticker.attach(this, &Winch::m_motorPositionController, W_POSITION_PID_DT);
-		_cur_ticker.attach(this, &Winch::m_motorCurrentSampler, 0.09f);
 		_position = m_getPositionMeters();
 		_target = _position;
 		if (_position < 0.01f)
@@ -27,11 +25,8 @@ void Winch::enable(bool enable)
 	else if (_en)
 	{
 		_pos_ticker.detach();
-		_cur_ticker.detach();
 		_motor.enable(false);
-		memset(_prev_currents, 0, W_CURRENT_BUFFER_SIZE * sizeof(uint16_t));
 		_value = 0.f;
-		_current_sum = 0;
 		_en = false;
 		_status = Status::Unknown;
 		_position = 0;
@@ -133,13 +128,4 @@ void Winch::m_motorPositionController()
 
 	_extruder.turn(m_extruderTransferFunction(_motor.getSpeed()));
 	_motor.speed(_value);
-}
-
-void Winch::m_motorCurrentSampler()
-{
-	_current_sum -= _prev_currents[_buf_index];
-	_prev_currents[_buf_index] = uint16_t(_motor.getCurrent() * 1000.f);
-	_current_sum += _prev_currents[_buf_index];
-	_buf_index++;
-	_buf_index %= W_CURRENT_BUFFER_SIZE;
 }

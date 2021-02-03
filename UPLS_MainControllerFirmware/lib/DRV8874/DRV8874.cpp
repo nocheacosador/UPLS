@@ -109,8 +109,7 @@ void DRV8874::turnCCW(float speed)
 
 float DRV8874::getCurrent()
 {
-	volatile float result = m_adc.read() * ADC_V_REF / m_resistor / 0.00045f;
-	return result;
+	return m_adc.getRmsFloat() * ADC_V_REF / m_resistor / 0.00045f;
 }
 
 DRV8874_Proper::DRV8874_Proper(PinName inputPin1, PinName inputPin2, PinName sleepPin, PinName adcPin, float Ripropi)
@@ -214,6 +213,5 @@ void DRV8874_Proper::turnCCW(float speed)
 
 float DRV8874_Proper::getCurrent()
 {
-	volatile float result = m_adc.read() * ADC_V_REF / m_resistor / 0.00045f;
-	return result;
+	return m_adc.getRmsFloat() * ADC_V_REF / m_resistor / 0.00045f;
 }

@@ -1,5 +1,8 @@
 #pragma GCC diagnostic ignored "-Wreorder"
 
+//#define TEST_SPACE
+
+#ifndef TEST_SPACE
 #include <mbed.h>
 
 #include "global_macros.h"
@@ -441,3 +444,85 @@ void sendInfoPackets()
 		lastMainController = now;
 	}
 }
+
+#else // TEST_SPACE
+
+#include "global_macros.h"
+
+#include <Serial.h>
+#include <Timer.h>
+#include "MotorSpeedControl.h"
+
+#include <string>
+
+using namespace mbed;
+
+Serial serial(UART_TX, UART_RX, 115200);
+MotorSpeedControl motor;
+Timer timer;
+
+char buf[100];
+int buf_index = 0;
+
+void handleCommand()
+{
+	char c_str[50];
+	float speed = 1.f;
+	auto args_read = sscanf(buf, "%s %f", c_str, &speed);
+	if (args_read == 0)
+	{
+		serial.printf("No args read.\n");
+		return;
+	}
+	std::string str(c_str);
+	if (str == "turn")
+	{
+		if (args_read == 2)
+		{
+			if (speed > 200.f) speed = 200.f;
+			else if (speed < -200.f) speed = -200.f;
+		}
+		motor.speed(speed);
+		serial.printf("Turning... speed = %f\n", speed);
+	}
+	else if (str == "stop")
+	{
+		motor.speed(0.f);
+		serial.printf("Stopping...\n");
+	}
+	else
+	{
+		motor.speed(0.f);
+		serial.printf("Unknown command: \"%s\"\n", str.c_str());
+	}
+}
+
+int main()
+{
+	buf_index = 0;
+	timer.start();
+	motor.enable(true);
+
+	while(1)
+	{
+		while (serial.readable())
+		{
+			char c = serial.getc();
+			buf[buf_index++] = c;
+			if (c == '\n' || c == '\r') 
+			{
+				buf[buf_index++] = '\0';
+				handleCommand();
+				buf_index = 0;
+			}
+		}
+		
+		if (timer.read_ms() > 500)
+		{
+			serial.printf("RPM: %f CUR: %fA TIM: %u us\n", motor.getSpeed(), motor.getCurrent(), motor.motor().m_adc.interruptHandlerExecTime);
+			timer.reset();
+		}
+	}
+}
+
+#endif // TEST_SPACE
