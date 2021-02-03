@@ -353,7 +353,8 @@ class WinchInfoWidget(Frame):
 					 WinchInfo.Status.Halted: 				"halted",
 					 WinchInfo.Status.Lowered: 				"lowered",
 					 WinchInfo.Status.Home:					"home",
-					 WinchInfo.Status.Manual:				"manual" }
+					 WinchInfo.Status.Manual:				"manual",
+					 WinchInfo.Status.Docking: 				"docking" }
 		self.var_status.set(switcher.get(status, "unknown"))
 
 	def updateVal(self, winch = WinchInfo(), frequency = 0.0):
