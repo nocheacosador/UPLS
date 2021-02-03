@@ -404,13 +404,13 @@ struct BINDINGS_API __NO_PADDING__ Command
 	enum Code : uint8_t
 #endif
 	{
-		Unknown = 0,
-		LatchClose = 1,
-		LatchOpen = 2,
-		SetLatchClosePulseDuration = 3,
-		SetLatchOpenPulseDuration = 4,
-		StatusRequest = 7,
-		HookShutdown = 12,
+		Unknown = 0,  					// do not change
+		LatchClose = 1,					// do not change
+		LatchOpen = 2,					// do not change
+		SetLatchClosePulseDuration = 3,	// do not change
+		SetLatchOpenPulseDuration = 4,	// do not change
+		StatusRequest = 7,				// do not change
+		HookShutdown = 12,				// do not change
 		LedsEnableAll,
 		LedsEnableFront,
 		LedsEnableRear,
