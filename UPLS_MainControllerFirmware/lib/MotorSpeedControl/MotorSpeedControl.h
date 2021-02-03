@@ -39,10 +39,6 @@ public:
 	void speed(float rpm)
 	{
 		_target_speed = rpm;
-		if (rpm == 0)
-		{
-			_integral_term = 0.0f;
-		}
 	}
 
 	float getCurrent()

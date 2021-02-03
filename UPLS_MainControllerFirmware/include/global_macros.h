@@ -110,7 +110,7 @@ const char sun[9][19] = {
 #define WINCH_MAX_RETURN_SPEED			270.f
 #define WINCH_MAX_SPEED					200.f		// RPM
 #define WINCH_HOME_SEARCHING_SPEED		100.f		// RPM
-#define WINCH_HOME_SEARCHING_CUR_TRESH	2800		// milliamperes
+#define WINCH_HOME_SEARCHING_CUR_TRESH	2200		// milliamperes
 #define WINCH_MOTOR_R_IPROPI			2200.f		// ohms
 #define LEG_MOT_FRONT_R_IPROPI			2200.f		// ohms
 #define LEG_MOT_REAR_R_IPROPI			2200.f		// ohms
