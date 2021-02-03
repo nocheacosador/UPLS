@@ -5,7 +5,7 @@ from UPLS import *
 from tkinter import simpledialog, ttk, Button, Toplevel, Label, Frame, Tk, Menu, Entry, Event, EventType, PhotoImage
 from custom_widgets import HookInfoWidget, LandingGearInfoWidget, WinchInfoWidget
 from custom_widgets import CPUUtilizationWidget, LedInfoWidget, SetNumericParameterWidget
-from PIL import Image, ImageTk
+#from PIL import Image, ImageTk
 
 hardware_serial_ports = ['/dev/ttyTHS0', '/dev/ttyTHS2', '/dev/ttyV0']
 
