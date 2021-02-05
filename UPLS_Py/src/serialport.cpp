@@ -571,7 +571,7 @@ void SerialPort::putChar(const char ch)
 	if (m_isOpen)
 	{
 		std::scoped_lock<std::mutex> lock(mux);
-		::write(m_serialPort, &ch, 1);
+		int i __attribute__((unused)) = ::write(m_serialPort, &ch, 1);
 	}
 }
 
@@ -594,7 +594,7 @@ void SerialPort::print(const char* str)
 		}
 
 		std::scoped_lock<std::mutex> lock(mux);
-		int i = ::write(m_serialPort, str, size);
+		int i __attribute__((unused)) = ::write(m_serialPort, str, size);
 	}
 }
 
@@ -603,7 +603,7 @@ void SerialPort::print(const std::string& str)
 	if (m_isOpen)
 	{
 		std::scoped_lock<std::mutex> lock(mux);
-		int i = ::write(m_serialPort, str.c_str(), str.size());
+		int i __attribute__((unused)) = ::write(m_serialPort, str.c_str(), str.size());
 	}
 }
 
@@ -612,7 +612,7 @@ void SerialPort::write(const void* data, size_t size)
 	if (m_isOpen)
 	{
 		std::scoped_lock<std::mutex> lock(mux);
-		int i = ::write(m_serialPort, data, size);
+		int i __attribute__((unused)) = ::write(m_serialPort, data, size);
 	}
 }
 

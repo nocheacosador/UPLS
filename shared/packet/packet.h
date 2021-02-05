@@ -139,9 +139,9 @@ struct BINDINGS_API __NO_PADDING__ LedInfo
 			Settings(uint8_t onValue = 255, uint8_t offValue = 0, uint16_t fadeInDuration = 500, 
 				uint16_t fadeOutDuration = 500, uint16_t onDuration = 1000, 
 				uint16_t offDuration = 1000) 
-					: on_value(onValue), off_value(offValue), 
-					fade_in_duration(fadeInDuration), fade_out_duration(fadeOutDuration), 
-					on_duration(onDuration), off_duration(offDuration) { ; }
+					: on_value(onValue), off_value(offValue),  
+					on_duration(onDuration), off_duration(offDuration),
+					fade_in_duration(fadeInDuration), fade_out_duration(fadeOutDuration) { ; }
 
 			uint16_t getFadeInDuration() const { return fade_in_duration; }
 			uint16_t getFadeOutDuration() const { return fade_out_duration; }
@@ -159,7 +159,7 @@ struct BINDINGS_API __NO_PADDING__ LedInfo
 			uint16_t fade_out_duration;
 		};
 # if defined(__XAVIER)		
-		Led() { memset(this, 0, sizeof(Led)); } 
+		Led() { ; }
 
 		bool getEnabled() const { return enabled; }
 		uint8_t getCurrentValue() const { return current_value; }
@@ -202,7 +202,7 @@ struct BINDINGS_API __NO_PADDING__ LandingGearInfo
 			InUpTransit
 		};
 # if defined(__XAVIER)
-		Leg() { memset(this, 0, sizeof(Leg)); }
+		Leg() { ; }
 
 		Status getStatus() const { return status; }
 		uint8_t getValue() const { return value; }

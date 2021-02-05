@@ -90,4 +90,5 @@
 	<rejection class="LatencyCheck"/>
 	<rejection class="Packet"/>
 	<rejection class="PacketHandler"/>
+	<rejection class="na"/>
 </typesystem>

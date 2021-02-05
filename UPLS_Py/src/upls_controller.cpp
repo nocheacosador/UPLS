@@ -15,10 +15,10 @@ char const hex_chars[16] = { '0', '1', '2', '3',
 							 'C', 'D', 'E', 'F' };
 
 
-UPLS_Controller::UPLS_Controller() : m_receiverThread(nullptr), m_receiverRunning(false), 
+UPLS_Controller::UPLS_Controller() : m_logReceivedPackets(false), m_receiverRunning(false), m_receiverThread(nullptr),
 	m_hookInfoUpdateFrequency(0.f), m_landingGearInfoUpdateFrequency(0.f), 
 	m_ledInfoUpdateFrequency(0.f), m_winchInfoUpdateFrequency(0.f),
-	m_mainControllerInfoUpdateFrequency(0.f), m_logReceivedPackets(false) { ; }
+	m_mainControllerInfoUpdateFrequency(0.f) { ; }
 
 UPLS_Controller::~UPLS_Controller()
 {

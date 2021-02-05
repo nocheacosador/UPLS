@@ -19,9 +19,9 @@ HookInfo::HookInfo() : averageRetrie(0.f), mcuRuntime(0.f), lostMessages(0),
 	temperature(0), battery({ 0, Battery::State::Unknown }), latch({ Latch::State::Unknown, 0 }) { ; }
 
 #if !defined(__HOOK)
-LedInfo::LedInfo() { memset(this, 0, sizeof(LedInfo)); }
+LedInfo::LedInfo() { ; }
 
-LandingGearInfo::LandingGearInfo() { memset(this, 0, sizeof(LandingGearInfo)); } 
+LandingGearInfo::LandingGearInfo() { ; } 
 
 WinchInfo::WinchInfo() : current(0), position(0), status(WinchInfo::Status::Unknown) { ; }
 
@@ -62,8 +62,8 @@ Warning::Warning(Warning::Code _code, const char* msg) : code(_code)
 LatencyCheck::LatencyCheck() : code(LatencyCheck::Code::None) { ; }
 LatencyCheck::LatencyCheck(LatencyCheck::Code _code) : code(_code) { ; }
 
-Packet::Packet() : startByte(PACKET_START_BYTE), endByte(PACKET_END_BYTE), sender(THIS_DEVICE), 
-	receiver(DEFAULT_RECEIVER_DEVICE), type(Packet::Type::Unknown) 
+Packet::Packet() : startByte(PACKET_START_BYTE), sender(THIS_DEVICE), 
+	receiver(DEFAULT_RECEIVER_DEVICE), type(Packet::Type::Unknown), endByte(PACKET_END_BYTE) 
 { 
 	static_assert(sizeof(Packet) == 32, "Packet is too big (bigger than 32 bytes).");
 	memset(message, 0, 27); 
@@ -74,7 +74,7 @@ Packet::Packet() : startByte(PACKET_START_BYTE), endByte(PACKET_END_BYTE), sende
 		#include <iostream>
 	#endif // __XAVIIER
 
-PacketHandler::PacketHandler() : m_startByteDetected(true), m_bufferIndex(0) { ; }
+PacketHandler::PacketHandler() : m_bufferIndex(0), m_startByteDetected(true) { ; }
 
 void PacketHandler::parseChar(char ch)
 {
@@ -91,7 +91,7 @@ void PacketHandler::parseChar(char ch)
 			{
 				Packet packet;
 				auto size = sizeof(Packet);
-				memcpy(&packet, m_buffer, 32);
+				memcpy(&packet, m_buffer, size);
 				pushPacket(packet);
 			}
 		}

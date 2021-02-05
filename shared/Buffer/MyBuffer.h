@@ -61,7 +61,7 @@ inline void MyBuffer<T,N>::put(const T& data)
 template <typename T, size_t N>
 inline T MyBuffer<T, N>::get(void)
 {
-    T data_pos;
+    T data_pos = T();
 	if (_count)
 	{
 		data_pos = _buf[_rloc++];

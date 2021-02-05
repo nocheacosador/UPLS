@@ -117,8 +117,6 @@ private:
 	int m_serialPort;
 	char* m_portName;
 	std::atomic<bool> m_isOpen;
-
-	std::thread* m_receiverThread;
 	
 	BaudRate m_baudRate;
 	DataBits m_dataBits;
@@ -126,6 +124,8 @@ private:
 	Parity   m_parity;
 	FlowControl m_flowControl;
 
+	std::thread* m_receiverThread;
+	
 	RingBuffer<char, 1024> m_buffer;
 
 	struct BaudRateConversionTableItem

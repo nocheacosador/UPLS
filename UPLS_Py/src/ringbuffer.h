@@ -55,7 +55,7 @@ protected:
 
 
 template<class T, size_t buffer_size>
-RingBuffer<T, buffer_size>::RingBuffer() : m_size(buffer_size), m_head(0), m_tail(0), m_itemCount(0)
+RingBuffer<T, buffer_size>::RingBuffer() : m_itemCount(0), m_size(buffer_size), m_head(0), m_tail(0)
 { ; }
 
 template<class T, size_t buffer_size>

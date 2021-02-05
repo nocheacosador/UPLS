@@ -15,7 +15,7 @@ if(NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE Release)
 endif()
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC")
+set(CMAKE_CXX_FLAGS "-Wall -fPIC")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -D_DEBUG")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
@@ -161,7 +161,7 @@ target_include_directories(${bindings_library} PRIVATE ${python_include_dir})
 target_include_directories(${bindings_library} PRIVATE ${shiboken_include_dir})
 target_include_directories(${bindings_library} PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
-target_compile_definitions(${bindings_library} PUBLIC __XAVIER)
+#target_compile_definitions(${bindings_library} PUBLIC __XAVIER)
 
 target_link_libraries(${bindings_library} PRIVATE ${shiboken_shared_libraries})
 target_link_libraries(${bindings_library} PRIVATE ${sample_library})
