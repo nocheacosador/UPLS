@@ -78,23 +78,28 @@ void Winch::m_motorPositionController()
 		{
 		case 0:
 			_motor.enable(false);
-			_motor.motor().turn(0.5f);
-			break;
-
 		case 1:
-			_motor.motor().turn(0.4f);
-			break;
-
 		case 2:
-			_motor.motor().turn(0.3f);
-			break;
-
 		case 3:
-			_motor.motor().turn(0.2f);
+		case 4:
+		case 5:
+			_motor.motor().turn(-0.8f);
 			break;
 
-		case 4:
-			_motor.motor().turn(0.1f);
+		case 6:
+			_motor.motor().turn(-0.4f);
+			break;
+
+		case 7:
+			_motor.motor().turn(-0.3f);
+			break;
+
+		case 8:
+			_motor.motor().turn(-0.2f);
+			break;
+
+		case 9:
+			_motor.motor().turn(-0.2f);
 			break;
 
 		default:

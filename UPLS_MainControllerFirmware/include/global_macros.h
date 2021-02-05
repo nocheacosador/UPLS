@@ -103,18 +103,18 @@ const char sun[9][19] = {
 ////////////////////// Other definitions /////////////////////////
 
 #define WINCH_MOTOR_ENCODER_SPR			134
-#define WINCH_PULLEY_DIAMETER			0.0235f		// meters
+#define WINCH_PULLEY_DIAMETER			0.023f		// meters
 #define WINCH_LOWERING_GROUND_SPEED		0.1f		// m/s
 #define WINCH_SPEED_GROUND_DISTANCE		1.f			// meters
-#define WINCH_MAX_LOWERING_ACCELERATION	100.f		// RPM/s
+#define WINCH_MAX_LOWERING_ACCELERATION	50.f		// RPM/s
 #define WINCH_MAX_RETURN_SPEED			270.f
-#define WINCH_MAX_SPEED					200.f		// RPM
+#define WINCH_MAX_SPEED					170.f		// RPM
 #define WINCH_HOME_SEARCHING_SPEED		100.f		// RPM
 #define WINCH_HOME_SEARCHING_CUR_TRESH	2200		// milliamperes
 #define WINCH_MOTOR_R_IPROPI			2200.f		// ohms
 #define LEG_MOT_FRONT_R_IPROPI			2200.f		// ohms
 #define LEG_MOT_REAR_R_IPROPI			2200.f		// ohms
-#define DRV8874_PWM_PERIOD_US			20000		// microseconds
+#define DRV8874_PWM_PERIOD_US			4000		// microseconds
 #define DRV8874_PROPER_PWM_PERIOD_US	200			// microseconds
 #define UART_BAUD_RATE					38400
 #define ADC_V_REF						3.3f		// volts

@@ -8,10 +8,10 @@
 #include <Timer.h>
 
 #define LG_CURRENT_BUFFER_SIZE  		20
-#define UP_TRANSIT_CURRENT_TRESHOLD		600
-#define DOWN_TRANSIT_CURRENT_TRESHOLD	600
-#define LG_UP_DUTY_CYCLE				-0.5f
-#define LG_DOWN_DUTY_CYCLE				0.5f
+#define UP_TRANSIT_CURRENT_TRESHOLD		400
+#define DOWN_TRANSIT_CURRENT_TRESHOLD	400
+#define LG_UP_DUTY_CYCLE				-0.6f
+#define LG_DOWN_DUTY_CYCLE				0.6f
 
 class LandingGear
 {
@@ -27,13 +27,12 @@ public:
 		void extract() { if (_en) _status = Status::InDownTransit; }
 		void enable(bool en);
 
-		uint16_t getCurrent() { return uint16_t(_motor.getCurrent()); }
+		uint16_t getCurrent() { return uint16_t(_motor.getCurrent() * 1000.f); }
 		uint8_t getValue() { return uint8_t(abs(_value * 255.f)); }
 		Status getStatus() { return _status; }
 
 	private:
 		void _handler();
-		void _current_monitor();
 		
 		bool _en;
 

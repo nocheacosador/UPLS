@@ -129,11 +129,11 @@ int main()
 void led_init()
 {
 	led_front.mode(LedDriver::Mode::Soft);
-	led_front.settings({ 200, 0, 1000, 1000, 1000, 1000 });
-	led_front.enable(false);
+	led_front.settings({ 255, 0, 0, 0, 1000, 1000 });
+	led_front.enable(true);
 
 	led_rear.mode(LedDriver::Mode::Soft);
-	led_rear.settings({ 200, 0, 1000, 1000, 1000, 1000 });
+	led_rear.settings({ 200, 0, 0, 0, 1000, 1000 });
 	led_rear.enable(false);
 }
 

@@ -43,8 +43,6 @@ public:
 		return m_sampleSum / float(sample_count);
 	}
 
-	volatile uint16_t interruptHandlerExecTime = 0;
-
 private:
 	mbed::AnalogIn m_adc;
 	mbed::Ticker   m_tick;
@@ -56,13 +54,11 @@ private:
 
 	void m_currentSampler()
 	{
-		uint16_t start = us_ticker_read();
 		m_sampleSum -= m_samples[m_sampleIndex];
 		m_samples[m_sampleIndex] = m_adc.read();
 		m_sampleSum += m_samples[m_sampleIndex];
 		m_sampleIndex++;
 		m_sampleIndex %= sample_count;
-		interruptHandlerExecTime = us_ticker_read() - start;
 	}
 }; 
 

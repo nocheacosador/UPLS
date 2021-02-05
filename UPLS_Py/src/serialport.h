@@ -12,6 +12,8 @@
 #include <termios.h> // Contains POSIX terminal control definitions
 #endif
 
+#include "logger.h"
+
 #include "ringbuffer.h"
 
 #include <csignal>

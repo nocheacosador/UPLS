@@ -11,7 +11,10 @@
 #include <cstring>
 #include <iostream>
 #include <filesystem>
-#include "console_formating.h"
+#include "logger.h"
+
+using namespace na;
+using namespace na::Console;
 
 namespace fs = std::filesystem;
 
@@ -93,15 +96,13 @@ bool SerialPort::open()
 
 	if (m_portName)
 	{
-		std::cout << '[' << Format("SerialPort").color(Color::Magenta).bold() << "] " 
-			<< "Opening " << Format(m_portName).color(Color::Yellow) << "...\n";
+		log.info(Format("SerialPort").color(Color::Magenta).bold(), ": Opening ", Format(m_portName).color(Color::Yellow), "...");
 		
 		m_serialPort = ::open(m_portName, O_RDWR);
 
 		if (m_serialPort < 0)
 		{
-			std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] " << errno 
-				<< ": from int open(const char*, int, ...) in SerialPort::open(): " << strerror(errno) << std::endl;
+			log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, ": from int open(const char*, int, ...) in SerialPort::open(): ", strerror(errno));
 		}
 		else
 		{
@@ -111,8 +112,8 @@ bool SerialPort::open()
 
 			if (tcgetattr(m_serialPort, &tty) < 0)
 			{
-    			std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcgetattr(int, struct termios*) in SerialPort::open(): " 
-					<< strerror(errno) << std::endl;
+    			log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+					": from int tcgetattr(int, struct termios*) in SerialPort::open(): ", strerror(errno));
 				return false;
 			}
 
@@ -133,8 +134,9 @@ bool SerialPort::open()
 
 			if (tcsetattr(m_serialPort, TCSANOW, &tty) < 0) 
 			{
-				std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcsetattr(int, int, const struct termios*) in SerialPort::open(): " 
-					<< strerror(errno) << std::endl;
+				log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+					": from int tcsetattr(int, int, const struct termios*) in SerialPort::open(): ",
+					strerror(errno));
 				return false;
 			}
 
@@ -142,8 +144,8 @@ bool SerialPort::open()
 
 			if (tcsetattr(m_serialPort, TCSAFLUSH, &tty) < 0) 
 			{
-				std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcsetattr(int, int, const struct termios*) in SerialPort::open(): " 
-					<< strerror(errno) << std::endl;
+				log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, ": from int tcsetattr(int, int, const struct termios*) in SerialPort::open(): ", 
+					strerror(errno));
 				return false;
 			}
 			
@@ -153,12 +155,11 @@ bool SerialPort::open()
 			setDataBits(m_dataBits);
 			setStopBits(m_stopBits);
 			
-			std::cout << '[' << Format("SerialPort").color(Color::Magenta).bold() << "] " 
-			<< "Port successfully opened.\n";
+			log.info(Format("SerialPort").color(Color::Magenta).bold(), ": Port successfully opened.");
 
 			printSettings();
 
-			std::cout << '[' << Format("SerialPort").color(Color::Magenta).bold() << "] Launching receiver thread...\n";
+			log.info(Format("SerialPort").color(Color::Magenta).bold(), ": Launching receiver thread...");
 			
 			m_receiverThread = new std::thread(&SerialPort::m_receiver, this);
 
@@ -173,8 +174,7 @@ void SerialPort::close()
 {
 	if (m_isOpen)
 	{
-		std::cout << '[' << Format("SerialPort").color(Color::Magenta).bold() << "] " 
-			<< "Closing " << Format(m_portName).color(Color::Yellow) << "...\n";
+		log.info(Format("SerialPort").color(Color::Magenta).bold(), ": Closing ", Format(m_portName).color(Color::Yellow), "...");
 		
 		m_isOpen = false;
 		
@@ -188,8 +188,7 @@ void SerialPort::close()
 		::close(m_serialPort);
 		m_serialPort = 0;
 		
-		std::cout << '[' << Format("SerialPort").color(Color::Magenta).bold() << "] " 
-			<< Format(m_portName).color(Color::Yellow) << " closed.\n";
+		log.info(Format("SerialPort").color(Color::Magenta).bold(), ": ", Format(m_portName).color(Color::Yellow), " closed.");
 	}
 }
 
@@ -210,8 +209,9 @@ SerialPort& SerialPort::setPort(const std::string& portName)
 	}
 	else
 	{
-		std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] From SerialPort::setPort(std::string& portName). portName.size() returned: "
-			<< portName.size() << std::endl;
+		log.error(Format("SerialPort").color(Color::Magenta).bold(), 
+			": From SerialPort::setPort(std::string& portName). portName.size() returned: ",
+			portName.size());
 	}
 
 	return *this;
@@ -232,8 +232,9 @@ SerialPort& SerialPort::setBaudRate(SerialPort::BaudRate baudRate)
 		
 		if (tcgetattr(m_serialPort, &tty) < 0)
 		{
-    		std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcgetattr(int, struct termios*) in SerialPort::setBaudRate(BaudRate): " 
-				<< strerror(errno) << std::endl;
+    		log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+				": from int tcgetattr(int, struct termios*) in SerialPort::setBaudRate(BaudRate): ",
+				strerror(errno));
 			return *this;
 		}
 
@@ -241,8 +242,11 @@ SerialPort& SerialPort::setBaudRate(SerialPort::BaudRate baudRate)
 		cfsetospeed(&tty, m_convertToSpeed_t(m_baudRate));
 
 		if (tcsetattr(m_serialPort, TCSANOW, &tty) < 0) 
-			std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcsetattr(int, int, const struct termios*) in SerialPort::setBaudRate(BaudRate): " 
-				<< strerror(errno) << std::endl;
+		{
+			log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+				": from int tcsetattr(int, int, const struct termios*) in SerialPort::setBaudRate(BaudRate): ",
+				strerror(errno));
+		}	
 	}
 	
 	return *this;
@@ -256,8 +260,10 @@ SerialPort::BaudRate SerialPort::getBaudRate()
 		
 		if (tcgetattr(m_serialPort, &tty) < 0)
 		{
-    		std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcgetattr(int, struct termios*) in SerialPort::getBaudRate(): " 
-				<< strerror(errno) << std::endl;
+    		log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+				": from int tcgetattr(int, struct termios*) in SerialPort::getBaudRate(): ",
+				strerror(errno));
+
 			m_baudRate = BaudRate::Unknown;
 		}
 		else
@@ -277,8 +283,9 @@ SerialPort& SerialPort::setDataBits(SerialPort::DataBits dataBits)
 		
 		if (tcgetattr(m_serialPort, &tty) < 0)
 		{
-    		std::cerr<< "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcgetattr(int, struct termios*) in SerialPort::setDataBits(DataBits): " 
-				<< strerror(errno) << std::endl;
+    		log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+				": from int tcgetattr(int, struct termios*) in SerialPort::setBaudRate(BaudRate): ",
+				strerror(errno));
 			return *this;
 		}
 
@@ -286,8 +293,11 @@ SerialPort& SerialPort::setDataBits(SerialPort::DataBits dataBits)
 		tty.c_cflag |= static_cast<uint32_t>(m_dataBits);
 
 		if (tcsetattr(m_serialPort, TCSANOW, &tty) < 0) 
-			std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcsetattr(int, int, const struct termios*) in SerialPort::setDataBits(DataBits): " 
-				<< strerror(errno) << std::endl;
+		{
+			log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+				": from int tcsetattr(int, int, const struct termios*) in SerialPort::setBaudRate(BaudRate): ",
+				strerror(errno));
+		}	
 	}
 
 	return *this;
@@ -301,8 +311,9 @@ SerialPort::DataBits SerialPort::getDataBits()
 		
 		if (tcgetattr(m_serialPort, &tty) < 0)
 		{
-    		std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcgetattr(int, struct termios*) in SerialPort::getDataBits(): " 
-				<< strerror(errno) << std::endl;
+    		log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+				": from int tcgetattr(int, struct termios*) in SerialPort::setBaudRate(BaudRate): ",
+				strerror(errno));
 			m_dataBits = DataBits::Unknown;
 		}
 		else
@@ -322,17 +333,21 @@ SerialPort& SerialPort::setStopBits(SerialPort::StopBits stopBits)
 		
 		if (tcgetattr(m_serialPort, &tty) < 0)
 		{
-    		std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcgetattr(int, struct termios*) in SerialPort::setStopBits(StopBits): " 
-				<< strerror(errno) << std::endl;
+    		log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+				": from int tcgetattr(int, struct termios*) in SerialPort::setBaudRate(BaudRate): ",
+				strerror(errno));
 			return *this;
 		}
 
 		tty.c_cflag &= ~CSTOPB;
 		tty.c_cflag |= static_cast<uint32_t>(m_stopBits);
-
+		
 		if (tcsetattr(m_serialPort, TCSANOW, &tty) < 0) 
-			std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcsetattr(int, int, const struct termios*) in SerialPort::setStopBits(StopBits): " 
-				<< strerror(errno) << std::endl;
+		{
+			log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+				": from int tcsetattr(int, int, const struct termios*) in SerialPort::setBaudRate(BaudRate): ",
+				strerror(errno));
+		}	
 	}
 
 	return *this;
@@ -346,8 +361,9 @@ SerialPort::StopBits SerialPort::getStopBits()
 		
 		if (tcgetattr(m_serialPort, &tty) < 0)
 		{
-    		std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ":from int tcgetattr(int, struct termios*) in SerialPort::getStopBits(): " 
-				<< strerror(errno) << std::endl;
+    		log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+				": from int tcgetattr(int, struct termios*) in SerialPort::setBaudRate(BaudRate): ",
+				strerror(errno));
 			m_stopBits = StopBits::Unknown;
 		}
 		else 
@@ -367,8 +383,9 @@ SerialPort& SerialPort::setParity(SerialPort::Parity parity)
 		
 		if (tcgetattr(m_serialPort, &tty) < 0)
 		{
-    		std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcgetattr(int, struct termios*) in SerialPort::setParity(Parity): " 
-				<< strerror(errno) << std::endl;
+    		log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+				": from int tcgetattr(int, struct termios*) in SerialPort::setBaudRate(BaudRate): ",
+				strerror(errno));
 			return *this;
 		}
 
@@ -376,8 +393,11 @@ SerialPort& SerialPort::setParity(SerialPort::Parity parity)
 		tty.c_cflag |= static_cast<uint32_t>(m_parity);
 
 		if (tcsetattr(m_serialPort, TCSANOW, &tty) < 0) 
-			std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcsetattr(int, int, const struct termios*) in SerialPort::setParity(Parity): " 
-				<< strerror(errno) << std::endl;
+		{
+			log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+				": from int tcsetattr(int, int, const struct termios*) in SerialPort::setBaudRate(BaudRate): ",
+				strerror(errno));
+		}	
 	}
 	
 	return *this;
@@ -391,8 +411,9 @@ SerialPort::Parity SerialPort::getParity()
 		
 		if (tcgetattr(m_serialPort, &tty) < 0)
 		{
-    		std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcgetattr(int, struct termios*) in SerialPort::getParity(): " 
-				<< strerror(errno) << std::endl;
+    		log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+				": from int tcgetattr(int, struct termios*) in SerialPort::setBaudRate(BaudRate): ",
+				strerror(errno));
 			m_parity = Parity::Unknown;
 		}
 		else
@@ -412,8 +433,9 @@ SerialPort& SerialPort::setFlowControl(SerialPort::FlowControl flowControl)
 		
 		if (tcgetattr(m_serialPort, &tty) < 0)
 		{
-    		std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcgetattr(int, struct termios*) in SerialPort::setFlowControl(FlowControl): " 
-				<< strerror(errno) << std::endl;
+    		log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+				": from int tcgetattr(int, struct termios*) in SerialPort::setBaudRate(BaudRate): ",
+				strerror(errno));
 			return *this;
 		}
 
@@ -421,8 +443,11 @@ SerialPort& SerialPort::setFlowControl(SerialPort::FlowControl flowControl)
 		tty.c_cflag |= static_cast<uint32_t>(m_flowControl);
 
 		if (tcsetattr(m_serialPort, TCSANOW, &tty) < 0) 
-			std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcsetattr(int, int, const struct termios*) in SerialPort::setFlowControl(FlowControl): " 
-				<< strerror(errno) << std::endl;
+		{
+			log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+				": from int tcsetattr(int, int, const struct termios*) in SerialPort::setBaudRate(BaudRate): ",
+				strerror(errno));
+		}	
 	}
 	
 	return *this;
@@ -436,8 +461,9 @@ SerialPort::FlowControl SerialPort::getFlowControl()
 		
 		if (tcgetattr(m_serialPort, &tty) < 0)
 		{
-    		std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] "<< errno << ": from int tcgetattr(int, struct termios*) in SerialPort::getParity(): " 
-				<< strerror(errno) << std::endl;
+    		log.error(Format("SerialPort").color(Color::Magenta).bold(), ": error ", errno, 
+				": from int tcgetattr(int, struct termios*) in SerialPort::setBaudRate(BaudRate): ",
+				strerror(errno));
 			m_flowControl = FlowControl::Unknown;
 		}
 		else
@@ -449,6 +475,7 @@ SerialPort::FlowControl SerialPort::getFlowControl()
 
 void SerialPort::printSettings()
 {
+	std::cout << std::endl;
 	std::cout << '[' << Format("SerialPort").color(Color::Magenta).bold() << "] " 
 			<< Format("Port Name:    ").bold() << Format(m_portName).color(Color::Green) << std::endl;
 	
@@ -558,7 +585,9 @@ void SerialPort::print(const char* str)
 		{
 			if (size > 256)
 			{
-				std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] in void SerialPort::print(const char* str): str is too big (max size is 256 bytes) or not null terminated.\n";
+				log.error(Format("SerialPort").color(Color::Magenta).bold(), 
+					": error: in void SerialPort::print(const char* str): str is too big"
+					" (max size is 256 bytes) or not null terminated.");
 				return;
 			}
 			size++;
@@ -594,8 +623,8 @@ char SerialPort::getChar()
 
 void SerialPort::m_receiver()
 {
-	std::cout << '[' << Format("SerialPort").color(Color::Magenta).bold() << "] " 
-		<< "Receiver thread started. Thread ID: " << std::hex << std::this_thread::get_id() << std::dec << std::endl;
+	log.info(Format("SerialPort").color(Color::Magenta).bold(), ": Receiver thread started. Thread ID: ", 
+		std::hex, std::this_thread::get_id(), std::dec);
 
 	char buffer[256];
 	int bytes_read;
@@ -615,6 +644,6 @@ void SerialPort::m_receiver()
 		
 		usleep(100);
 	}
-	std::cout << '[' << Format("SerialPort").color(Color::Magenta).bold() << "] " 
-		<< "Receiver thread exiting... Thread ID: " << std::hex << std::this_thread::get_id() << std::dec << std::endl;
+	log.info(Format("SerialPort").color(Color::Magenta).bold(), ": Receiver thread exiting... Thread ID: ",
+		std::hex, std::this_thread::get_id(), std::dec);
 }

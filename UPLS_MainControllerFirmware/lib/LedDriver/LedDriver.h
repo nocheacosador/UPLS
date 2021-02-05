@@ -30,7 +30,7 @@ public:
 			  fade_in_duration(fadeInDuration), fade_out_duration(fadeOutDuration) { ; }
 	};*/
 
-	LedDriver(PinName pin, float update_rate = 50.f);
+	LedDriver(PinName pin, float update_rate = 120.f);
 
 	void enable(bool enable = true);
 

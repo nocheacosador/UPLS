@@ -396,7 +396,6 @@ class MainApp:
 
 	def __onChooseSerialExit(self):
 		if self.choose_serial.success():
-			print("Success!")
 			self.upls.setSerialPort(self.choose_serial.getSelectedPort())
 			self.upls.start()
 			self.__enableWidgets()

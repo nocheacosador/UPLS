@@ -3,7 +3,7 @@
 
 #include <mutex>
 #include <iostream>
-#include "console_formating.h"
+#include "logger.h"
 
 
 // Thread-safe ring buffer
@@ -73,8 +73,7 @@ void RingBuffer<T, buffer_size>::push(T& item)
 		m_itemCount++;
 	}
 	else
-		std::cerr << "[" << Format("Error").color(Color::Red).bold() << "] " << "in template<class T> void RingBuffer<T>::push(T&): buffer overflow. "
-			"Increase buffer size.\n";
+		na::log.error("Error in template<class T> void RingBuffer<T>::push(T&): buffer overflow. Increase buffer size.");
 }
 
 template<class T, size_t buffer_size>

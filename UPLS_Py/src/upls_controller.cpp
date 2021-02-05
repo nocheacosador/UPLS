@@ -4,7 +4,10 @@
 #include <sstream>
 #include <chrono>
 #include <exception>
-#include "console_formating.h"
+#include "logger.h"
+
+using namespace na;
+using namespace na::Console;
 
 char const hex_chars[16] = { '0', '1', '2', '3', 
 							 '4', '5', '6', '7', 
@@ -142,16 +145,20 @@ void UPLS_Controller::printError()
 {
 	auto error_packet = m_errorQueue.pop();
 
-	std::cout << '[' << Format().color(Format::Color::BrightRed).bold().text("ERROR") << "] in: " 
-		<< device(error_packet.sender) << ": " << errorMessage(error_packet.error.getCode()) << '\n';
+	log.info(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": ", 
+			Format("Error").color(Format::Color::BrightRed), " from ", 
+			Format(device(error_packet.sender)).color(Color::Yellow), ": '",
+			errorMessage(error_packet.error.getCode()), '\'');
 }
 
 void UPLS_Controller::printAllErrors()
 {
 	for (auto error_packet : m_errorQueue)
 	{
-		std::cout << '[' << Format().color(Format::Color::BrightRed).bold().text("ERROR") << "] in: " 
-			<< device(error_packet.sender) << ": " << errorMessage(error_packet.error.getCode()) << '\n';
+		log.info(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": ", 
+			Format("Error").color(Format::Color::BrightRed), " from ", 
+			Format(device(error_packet.sender)).color(Color::Yellow), ": '",
+			errorMessage(error_packet.error.getCode()), '\'');
 	}
 }
 
@@ -169,16 +176,20 @@ void UPLS_Controller::printWarning()
 {
 	auto warning_packet = m_warningQueue.pop();
 
-	std::cout << '[' << Format().color(Format::Color::Yellow).bold().text("WARNING") << "] in: " 
-		<< device(warning_packet.sender) << ": " << warningMessage(warning_packet.warning.getCode()) << '\n';
+	log.info(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": ", 
+			Format("Warning").color(Format::Color::Yellow), " from ", 
+			Format(device(warning_packet.sender)).color(Color::Yellow), ": '",
+			warningMessage(warning_packet.warning.getCode()), '\'');
 }
 
 void UPLS_Controller::printAllWarnings()
 {
 	for (auto warning_packet : m_warningQueue)
 	{
-		std::cout << '[' << Format().color(Format::Color::Yellow).bold().text("WARNING") << "] in: " 
-			<< device(warning_packet.sender) << ": " << warningMessage(warning_packet.warning.getCode()) << '\n';
+		log.info(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": ", 
+			Format("Warning").color(Format::Color::Yellow), " from ", 
+			Format(device(warning_packet.sender)).color(Color::Yellow), ": '",
+			warningMessage(warning_packet.warning.getCode()), '\'');
 	}
 }
 
@@ -198,8 +209,9 @@ void UPLS_Controller::printAllMessages()
 	{
 		auto message_packet = m_messageQueue.pop();
 
-		std::cout << '[' << Format().color(Format::Color::Magenta).bold().text("MESSAGE") << "] from: " 
-			<< device(message_packet.sender) << ": " << message_packet.message << '\n';
+		log.info(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": ", 
+			Format("Message").color(Format::Color::Magenta), " from ", 
+			Format(device(message_packet.sender)).color(Color::Yellow), ": '", message_packet.message, '\'');
 	}
 }
 
@@ -397,8 +409,6 @@ void UPLS_Controller::latchSetOpenPulseDuration(int pulse_duration)
 	Packet packet;
 	packet = PacketHandler::createCommand(Command(Command::SetLatchOpenPulseDuration).setPulseLength(pulse_duration), Device::Hook);
 	m_serial.write(&packet, sizeof(Packet));
-
-	std::cout << "[Message] void UPLS_Controller::latchSetOpenPulseDuration(int pulse_duration) called. Argument was: " << pulse_duration << '\n';
 }
 
 void UPLS_Controller::latchSetClosePulseDuration(int pulse_duration)
@@ -406,8 +416,6 @@ void UPLS_Controller::latchSetClosePulseDuration(int pulse_duration)
 	Packet packet;
 	packet = PacketHandler::createCommand(Command(Command::SetLatchClosePulseDuration).setPulseLength(pulse_duration), Device::Hook);
 	m_serial.write(&packet, sizeof(Packet));
-
-	std::cout << "[Message] void UPLS_Controller::latchSetClosePulseDuration(int pulse_duration) called. Argument was: " << pulse_duration << '\n';
 }
 
 void UPLS_Controller::hookShutdown()
@@ -497,27 +505,25 @@ void UPLS_Controller::winchManualModeDisable()
 
 void UPLS_Controller::error(const char* error_msg)
 {
-	std::cout << '[' << Format().bold().color(Color::BrightRed).text("ERROR") << "] " << error_msg << '\n'; 
+	log.error(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": ", error_msg); 
 }
 
 void UPLS_Controller::warning(const char* warning_msg)
 {
-	std::cout << '[' << Format().bold().color(Color::BrightYellow).text("WARNING") << "] " << warning_msg << '\n'; 
+	log.warning(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": ", warning_msg); 
 }
 
 void UPLS_Controller::message(const char* msg)
 {
-	std::cout << '[' << Format().bold().color(Color::BrightGreen).text("MESSAGE") << "] " << msg << '\n'; 
+	log.info(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": ", msg); 
 }
 
 /************************* PRIVATE MEMBER FUNCTIONS ***************************/
 
 void UPLS_Controller::m_receivedPacketHandler()
 {
-	std::stringstream ss;
-	ss << "Packet handler thread started. Thread ID: " << Format().color(Color::Yellow) 
-		<< std::hex << std::this_thread::get_id() << std::dec << Format();
-	info(ss.str().c_str());
+	log.info(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": Packet handler thread started. Thread ID: ",
+		Format().color(Color::Yellow), std::hex, std::this_thread::get_id(), std::dec, Format());
 
 	PacketHandler handler;
 	
@@ -531,66 +537,92 @@ void UPLS_Controller::m_receivedPacketHandler()
 			Packet packet;
 			packet = handler.getPacket();
 
-			std::stringstream ss;
-			ss << "Packet received. Type: ";
-
 			switch (packet.type)
 			{
 			case Packet::Type::HookInfo:
 				m_updateHookInfo(packet.hook);
-				ss << Format("HookInfo").color(Color::Green);
+				if (m_logReceivedPackets) 
+				{
+					log.debug(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": Packet received. Type: ",
+						Format("HookInfo").color(Color::Green), " Sender: ", Format(device(packet.sender)).color(Color::Yellow));
+				}
 				break;
 
 			case Packet::Type::LandingGearInfo:
 				m_updateLandingGearInfo(packet.landingGear);
-				ss << Format("LandingGearInfo").color(Color::Green);
+				if (m_logReceivedPackets) 
+				{
+					log.debug(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": Packet received. Type: ",
+						Format("LandingGearInfo").color(Color::Green), " Sender: ", Format(device(packet.sender)).color(Color::Yellow));
+				}
 				break;
 
 			case Packet::Type::LedInfo:
 				m_updateLedInfo(packet.led);
-				ss << Format("LedInfo").color(Color::Green);
+				if (m_logReceivedPackets) 
+				{
+					log.debug(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": Packet received. Type: ",
+						Format("LedInfo").color(Color::Green), " Sender: ", Format(device(packet.sender)).color(Color::Yellow));
+				}
 				break;
 
 			case Packet::Type::WinchInfo:
 				m_updateWinchInfo(packet.winch);
-				ss << Format("WinchInfo").color(Color::Green);
+				if (m_logReceivedPackets) 
+				{
+					log.debug(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": Packet received. Type: ",
+						Format("WinchInfo").color(Color::Green), " Sender: ", Format(device(packet.sender)).color(Color::Yellow));
+				}
 				break;
 
 			case Packet::Type::MainControllerInfo:
 				m_updateMainControllerInfo(packet.mainController);
-				ss << Format("MainControllerInfo").color(Color::Green);
+				if (m_logReceivedPackets) 
+				{
+					log.debug(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": Packet received. Type: ",
+						Format("MainControllerInfo").color(Color::Green), " Sender: ", Format(device(packet.sender)).color(Color::Yellow));
+				}
 				break;
 
 			case Packet::Type::Error:
 				m_errorQueue.push(packet);
-				ss << Format("Error").color(Color::Green);
+				if (m_logReceivedPackets) 
+				{
+					log.debug(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": Packet received. Type: ",
+						Format("Error").color(Color::Green), " Sender: ", Format(device(packet.sender)).color(Color::Yellow));
+				}
 				break;
 
 			case Packet::Type::Warning:
 				m_warningQueue.push(packet);
-				ss << Format("Warning").color(Color::Green);
+				if (m_logReceivedPackets) 
+				{
+					log.debug(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": Packet received. Type: ",
+						Format("Warning").color(Color::Green), " Sender: ", Format(device(packet.sender)).color(Color::Yellow));
+				}
 				break;
 
 			case Packet::Type::Message:
 				m_messageQueue.push(packet);
-				ss << Format("Message").color(Color::Green);
+				if (m_logReceivedPackets) 
+				{
+					log.debug(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": Packet received. Type: ",
+						Format("Message").color(Color::Green), " Sender: ", Format(device(packet.sender)).color(Color::Yellow));
+				}
 				break;
 
 			default:
-				ss << Format("Unknown").color(Color::Red);
+				if (m_logReceivedPackets) 
+				{
+					log.debug(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": Packet received. Type: ",
+						Format("Unknown").color(Color::Red), " Sender: ", Format(device(packet.sender)).color(Color::Yellow));
+				}
 				break;
 			}
-
-			if (m_logReceivedPackets) info(ss.str().c_str());
 		}
 	}
-	
-	ss.clear();
-	info("Packet handler thread exiting...");
-	ss << "Packet handler thread exiting... Thread ID: " << Format().color(Color::Yellow) 
-		<< std::hex << std::this_thread::get_id() << std::dec << Format();
-
-	info(ss.str().c_str());
+	log.info(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": Packet handler thread exiting... Thread ID: ",
+		Format().color(Color::Yellow), std::hex, std::this_thread::get_id(), std::dec, Format());
 }
 
 void UPLS_Controller::m_updateHookInfo(HookInfo& info)
@@ -670,6 +702,5 @@ void UPLS_Controller::m_updateMainControllerInfo(MainControllerInfo& info)
 
 void UPLS_Controller::info(const char* info_msg)
 {
-	std::scoped_lock<std::mutex> lock(muxInfoStream);
-	std::cout << '[' << Format("UPLS_Controller").bold().color(Color::BrightCyan) << "] " << info_msg << std::endl; 
+	log.info(Format("UPLS_Controller").color(Color::BrightMagenta).bold(), ": ", info_msg); 
 }
