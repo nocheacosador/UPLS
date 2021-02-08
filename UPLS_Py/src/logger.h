@@ -6,9 +6,16 @@
 #include <list>
 #include <functional>
 #include <chrono>
-#include "console_formating.h"
+#include <console_formating.h>
 #include <mutex>
 #include <filesystem>
+
+#if defined(__linux__)
+	#include <unistd.h>
+	#include <fcntl.h> 
+	#include <ext/stdio_sync_filebuf.h>
+#endif
+
 
 namespace na
 {
@@ -39,7 +46,7 @@ namespace na
 			std::scoped_lock lock(mux);
 #endif
 
-			m_header(m_formatTime(systemClockNow), Format("   ERROR").color(Color::BrightRed));
+			m_header(m_formatPreciseTime(systemClockNow), Format("   ERROR").color(Color::BrightRed));
 			m_print(args...);
 		}
 
@@ -53,7 +60,7 @@ namespace na
 #ifndef LOG_NO_THREADSAFE
 			std::scoped_lock lock(mux);
 #endif
-			m_header(m_formatTime(systemClockNow), Format(" WARNING").color(Color::BrightYellow));
+			m_header(m_formatPreciseTime(systemClockNow), Format(" WARNING").color(Color::BrightYellow));
 			m_print(args...);
 		}
 
@@ -67,7 +74,7 @@ namespace na
 #ifndef LOG_NO_THREADSAFE
 			std::scoped_lock lock(mux);
 #endif
-			m_header(m_formatTime(systemClockNow), Format("    INFO").color(Color::BrightCyan));
+			m_header(m_formatPreciseTime(systemClockNow), Format("    INFO").color(Color::BrightCyan));
 			m_print(args...);
 		}
 
@@ -81,20 +88,25 @@ namespace na
 #ifndef LOG_NO_THREADSAFE
 			std::scoped_lock lock(mux);
 #endif
-			m_header(m_formatTime(systemClockNow), Format("   DEBUG").color(Color::BrightMagenta));
+			m_header(m_formatPreciseTime(systemClockNow), Format("   DEBUG").color(Color::BrightMagenta));
 			m_print(args...);
+		}
+
+		BasicLogger& addExecutableName(const char* name)
+		{
+			m_executableName = name;
+			return *this;
 		}
 
 		BasicLogger& addStream(std::basic_ostream<_CharT>* os)
 		{		
 			using std::chrono::system_clock;
 				
-			auto rawTime = system_clock::to_time_t(system_clock::now());
-			auto time = localtime(&rawTime);
+			auto systemClockNow = system_clock::now();
 			
 			m_outputStreams.push_back(os);
-			*os << "==============================[ LOG " << time->tm_hour << ':' << time->tm_min << ":" << time->tm_sec 
-						<< " ]==============================\n";
+			*os << "==============================[ " << m_executableName << " LOG " << m_formatDate(systemClockNow) << ' ' <<
+					m_formatTime(systemClockNow) << " ]==============================\n";
 			return *this;
 		}
 
@@ -125,8 +137,38 @@ namespace na
 			return *this;
 		}
 
+#if defined(__linux__)
+		BasicLogger& addTerminal(const char* name)
+		{
+			info("Adding terminal at '", name, "'");
+			FILE* ttyFile = fopen(name, "w");
+
+			if (ttyFile && isatty(ttyFile->_fileno))
+			{
+				m_openFileHandles.push_back(ttyFile);
+				
+				__gnu_cxx::stdio_sync_filebuf<_CharT>* buf = new __gnu_cxx::stdio_sync_filebuf<_CharT>(ttyFile);
+				m_ttyFileBuffers.push_back(buf);
+				
+				std::basic_ostream<_CharT>* tty = new std::basic_ostream<_CharT>(buf); 
+				m_ttyStreams.push_back(tty);
+				
+				*tty << std::endl;
+
+				addStream(tty);
+				info("Terminal at '",  name, "' added successfully.");
+			}
+			else
+			{
+				error("Failed to add terminal at '",  name, "'");
+			}
+
+			return *this;
+		}
+#endif
+
 	private:
-		BasicLogger() : m_logDir(std::filesystem::current_path()) 
+		BasicLogger() : m_logDir(std::filesystem::current_path()), m_executableName("")
 		{
 			m_logDir.append("log");
 		}
@@ -140,6 +182,15 @@ namespace na
 			{
 				m_logFile.close();
 			}
+
+			for (auto* ptr : m_ttyStreams)
+				delete ptr;
+
+			for (auto* ptr : m_ttyFileBuffers)
+				delete ptr;
+
+			for (auto* ptr : m_openFileHandles)
+				fclose(ptr);
 		}
 
 		void m_print()
@@ -152,7 +203,7 @@ namespace na
 		void m_print(const T& arg, const Types&... args)
 		{
 			for (auto os : m_outputStreams)
-				*os << arg;
+				*os << arg << ' ';
 			
 			m_print(args...);
 		}
@@ -184,6 +235,19 @@ namespace na
 		static std::basic_string<_CharT> m_formatTime(std::chrono::system_clock::time_point& timePoint)
 		{
 			using std::chrono::system_clock;
+
+			auto rawTime = system_clock::to_time_t(timePoint);
+			auto time = localtime(&rawTime);
+
+			char buf[40]; 
+			sprintf(buf, "%02d:%02d:%02d", time->tm_hour, time->tm_min, time->tm_sec);
+			
+			return std::basic_string<_CharT>(buf);
+		}
+
+		static std::basic_string<_CharT> m_formatPreciseTime(std::chrono::system_clock::time_point& timePoint)
+		{
+			using std::chrono::system_clock;
 			using std::chrono::microseconds;
 			using std::chrono::duration_cast;
 
@@ -192,18 +256,37 @@ namespace na
 			auto time = localtime(&rawTime);
 
 			char buf[40]; 
-			sprintf(buf, "%d-%d-%d %02d:%02d:%02d.%06ld", time->tm_mday, time->tm_mon, time->tm_year + 1900,
-												time->tm_hour, time->tm_min, time->tm_sec, microsec % 1000000);
+			sprintf(buf, "%02d:%02d:%02d.%06ld", time->tm_hour, time->tm_min, time->tm_sec, microsec % 1000000);
 			
 			return std::basic_string<_CharT>(buf);
 		}
+
+		static std::basic_string<_CharT> m_formatDate(std::chrono::system_clock::time_point& timePoint)
+		{
+			using std::chrono::system_clock;
+
+			auto rawTime = system_clock::to_time_t(timePoint);
+			auto time = localtime(&rawTime);
+
+			char buf[40]; 
+			sprintf(buf, "%d-%d-%d", time->tm_mday, time->tm_mon, time->tm_year + 1900);
+			
+			return std::basic_string<_CharT>(buf);
+		}
+
 	protected:
 		mutable std::mutex mux;
 
 	private:
 		std::list<std::basic_ostream<_CharT>*> m_outputStreams;
+#if defined(__linux__)
+		std::list<FILE*> m_openFileHandles;
+		std::list<__gnu_cxx::stdio_sync_filebuf<_CharT>*> m_ttyFileBuffers;
+		std::list<std::basic_ostream<_CharT>*> m_ttyStreams;
+#endif		
 		std::filesystem::path m_logDir;
 		std::ofstream m_logFile;
+		std::string m_executableName;
 	};
 
 	typedef BasicLogger<char> Logger;
